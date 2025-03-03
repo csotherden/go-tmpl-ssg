@@ -8,14 +8,31 @@ import (
 	"strings"
 )
 
-func GenerateSite(templateDir, outputDir string) error {
-	componentDir := filepath.Join(templateDir, "components")
-	pageDir := filepath.Join(templateDir, "pages")
+type SiteConfig struct {
+	TemplateDir     string
+	OutputDir       string
+	GenerateSitemap bool
+	BaseURL         string
+}
+
+type SiteGenerator struct {
+	Config SiteConfig
+}
+
+func NewSiteGenerator(config SiteConfig) *SiteGenerator {
+	return &SiteGenerator{Config: config}
+}
+
+func (s *SiteGenerator) GenerateSite() error {
+	componentDir := filepath.Join(s.Config.TemplateDir, "components")
+	pageDir := filepath.Join(s.Config.TemplateDir, "pages")
 
 	componentTemplates, err := template.ParseGlob(filepath.Join(componentDir, "*.tmpl"))
 	if err != nil {
 		return err
 	}
+
+	var htmlFiles []string
 
 	err = filepath.Walk(pageDir, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
@@ -27,18 +44,27 @@ func GenerateSite(templateDir, outputDir string) error {
 			return err
 		}
 
-		outputPath := filepath.Join(outputDir, relPath)
+		outputPath := filepath.Join(s.Config.OutputDir, relPath)
 
 		if info.IsDir() {
 			return os.MkdirAll(outputPath, os.ModePerm)
 		}
 
 		if strings.HasSuffix(info.Name(), ".tmpl") {
-			return renderTemplate(path, outputPath[:len(outputPath)-5]+".html", componentTemplates)
+			htmlPath := outputPath[:len(outputPath)-5] + ".html"
+			htmlFiles = append(htmlFiles, htmlPath)
+			return renderTemplate(path, htmlPath, componentTemplates)
 		} else {
+			if strings.HasSuffix(info.Name(), ".html") {
+				htmlFiles = append(htmlFiles, outputPath)
+			}
 			return copyFile(path, outputPath)
 		}
 	})
+
+	if err == nil && s.Config.GenerateSitemap {
+		err = generateSitemap(s.Config.OutputDir, s.Config.BaseURL, htmlFiles)
+	}
 
 	return err
 }

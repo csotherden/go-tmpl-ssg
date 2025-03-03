@@ -30,7 +30,14 @@ func TestGenerateSite(t *testing.T) {
 		}
 	}
 
-	if err := GenerateSite(templateDir, outputDir); err != nil {
+	cfg := SiteConfig{
+		TemplateDir: templateDir,
+		OutputDir:   outputDir,
+	}
+
+	gen := NewSiteGenerator(cfg)
+
+	if err := gen.GenerateSite(); err != nil {
 		t.Fatalf("GenerateSite failed: %v", err)
 	}
 
