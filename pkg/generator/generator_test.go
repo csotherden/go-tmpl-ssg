@@ -14,13 +14,14 @@ func TestGenerateSite(t *testing.T) {
 
 	// Create mock template files
 	mockTemplates := map[string]string{
-		"components/header.tmpl":        "<header>Header</header>",
-		"components/footer.tmpl":        "<footer>Footer</footer>",
-		"layouts/base.tmpl":             "{{template \"header.tmpl\"}}<main>{{template %CONTENT%}}</main>{{template \"footer.tmpl\"}}",
-		"pages/subdirectory/index.tmpl": "{{- /* layout:base.tmpl */ -}}<p>Subdirectory Index Page</p>",
-		"pages/index.tmpl":              "{{- /* layout:base.tmpl */ -}}<p>Index Page</p>",
-		"pages/about.tmpl":              "{{- /* layout:base.tmpl */ -}}<p>About Page</p>",
-		"pages/robots.txt":              "User-agent: *\nDisallow: /",
+		"components/header.tmpl":         "<header>Header</header>",
+		"components/widgets/widget.tmpl": "<widget>Widget</widget>",
+		"components/footer.tmpl":         "<footer>Footer</footer>",
+		"layouts/base.tmpl":              "{{template \"header.tmpl\"}}<main>{{template %CONTENT%}}</main>{{template \"footer.tmpl\"}}",
+		"pages/subdirectory/index.tmpl":  "{{- /* layout:base.tmpl */ -}}<p>Subdirectory Index Page</p>{{template \"widgets/widget.tmpl\"}}",
+		"pages/index.tmpl":               "{{- /* layout:base.tmpl */ -}}<p>Index Page</p>",
+		"pages/about.tmpl":               "{{- /* layout:base.tmpl */ -}}<p>About Page</p>",
+		"pages/robots.txt":               "User-agent: *\nDisallow: /",
 	}
 
 	for path, content := range mockTemplates {
@@ -45,7 +46,7 @@ func TestGenerateSite(t *testing.T) {
 	}
 
 	expectedFiles := map[string]string{
-		"subdirectory/index.html": "<header>Header</header><main><p>Subdirectory Index Page</p></main><footer>Footer</footer>",
+		"subdirectory/index.html": "<header>Header</header><main><p>Subdirectory Index Page</p><widget>Widget</widget></main><footer>Footer</footer>",
 		"index.html":              "<header>Header</header><main><p>Index Page</p></main><footer>Footer</footer>",
 		"about.html":              "<header>Header</header><main><p>About Page</p></main><footer>Footer</footer>",
 		"robots.txt":              "User-agent: *\nDisallow: /",

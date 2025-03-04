@@ -1,6 +1,7 @@
 package generator
 
 import (
+	"fmt"
 	"html/template"
 	"io"
 	"os"
@@ -8,8 +9,6 @@ import (
 	"regexp"
 	"strings"
 )
-
-const GLOB_NO_MATCH = "pattern matches no files"
 
 var parentTemplateRegex = regexp.MustCompile(`(?m)^{{-? /\* layout:(.*?) \*/ -?}}`)
 
@@ -37,8 +36,33 @@ func (s *SiteGenerator) GenerateSite() error {
 	layoutDir := filepath.Join(s.Config.TemplateDir, "layouts")
 	pageDir := filepath.Join(s.Config.TemplateDir, "pages")
 
-	componentTemplates, err := template.ParseGlob(filepath.Join(componentDir, "*.tmpl"))
-	if err != nil && !strings.Contains(err.Error(), GLOB_NO_MATCH) {
+	componentTemplates := template.New("components")
+	// Walk the components directory to load all template files recursively
+	err := filepath.Walk(componentDir, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if !info.IsDir() && strings.HasSuffix(info.Name(), ".tmpl") {
+			relPath, err := filepath.Rel(componentDir, path)
+			if err != nil {
+				return err
+			}
+			relPath = filepath.ToSlash(relPath) // Ensure Unix-style paths
+			content, err := os.ReadFile(path)
+			if err != nil {
+				return err
+			}
+			if len(content) == 0 {
+				return fmt.Errorf("template %s is empty", relPath)
+			}
+			_, err = componentTemplates.New(relPath).Parse(string(content))
+			if err != nil {
+				return fmt.Errorf("error parsing template %s: %v", relPath, err)
+			}
+		}
+		return nil
+	})
+	if err != nil {
 		return err
 	}
 
@@ -120,14 +144,14 @@ func (s *SiteGenerator) renderPageTemplate(pagePath, outputPath string, componen
 			childTemplateName := filepath.Base(pagePath)
 
 			// Define the child template in the template set
-			_, err = tmpl.New(childTemplateName).Parse(string(content))
+			tmpl, err = tmpl.New(childTemplateName).Parse(string(content))
 			if err != nil {
 				return err
 			}
 
 			// Replace %CONTENT% placeholder with actual child template call
 			parentContent = strings.Replace(parentContent, "{{template %CONTENT%}}", "{{template \""+childTemplateName+"\" .}}", 1)
-			_, err = tmpl.New(parentName).Parse(parentContent)
+			tmpl, err = tmpl.New(parentName).Parse(parentContent)
 			if err != nil {
 				return err
 			}
@@ -141,7 +165,7 @@ func (s *SiteGenerator) renderPageTemplate(pagePath, outputPath string, componen
 		return err
 	}
 
-	_, err = finalTemplate.New(filepath.Base(pagePath)).Parse(string(content))
+	finalTemplate, err = finalTemplate.New(filepath.Base(pagePath)).Parse(string(content))
 	if err != nil {
 		return err
 	}
