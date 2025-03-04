@@ -1,10 +1,11 @@
 # Go Template Static Site Generator
 
-This project is a simple static site generator written in Go, designed to generate HTML files from Go templates. It supports component-based templating to make managing common site elements like headers and footers easier. The generated static site can be deployed easily anywhere you can serve static files. For example, to an S3 bucket behind a CloudFront distribution for efficient hosting.
+This project is a simple static site generator written in Go, designed to generate HTML files from Go templates. It supports component-based templating to make managing common site elements like headers and footers easier. It also supports layout-based templating to apply consistent structure across multiple pages. The generated static site can be deployed easily anywhere you can serve static files. For example, to an S3 bucket behind a CloudFront distribution for efficient hosting.
 
 ## Features
 
 - Uses Go templates for reusable components (`components/` directory)
+- Supports layout-based page rendering for consistent structure (`layouts/` directory)
 - Processes `.tmpl` files in the `pages/` directory and outputs HTML
 - Copies non-template files (e.g., `robots.txt`) to the output directory
 - Simple CLI interface to specify template and output directories
@@ -48,6 +49,8 @@ templates/
 ├── components/
 │   ├── header.tmpl
 │   ├── footer.tmpl
+├── layouts/
+│   ├── base.tmpl
 ├── pages/
 │   ├── index.tmpl
 │   ├── about.tmpl
@@ -55,17 +58,36 @@ templates/
 ```
 
 - `components/`: Contains common reusable templates like `header.tmpl` and `footer.tmpl`
+- `layouts/`: Contains layout templates that define a page structure (e.g., `base.tmpl`)
 - `pages/`: Contains individual page templates
 - Non-template files (e.g., `robots.txt`) are copied as-is
 
-### Example Page Template
+### Using Layout Templates
 
+Pages can specify a parent layout by including a comment at the beginning of the file:
+
+#### Example Layout Template (`layouts/base.tmpl`):
 ```html
 {{template "header.tmpl"}}
 <main>
-    <h1>Welcome to My Site</h1>
+    {{template %CONTENT%}}
 </main>
 {{template "footer.tmpl"}}
+```
+
+#### Example Page Template (`pages/index.tmpl`):
+```html
+{{- /* layout:base.tmpl */ -}}
+<p>Welcome to My Site</p>
+```
+
+This results in the following rendered HTML:
+```html
+<header>Header</header>
+<main>
+    <p>Welcome to My Site</p>
+</main>
+<footer>Footer</footer>
 ```
 
 ## Running Tests

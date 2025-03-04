@@ -3,6 +3,7 @@ package generator
 import (
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 )
 
@@ -15,8 +16,9 @@ func TestGenerateSite(t *testing.T) {
 	mockTemplates := map[string]string{
 		"components/header.tmpl": "<header>Header</header>",
 		"components/footer.tmpl": "<footer>Footer</footer>",
-		"pages/index.tmpl":       "{{template \"header.tmpl\"}}<main>Index Page</main>{{template \"footer.tmpl\"}}",
-		"pages/about.tmpl":       "{{template \"header.tmpl\"}}<main>About Page</main>{{template \"footer.tmpl\"}}",
+		"layouts/base.tmpl":      "{{template \"header.tmpl\"}}<main>{{template %CONTENT%}}</main>{{template \"footer.tmpl\"}}",
+		"pages/index.tmpl":       "{{- /* layout:base.tmpl */ -}}<p>Index Page</p>",
+		"pages/about.tmpl":       "{{- /* layout:base.tmpl */ -}}<p>About Page</p>",
 		"pages/robots.txt":       "User-agent: *\nDisallow: /",
 	}
 
@@ -41,15 +43,21 @@ func TestGenerateSite(t *testing.T) {
 		t.Fatalf("GenerateSite failed: %v", err)
 	}
 
-	expectedFiles := []string{
-		"index.html",
-		"about.html",
-		"robots.txt",
+	expectedFiles := map[string]string{
+		"index.html": "<header>Header</header><main><p>Index Page</p></main><footer>Footer</footer>",
+		"about.html": "<header>Header</header><main><p>About Page</p></main><footer>Footer</footer>",
+		"robots.txt": "User-agent: *\nDisallow: /",
 	}
 
-	for _, file := range expectedFiles {
-		if _, err := os.Stat(filepath.Join(outputDir, file)); os.IsNotExist(err) {
+	for file, expectedContent := range expectedFiles {
+		outputPath := filepath.Join(outputDir, file)
+		data, err := os.ReadFile(outputPath)
+		if err != nil {
 			t.Errorf("Expected file %s not found", file)
+			continue
+		}
+		if strings.TrimSpace(string(data)) != expectedContent {
+			t.Errorf("File %s content mismatch\nExpected:\n%s\nGot:\n%s", file, expectedContent, strings.TrimSpace(string(data)))
 		}
 	}
 }

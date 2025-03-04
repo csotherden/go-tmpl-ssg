@@ -5,8 +5,13 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 )
+
+const GLOB_NO_MATCH = "pattern matches no files"
+
+var parentTemplateRegex = regexp.MustCompile(`(?m)^{{-? /\* layout:(.*?) \*/ -?}}`)
 
 type SiteConfig struct {
 	TemplateDir     string
@@ -16,19 +21,28 @@ type SiteConfig struct {
 }
 
 type SiteGenerator struct {
-	Config SiteConfig
+	Config  SiteConfig
+	Layouts map[string]string
 }
 
 func NewSiteGenerator(config SiteConfig) *SiteGenerator {
-	return &SiteGenerator{Config: config}
+	return &SiteGenerator{
+		Config:  config,
+		Layouts: make(map[string]string),
+	}
 }
 
 func (s *SiteGenerator) GenerateSite() error {
 	componentDir := filepath.Join(s.Config.TemplateDir, "components")
+	layoutDir := filepath.Join(s.Config.TemplateDir, "layouts")
 	pageDir := filepath.Join(s.Config.TemplateDir, "pages")
 
 	componentTemplates, err := template.ParseGlob(filepath.Join(componentDir, "*.tmpl"))
-	if err != nil {
+	if err != nil && !strings.Contains(err.Error(), GLOB_NO_MATCH) {
+		return err
+	}
+
+	if err := s.loadLayouts(layoutDir); err != nil {
 		return err
 	}
 
@@ -53,7 +67,7 @@ func (s *SiteGenerator) GenerateSite() error {
 		if strings.HasSuffix(info.Name(), ".tmpl") {
 			htmlPath := outputPath[:len(outputPath)-5] + ".html"
 			htmlFiles = append(htmlFiles, htmlPath)
-			return renderTemplate(path, htmlPath, componentTemplates)
+			return s.renderPageTemplate(path, htmlPath, componentTemplates)
 		} else {
 			if strings.HasSuffix(info.Name(), ".html") {
 				htmlFiles = append(htmlFiles, outputPath)
@@ -69,10 +83,57 @@ func (s *SiteGenerator) GenerateSite() error {
 	return err
 }
 
-func renderTemplate(templatePath, outputPath string, componentTemplates *template.Template) error {
-	pageTemplate, err := template.ParseFiles(templatePath)
+func (s *SiteGenerator) loadLayouts(dir string) error {
+	files, err := os.ReadDir(dir)
 	if err != nil {
 		return err
+	}
+
+	for _, file := range files {
+		if strings.HasSuffix(file.Name(), ".tmpl") {
+			path := filepath.Join(dir, file.Name())
+			content, err := os.ReadFile(path)
+			if err != nil {
+				return err
+			}
+			s.Layouts[file.Name()] = string(content)
+		}
+	}
+	return nil
+}
+
+func (s *SiteGenerator) renderPageTemplate(pagePath, outputPath string, componentTemplates *template.Template) error {
+	content, err := os.ReadFile(pagePath)
+	if err != nil {
+		return err
+	}
+
+	matches := parentTemplateRegex.FindSubmatch(content)
+	if matches != nil {
+		parentName := string(matches[1])
+		parentContent, exists := s.Layouts[parentName]
+		if exists {
+			tmpl, err := componentTemplates.Clone()
+			if err != nil {
+				return err
+			}
+			childTemplateName := filepath.Base(pagePath)
+
+			// Define the child template in the template set
+			_, err = tmpl.New(childTemplateName).Parse(string(content))
+			if err != nil {
+				return err
+			}
+
+			// Replace %CONTENT% placeholder with actual child template call
+			parentContent = strings.Replace(parentContent, "{{template %CONTENT%}}", "{{template \""+childTemplateName+"\" .}}", 1)
+			_, err = tmpl.New(parentName).Parse(parentContent)
+			if err != nil {
+				return err
+			}
+
+			return executeTemplate(outputPath, tmpl, parentName)
+		}
 	}
 
 	finalTemplate, err := componentTemplates.Clone()
@@ -80,18 +141,22 @@ func renderTemplate(templatePath, outputPath string, componentTemplates *templat
 		return err
 	}
 
-	finalTemplate, err = finalTemplate.AddParseTree("page", pageTemplate.Tree)
+	_, err = finalTemplate.New(filepath.Base(pagePath)).Parse(string(content))
 	if err != nil {
 		return err
 	}
 
+	return executeTemplate(outputPath, finalTemplate, filepath.Base(pagePath))
+}
+
+func executeTemplate(outputPath string, tmpl *template.Template, templateName string) error {
 	outputFile, err := os.Create(outputPath)
 	if err != nil {
 		return err
 	}
 	defer outputFile.Close()
 
-	return finalTemplate.ExecuteTemplate(outputFile, "page", nil)
+	return tmpl.ExecuteTemplate(outputFile, templateName, nil)
 }
 
 func copyFile(src, dst string) error {
