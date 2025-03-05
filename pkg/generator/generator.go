@@ -93,12 +93,14 @@ func (s *SiteGenerator) GenerateSite() error {
 			htmlPath := outputPath[:len(outputPath)-5] + ".html"
 			htmlFiles = append(htmlFiles, htmlPath)
 			return s.renderPageTemplate(path, htmlPath, componentTemplates)
-		} else {
+		} else if !strings.HasSuffix(info.Name(), ".tmpl.json") {
 			if strings.HasSuffix(info.Name(), ".html") {
 				htmlFiles = append(htmlFiles, outputPath)
 			}
 			return copyFile(path, outputPath)
 		}
+
+		return nil
 	})
 
 	if err == nil && s.Config.GenerateSitemap {
