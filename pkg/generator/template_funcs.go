@@ -31,5 +31,8 @@ func FuncMap() template.FuncMap {
 		"title": func(s string) string {
 			return strings.Title(s)
 		},
+		"sub": func(a, b int) int {
+			return a - b
+		},
 	}
 }
