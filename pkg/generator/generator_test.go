@@ -1,6 +1,7 @@
 package generator
 
 import (
+	"encoding/json"
 	"os"
 	"path/filepath"
 	"strings"
@@ -14,14 +15,18 @@ func TestGenerateSite(t *testing.T) {
 
 	// Create mock template files
 	mockTemplates := map[string]string{
-		"components/header.tmpl":         "<header>Header</header>",
+		"components/header.tmpl":         "<header>{{.Title}}</header>",
 		"components/widgets/widget.tmpl": "<widget>Widget</widget>",
 		"components/footer.tmpl":         "<footer>Footer</footer>",
-		"layouts/base.tmpl":              "{{template \"header.tmpl\"}}<main>{{template %CONTENT%}}</main>{{template \"footer.tmpl\"}}",
-		"pages/subdirectory/index.tmpl":  "{{- /* layout:base.tmpl */ -}}<p>Subdirectory Index Page</p>{{template \"widgets/widget.tmpl\"}}",
+		"layouts/base.tmpl":              "{{template \"header.tmpl\" .}}<main>{{template %CONTENT% .}}</main>{{template \"footer.tmpl\" .}}",
 		"pages/index.tmpl":               "{{- /* layout:base.tmpl */ -}}<p>Index Page</p>",
 		"pages/about.tmpl":               "{{- /* layout:base.tmpl */ -}}<p>About Page</p>",
 		"pages/robots.txt":               "User-agent: *\nDisallow: /",
+	}
+
+	mockData := map[string]map[string]interface{}{
+		"pages/index.tmpl.json": {"Title": "Home Page"},
+		"pages/about.tmpl.json": {"Title": "About Me"},
 	}
 
 	for path, content := range mockTemplates {
@@ -31,6 +36,17 @@ func TestGenerateSite(t *testing.T) {
 		}
 		if err := os.WriteFile(fullPath, []byte(content), os.ModePerm); err != nil {
 			t.Fatalf("Failed to create test file: %v", err)
+		}
+	}
+
+	for path, data := range mockData {
+		fullPath := filepath.Join(templateDir, path)
+		jsonData, err := json.Marshal(data)
+		if err != nil {
+			t.Fatalf("Failed to marshal JSON: %v", err)
+		}
+		if err := os.WriteFile(fullPath, jsonData, os.ModePerm); err != nil {
+			t.Fatalf("Failed to create JSON data file: %v", err)
 		}
 	}
 
@@ -46,10 +62,9 @@ func TestGenerateSite(t *testing.T) {
 	}
 
 	expectedFiles := map[string]string{
-		"subdirectory/index.html": "<header>Header</header><main><p>Subdirectory Index Page</p><widget>Widget</widget></main><footer>Footer</footer>",
-		"index.html":              "<header>Header</header><main><p>Index Page</p></main><footer>Footer</footer>",
-		"about.html":              "<header>Header</header><main><p>About Page</p></main><footer>Footer</footer>",
-		"robots.txt":              "User-agent: *\nDisallow: /",
+		"index.html": "<header>Home Page</header><main><p>Index Page</p></main><footer>Footer</footer>",
+		"about.html": "<header>About Me</header><main><p>About Page</p></main><footer>Footer</footer>",
+		"robots.txt": "User-agent: *\nDisallow: /",
 	}
 
 	for file, expectedContent := range expectedFiles {

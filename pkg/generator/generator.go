@@ -1,6 +1,7 @@
 package generator
 
 import (
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"io"
@@ -132,6 +133,14 @@ func (s *SiteGenerator) renderPageTemplate(pagePath, outputPath string, componen
 		return err
 	}
 
+	data := make(map[string]interface{})
+	jsonPath := pagePath + ".json"
+	if jsonContent, err := os.ReadFile(jsonPath); err == nil {
+		if err := json.Unmarshal(jsonContent, &data); err != nil {
+			return err
+		}
+	}
+
 	matches := parentTemplateRegex.FindSubmatch(content)
 	if matches != nil {
 		parentName := string(matches[1])
@@ -141,22 +150,21 @@ func (s *SiteGenerator) renderPageTemplate(pagePath, outputPath string, componen
 			if err != nil {
 				return err
 			}
-			childTemplateName := filepath.Base(pagePath)
+			childTemplateName := filepath.ToSlash(filepath.Base(pagePath))
 
-			// Define the child template in the template set
-			tmpl, err = tmpl.New(childTemplateName).Parse(string(content))
+			_, err = tmpl.New(childTemplateName).Parse(string(content))
 			if err != nil {
 				return err
 			}
 
-			// Replace %CONTENT% placeholder with actual child template call
-			parentContent = strings.Replace(parentContent, "{{template %CONTENT%}}", "{{template \""+childTemplateName+"\" .}}", 1)
-			tmpl, err = tmpl.New(parentName).Parse(parentContent)
+			parentContent = strings.ReplaceAll(parentContent, "{{template %CONTENT% .}}", "{{template \""+childTemplateName+"\" .}}")
+			parentContent = strings.ReplaceAll(parentContent, "{{template %CONTENT%}}", "{{template \""+childTemplateName+"\" .}}")
+			_, err = tmpl.New(parentName).Parse(parentContent)
 			if err != nil {
 				return err
 			}
 
-			return executeTemplate(outputPath, tmpl, parentName)
+			return executeTemplate(outputPath, tmpl, parentName, data)
 		}
 	}
 
@@ -165,22 +173,28 @@ func (s *SiteGenerator) renderPageTemplate(pagePath, outputPath string, componen
 		return err
 	}
 
-	finalTemplate, err = finalTemplate.New(filepath.Base(pagePath)).Parse(string(content))
+	relPath, err := filepath.Rel(s.Config.TemplateDir, pagePath)
+	if err != nil {
+		return err
+	}
+	relPath = filepath.ToSlash(relPath)
+
+	_, err = finalTemplate.New(relPath).Parse(string(content))
 	if err != nil {
 		return err
 	}
 
-	return executeTemplate(outputPath, finalTemplate, filepath.Base(pagePath))
+	return executeTemplate(outputPath, finalTemplate, relPath, data)
 }
 
-func executeTemplate(outputPath string, tmpl *template.Template, templateName string) error {
+func executeTemplate(outputPath string, tmpl *template.Template, templateName string, data interface{}) error {
 	outputFile, err := os.Create(outputPath)
 	if err != nil {
 		return err
 	}
 	defer outputFile.Close()
 
-	return tmpl.ExecuteTemplate(outputFile, templateName, nil)
+	return tmpl.ExecuteTemplate(outputFile, templateName, data)
 }
 
 func copyFile(src, dst string) error {
