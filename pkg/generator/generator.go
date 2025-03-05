@@ -37,7 +37,7 @@ func (s *SiteGenerator) GenerateSite() error {
 	layoutDir := filepath.Join(s.Config.TemplateDir, "layouts")
 	pageDir := filepath.Join(s.Config.TemplateDir, "pages")
 
-	componentTemplates := template.New("components")
+	componentTemplates := template.New("components").Funcs(FuncMap())
 	// Walk the components directory to load all template files recursively
 	err := filepath.Walk(componentDir, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
