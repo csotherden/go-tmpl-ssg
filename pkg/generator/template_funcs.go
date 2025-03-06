@@ -1,6 +1,7 @@
 package generator
 
 import (
+	"fmt"
 	"html/template"
 	"strings"
 	"time"
@@ -9,6 +10,9 @@ import (
 // FuncMap returns a map of custom template functions.
 func FuncMap() template.FuncMap {
 	return template.FuncMap{
+		"html": func(s string) template.HTML {
+			return template.HTML(s)
+		},
 		"now": func() string {
 			return time.Now().String()
 		},
@@ -33,6 +37,15 @@ func FuncMap() template.FuncMap {
 		},
 		"sub": func(a, b int) int {
 			return a - b
+		},
+		"join": func(list []interface{}, sep string) string {
+			var s []string
+
+			for _, item := range list {
+				s = append(s, fmt.Sprintf("%v", item))
+			}
+
+			return strings.Join(s, sep)
 		},
 	}
 }
