@@ -38,6 +38,16 @@ func FuncMap() template.FuncMap {
 		"sub": func(a, b int) int {
 			return a - b
 		},
+		"add": func(a, b int) int {
+			return a + b
+		},
+		"seq": func(start, end int) []int {
+			seq := []int{}
+			for i := start; i <= end; i++ {
+				seq = append(seq, i)
+			}
+			return seq
+		},
 		"join": func(list []interface{}, sep string) string {
 			var s []string
 

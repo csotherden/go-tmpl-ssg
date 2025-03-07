@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"strconv"
 	"strings"
 )
 
@@ -33,11 +34,79 @@ func NewSiteGenerator(config SiteConfig) *SiteGenerator {
 }
 
 func (s *SiteGenerator) GenerateSite() error {
-	componentDir := filepath.Join(s.Config.TemplateDir, "components")
-	layoutDir := filepath.Join(s.Config.TemplateDir, "layouts")
 	pageDir := filepath.Join(s.Config.TemplateDir, "pages")
 
+	componentTemplates, err := s.loadComponents()
+	if err != nil {
+		return err
+	}
+
+	if err := s.loadLayouts(); err != nil {
+		return err
+	}
+
+	var htmlFiles []string
+
+	err = filepath.Walk(pageDir, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		relPath, err := filepath.Rel(pageDir, path)
+		if err != nil {
+			return err
+		}
+
+		outputPath := filepath.Join(s.Config.OutputDir, relPath)
+
+		if info.IsDir() {
+			return os.MkdirAll(outputPath, os.ModePerm)
+		}
+
+		if strings.HasSuffix(info.Name(), ".tmpl") {
+			htmlPath := outputPath[:len(outputPath)-5] + ".html"
+			htmlFiles = append(htmlFiles, htmlPath)
+
+			jsonPath := path + ".json"
+			data := make(map[string]interface{})
+
+			if jsonContent, err := os.ReadFile(jsonPath); err == nil {
+				if err := json.Unmarshal(jsonContent, &data); err != nil {
+					return err
+				}
+			}
+
+			if iterations, ok := data["Iterations"].(map[string]interface{}); ok {
+				return s.renderPaginatedPages(path, componentTemplates, data, iterations)
+			}
+
+			return s.renderPageTemplate(path, htmlPath, componentTemplates, data)
+		} else if !strings.HasSuffix(info.Name(), ".tmpl.json") {
+			if strings.HasSuffix(info.Name(), ".html") {
+				htmlFiles = append(htmlFiles, outputPath)
+			}
+			return copyFile(path, outputPath)
+		}
+
+		return nil
+	})
+
+	if err == nil && s.Config.GenerateSitemap {
+		err = generateSitemap(s.Config.OutputDir, s.Config.BaseURL, htmlFiles)
+	}
+
+	return err
+}
+
+func (s *SiteGenerator) loadComponents() (*template.Template, error) {
+	componentDir := filepath.Join(s.Config.TemplateDir, "components")
+
 	componentTemplates := template.New("components").Funcs(FuncMap())
+
+	if exists, _ := dirExists(componentDir); !exists {
+		return componentTemplates, nil
+	}
+
 	// Walk the components directory to load all template files recursively
 	err := filepath.Walk(componentDir, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
@@ -64,61 +133,27 @@ func (s *SiteGenerator) GenerateSite() error {
 		return nil
 	})
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	if err := s.loadLayouts(layoutDir); err != nil {
-		return err
-	}
-
-	var htmlFiles []string
-
-	err = filepath.Walk(pageDir, func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			return err
-		}
-
-		relPath, err := filepath.Rel(pageDir, path)
-		if err != nil {
-			return err
-		}
-
-		outputPath := filepath.Join(s.Config.OutputDir, relPath)
-
-		if info.IsDir() {
-			return os.MkdirAll(outputPath, os.ModePerm)
-		}
-
-		if strings.HasSuffix(info.Name(), ".tmpl") {
-			htmlPath := outputPath[:len(outputPath)-5] + ".html"
-			htmlFiles = append(htmlFiles, htmlPath)
-			return s.renderPageTemplate(path, htmlPath, componentTemplates)
-		} else if !strings.HasSuffix(info.Name(), ".tmpl.json") {
-			if strings.HasSuffix(info.Name(), ".html") {
-				htmlFiles = append(htmlFiles, outputPath)
-			}
-			return copyFile(path, outputPath)
-		}
-
-		return nil
-	})
-
-	if err == nil && s.Config.GenerateSitemap {
-		err = generateSitemap(s.Config.OutputDir, s.Config.BaseURL, htmlFiles)
-	}
-
-	return err
+	return componentTemplates, nil
 }
 
-func (s *SiteGenerator) loadLayouts(dir string) error {
-	files, err := os.ReadDir(dir)
+func (s *SiteGenerator) loadLayouts() error {
+	layoutDir := filepath.Join(s.Config.TemplateDir, "layouts")
+
+	if exists, _ := dirExists(layoutDir); !exists {
+		return nil
+	}
+
+	files, err := os.ReadDir(layoutDir)
 	if err != nil {
 		return err
 	}
 
 	for _, file := range files {
 		if strings.HasSuffix(file.Name(), ".tmpl") {
-			path := filepath.Join(dir, file.Name())
+			path := filepath.Join(layoutDir, file.Name())
 			content, err := os.ReadFile(path)
 			if err != nil {
 				return err
@@ -129,18 +164,81 @@ func (s *SiteGenerator) loadLayouts(dir string) error {
 	return nil
 }
 
-func (s *SiteGenerator) renderPageTemplate(pagePath, outputPath string, componentTemplates *template.Template) error {
+func (s *SiteGenerator) renderPaginatedPages(pagePath string, componentTemplates *template.Template, data map[string]interface{}, iterations map[string]interface{}) error {
+	pageSize, ok := iterations["PageSize"].(float64)
+	if !ok || pageSize <= 0 {
+		return fmt.Errorf("invalid PageSize in Iterations for %s", pagePath)
+	}
+
+	pageRoot, _ := iterations["PageRoot"].(string)
+
+	items, ok := iterations["Data"].([]interface{})
+	if !ok {
+		return fmt.Errorf("invalid Data array in Iterations for %s", pagePath)
+	}
+
+	totalItems := len(items)
+	totalPages := (totalItems + int(pageSize) - 1) / int(pageSize)
+
+	outputBaseDir := s.Config.OutputDir
+
+	for pageNumber := 1; pageNumber <= totalPages; pageNumber++ {
+		start := (pageNumber - 1) * int(pageSize)
+		end := start + int(pageSize)
+		if end > totalItems {
+			end = totalItems
+		}
+
+		pagedData := make(map[string]interface{})
+		for k, v := range data {
+			pagedData[k] = v
+		}
+		pagedData["Iterations"] = map[string]interface{}{
+			"PageSize":   pageSize,
+			"PageNumber": pageNumber,
+			"TotalPages": totalPages,
+			"TotalCount": totalItems,
+			"PageRoot":   pageRoot,
+			"Data":       items[start:end],
+		}
+
+		var pageOutputPath string
+		relPath, err := filepath.Rel(filepath.Join(s.Config.TemplateDir, "pages"), pagePath)
+		if err != nil {
+			return fmt.Errorf("error resolving relative path: %v", err)
+		}
+		relPath = filepath.ToSlash(relPath) // Ensure correct path separators
+
+		pageDir := filepath.Join(outputBaseDir, filepath.Dir(relPath))
+		pageName := filepath.Base(pagePath[:len(pagePath)-5])
+
+		err = os.MkdirAll(filepath.Join(pageDir, strconv.Itoa(pageNumber)), os.ModePerm)
+		if err != nil {
+			return fmt.Errorf("error creating paginated output directory: %v", err)
+		}
+
+		pageOutputPath = filepath.Join(pageDir, strconv.Itoa(pageNumber), pageName+".html")
+
+		err = s.renderPageTemplate(pagePath, pageOutputPath, componentTemplates, pagedData)
+		if err != nil {
+			return fmt.Errorf("error rendering paginated page %s: %v", pageOutputPath, err)
+		}
+
+		if pageNumber == 1 {
+			basePageOutputPath := filepath.Join(pageDir, pageName+".html")
+			if err := s.renderPageTemplate(pagePath, basePageOutputPath, componentTemplates, pagedData); err != nil {
+				return fmt.Errorf("error rendering paginated page %s: %v", basePageOutputPath, err)
+			}
+		}
+	}
+
+	return nil
+}
+
+func (s *SiteGenerator) renderPageTemplate(pagePath, outputPath string, componentTemplates *template.Template, data map[string]interface{}) error {
 	content, err := os.ReadFile(pagePath)
 	if err != nil {
 		return err
-	}
-
-	data := make(map[string]interface{})
-	jsonPath := pagePath + ".json"
-	if jsonContent, err := os.ReadFile(jsonPath); err == nil {
-		if err := json.Unmarshal(jsonContent, &data); err != nil {
-			return err
-		}
 	}
 
 	matches := parentTemplateRegex.FindSubmatch(content)
@@ -214,4 +312,20 @@ func copyFile(src, dst string) error {
 
 	_, err = io.Copy(output, input)
 	return err
+}
+
+func dirExists(path string) (bool, error) {
+	info, err := os.Stat(path)
+	if err == nil {
+		if info.IsDir() {
+			return true, nil
+		}
+		return false, nil
+	}
+	if os.IsNotExist(err) {
+		// Directory does not exist
+		return false, nil
+	}
+	// Error occurred (e.g., permission denied)
+	return false, err
 }

@@ -1,6 +1,6 @@
 # Go Template Static Site Generator
 
-This project is a simple static site generator written in Go, designed to generate HTML files from Go templates. It supports component-based templating to make managing common site elements like headers and footers easier. It also supports layout-based templating to apply consistent structure across multiple pages. The generator also supports injecting dynamic data into templates via JSON files. The generated static site can be deployed easily anywhere you can serve static files. For example, to an S3 bucket behind a CloudFront distribution for efficient hosting.
+This project is a simple static site generator written in Go, designed to generate HTML files from Go templates. It supports component-based templating to make managing common site elements like headers and footers easier. It also supports layout-based templating to apply consistent structure across multiple pages. The generator also supports injecting dynamic data into templates via JSON files and provides built-in pagination support. The generated static site can be deployed easily anywhere you can serve static files, such as an S3 bucket behind a CloudFront distribution for efficient hosting.
 
 ## Features
 
@@ -8,10 +8,11 @@ This project is a simple static site generator written in Go, designed to genera
 - Supports layout-based page rendering for consistent structure (`layouts/` directory)
 - Processes `.tmpl` files in the `pages/` directory and outputs HTML
 - Allows passing dynamic data to templates via `.tmpl.json` files
+- Supports automatic pagination for pages with large datasets
 - Copies non-template files (e.g., `robots.txt`) to the output directory
 - Simple CLI interface to specify template and output directories
-- **Optional sitemap generation (`sitemap.xml`)**
-- **Supports defining a base URL for fully qualified sitemap entries**
+- Optional sitemap generation (`sitemap.xml`)
+- Supports defining a base URL for fully qualified sitemap entries
 
 ## Installation
 
@@ -111,6 +112,74 @@ If a `page.tmpl.json` file exists alongside a `page.tmpl`, it will be parsed and
 ```
 
 This allows dynamic data (like page titles) to be injected without modifying the templates directly.
+
+## Pagination Support
+
+The generator supports automatic pagination for pages with large datasets. If a `.tmpl.json` file contains an `Iterations` object, the page will be split into multiple paginated sections based on the `PageSize` field.
+
+### Example JSON for Pagination (`pages/projects/index.tmpl.json`):
+```json
+{
+  "Title": "Projects",
+  "Iterations": {
+    "PageSize": 10,
+    "PageRoot": "/projects",
+    "Data": [
+      { "name": "Project 1" },
+      { "name": "Project 2" },
+      { "name": "Project 3" }
+    ]
+  }
+}
+```
+
+### How Pagination Works
+
+The generator will split the `Data` array into chunks of `PageSize` and create paginated pages:
+
+```
+output/
+├── projects/index.html  (same as projects/1/index.html)
+├── projects/1/index.html
+├── projects/2/index.html
+├── projects/3/index.html
+```
+
+The `Iterations` object will provide pagination metadata:
+
+```json
+{
+  "PageSize": 10,
+  "PageNumber": 1,
+  "TotalPages": 3,
+  "TotalCount": 30,
+  "PageRoot": "/projects"
+}
+```
+
+### Pagination Component Example
+
+A paginator can be created using the `Iterations` metadata:
+
+```html
+<nav>
+    {{if gt .Iterations.PageNumber 1}}
+        <a href="{{.Iterations.PageRoot}}/{{sub .Iterations.PageNumber 1}}">Previous</a>
+    {{end}}
+    
+    {{range $i := seq 1 .Iterations.TotalPages}}
+        {{if eq $i $.Iterations.PageNumber}}
+            <span>{{$i}}</span>
+        {{else}}
+            <a href="{{$.Iterations.PageRoot}}/{{$i}}">{{$i}}</a>
+        {{end}}
+    {{end}}
+    
+    {{if lt .Iterations.PageNumber .Iterations.TotalPages}}
+        <a href="{{.Iterations.PageRoot}}/{{add .Iterations.PageNumber 1}}">Next</a>
+    {{end}}
+</nav>
+```
 
 ## Running Tests
 
