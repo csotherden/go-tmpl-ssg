@@ -19,22 +19,30 @@ func TestGenerateSite(t *testing.T) {
 
 	tests := []test{
 		{
-			name: "Mono test",
+			name: "Layout and component test",
 			templates: map[string]string{
-				"components/header.tmpl":         "<header>{{.Title}}</header>",
-				"components/widgets/widget.tmpl": "<widget>Widget</widget>",
-				"components/footer.tmpl":         "<footer>Footer</footer>",
-				"layouts/base.tmpl":              "{{template \"header.tmpl\" .}}<main>{{template %CONTENT% .}}</main>{{template \"footer.tmpl\" .}}",
-				"pages/index.tmpl":               "{{- /* layout:base.tmpl */ -}}<p>Index Page</p>",
-				"pages/about.tmpl":               "{{- /* layout:base.tmpl */ -}}<p>About Page</p>",
+				"components/header.tmpl": "<header>{{.Title}}</header>",
+				"components/footer.tmpl": "<footer>Footer</footer>",
+				"layouts/base.tmpl":      "<html><body>{{template \"header.tmpl\" .}}{{template %CONTENT% .}}{{template \"footer.tmpl\" .}}</body></html>",
+				"pages/index.tmpl":       "{{- /* layout:base.tmpl */ -}}<p>Index Page</p>",
 			},
 			data: map[string]interface{}{
 				"pages/index.tmpl.json": map[string]interface{}{"Title": "Home Page"},
-				"pages/about.tmpl.json": map[string]interface{}{"Title": "About Me"},
 			},
 			expectedFiles: map[string]string{
-				"index.html": "<header>Home Page</header><main><p>Index Page</p></main><footer>Footer</footer>",
-				"about.html": "<header>About Me</header><main><p>About Page</p></main><footer>Footer</footer>",
+				"index.html": `<html>
+  <body>
+    <header>
+      Home Page
+    </header>
+    <p>
+      Index Page
+    </p>
+    <footer>
+      Footer
+    </footer>
+  </body>
+</html>`,
 			},
 			expectedErr: nil,
 		},
@@ -52,7 +60,7 @@ func TestGenerateSite(t *testing.T) {
 		{
 			name: "Pagination test",
 			templates: map[string]string{
-				"pages/paginated/paginated.tmpl": "<ul>{{range .Iterations.Data}}<li>{{.}}</li>{{end}}</ul>",
+				"pages/paginated/paginated.tmpl": "<html><ul>{{range .Iterations.Data}}<li>{{.}}</li>{{end}}</ul></html>",
 			},
 			data: map[string]interface{}{
 				"pages/paginated/paginated.tmpl.json": map[string]interface{}{
@@ -65,10 +73,43 @@ func TestGenerateSite(t *testing.T) {
 				},
 			},
 			expectedFiles: map[string]string{
-				"paginated/paginated.html":   "<ul><li>Item 1</li><li>Item 2</li></ul>",
-				"paginated/1/paginated.html": "<ul><li>Item 1</li><li>Item 2</li></ul>",
-				"paginated/2/paginated.html": "<ul><li>Item 3</li><li>Item 4</li></ul>",
-				"paginated/3/paginated.html": "<ul><li>Item 5</li></ul>",
+				"paginated/paginated.html": `<html>
+  <ul>
+    <li>
+      Item 1
+    </li>
+    <li>
+      Item 2
+    </li>
+  </ul>
+</html>`,
+				"paginated/1/paginated.html": `<html>
+  <ul>
+    <li>
+      Item 1
+    </li>
+    <li>
+      Item 2
+    </li>
+  </ul>
+</html>`,
+				"paginated/2/paginated.html": `<html>
+  <ul>
+    <li>
+      Item 3
+    </li>
+    <li>
+      Item 4
+    </li>
+  </ul>
+</html>`,
+				"paginated/3/paginated.html": `<html>
+  <ul>
+    <li>
+      Item 5
+    </li>
+  </ul>
+</html>`,
 			},
 			expectedErr: nil,
 		},

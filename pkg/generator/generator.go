@@ -3,6 +3,7 @@ package generator
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/yosssi/gohtml"
 	"html/template"
 	"io"
 	"os"
@@ -294,7 +295,7 @@ func executeTemplate(outputPath string, tmpl *template.Template, templateName st
 	}
 	defer outputFile.Close()
 
-	return tmpl.ExecuteTemplate(outputFile, templateName, data)
+	return tmpl.ExecuteTemplate(gohtml.NewWriter(outputFile), templateName, data)
 }
 
 func copyFile(src, dst string) error {
