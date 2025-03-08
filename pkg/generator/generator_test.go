@@ -2,8 +2,10 @@ package generator
 
 import (
 	"encoding/json"
+	"html/template"
 	"os"
 	"path/filepath"
+	"reflect"
 	"strings"
 	"testing"
 )
@@ -198,5 +200,104 @@ func TestCopyFile(t *testing.T) {
 
 	if _, err := os.Stat(dstFile); os.IsNotExist(err) {
 		t.Errorf("Expected file %s not found", dstFile)
+	}
+}
+
+// Test template function examples
+func TestTemplateFunctions(t *testing.T) {
+	funcMap := FuncMap()
+
+	// Test html function
+	htmlFunc := funcMap["html"].(func(string) template.HTML)
+	result := string(htmlFunc("<p>Test</p>"))
+	if result != "<p>Test</p>" {
+		t.Errorf("html function failed, expected: <p>Test</p>, got: %s", result)
+	}
+
+	// Test date formatting with invalid input
+	formatDateFunc := funcMap["formatDate"].(func(string, string) string)
+	result = formatDateFunc("invalid-date", "2006-01-02")
+	if result != "Invalid Date" {
+		t.Errorf("formatDate with invalid input failed, expected: Invalid Date, got: %s", result)
+	}
+
+	// Test sequence generation
+	seqFunc := funcMap["seq"].(func(int, int) []int)
+	resultSeq := seqFunc(1, 5)
+	expected := []int{1, 2, 3, 4, 5}
+	if !reflect.DeepEqual(resultSeq, expected) {
+		t.Errorf("seq function failed, expected: %v, got: %v", expected, resultSeq)
+	}
+
+	// Test empty sequence
+	resultSeq = seqFunc(10, 5)
+	if len(resultSeq) != 0 {
+		t.Errorf("seq function with start > end should return empty slice, got: %v", resultSeq)
+	}
+}
+
+// Test edge cases for dirExists
+func TestDirExists(t *testing.T) {
+	tempDir := t.TempDir()
+
+	// Test with directory
+	exists, err := dirExists(tempDir)
+	if !exists || err != nil {
+		t.Errorf("dirExists failed with valid directory, exists: %v, err: %v", exists, err)
+	}
+
+	// Test with file
+	filePath := filepath.Join(tempDir, "testfile.txt")
+	if err := os.WriteFile(filePath, []byte("test"), 0644); err != nil {
+		t.Fatalf("Failed to create test file: %v", err)
+	}
+
+	exists, err = dirExists(filePath)
+	if exists || err != nil {
+		t.Errorf("dirExists should return false for files, exists: %v, err: %v", exists, err)
+	}
+
+	// Test with non-existent path
+	nonExistentPath := filepath.Join(tempDir, "nonexistent")
+	exists, err = dirExists(nonExistentPath)
+	if exists || err != nil {
+		t.Errorf("dirExists should return false for non-existent paths, exists: %v, err: %v", exists, err)
+	}
+}
+
+// Test DevServer functionality in executeTemplate
+func TestExecuteTemplateWithDevServer(t *testing.T) {
+	tempDir := t.TempDir()
+	outputPath := filepath.Join(tempDir, "index.html")
+
+	// Create a simple template
+	tmpl, err := template.New("test").Parse("<html><head></head><body>Test</body></html>")
+	if err != nil {
+		t.Fatalf("Failed to parse template: %v", err)
+	}
+
+	// Create generator with DevServer enabled
+	generator := &SiteGenerator{
+		Config: SiteConfig{
+			DevServer:     true,
+			DevServerAddr: "localhost:8080",
+		},
+	}
+
+	// Execute template
+	err = generator.executeTemplate(outputPath, tmpl, "test", nil)
+	if err != nil {
+		t.Fatalf("executeTemplate failed: %v", err)
+	}
+
+	// Read the output file
+	content, err := os.ReadFile(outputPath)
+	if err != nil {
+		t.Fatalf("Failed to read output file: %v", err)
+	}
+
+	// Check for WebSocket script
+	if !strings.Contains(string(content), "ws://localhost:8080/ws") {
+		t.Errorf("WebSocket script not injected in DevServer mode")
 	}
 }
