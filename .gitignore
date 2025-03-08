@@ -21,6 +21,16 @@
 go.work
 go.work.sum
 
+# InteliJ IDEA
+.idea/*
+
+# VSCode
+.vscode/*
+
+# Cursor
+.cursorrules
+.cursorignore
+
 # env file
 .env
 
