@@ -1,6 +1,7 @@
 package generator
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"github.com/yosssi/gohtml"
@@ -20,6 +21,8 @@ type SiteConfig struct {
 	OutputDir       string
 	GenerateSitemap bool
 	BaseURL         string
+	DevServer       bool
+	DevServerAddr   string
 }
 
 type SiteGenerator struct {
@@ -265,7 +268,7 @@ func (s *SiteGenerator) renderPageTemplate(pagePath, outputPath string, componen
 				return err
 			}
 
-			return executeTemplate(outputPath, tmpl, parentName, data)
+			return s.executeTemplate(outputPath, tmpl, parentName, data)
 		}
 	}
 
@@ -285,17 +288,66 @@ func (s *SiteGenerator) renderPageTemplate(pagePath, outputPath string, componen
 		return err
 	}
 
-	return executeTemplate(outputPath, finalTemplate, relPath, data)
+	return s.executeTemplate(outputPath, finalTemplate, relPath, data)
 }
 
-func executeTemplate(outputPath string, tmpl *template.Template, templateName string, data interface{}) error {
+func (s *SiteGenerator) executeTemplate(outputPath string, tmpl *template.Template, templateName string, data interface{}) error {
+	var buf bytes.Buffer
+
+	// Execute the template into the buffer
+	if err := tmpl.ExecuteTemplate(&buf, templateName, data); err != nil {
+		return err
+	}
+
+	// Convert buffer to string for manipulation
+	htmlContent := buf.String()
+
+	// Inject WebSocket script if DevServer is enabled
+	if s.Config.DevServer {
+		websocketScript := fmt.Sprintf(`<script>
+			function connectWebSocket() {
+				const socket = new WebSocket("ws://%s/ws");
+
+				socket.onopen = function() {
+					console.log("Connected to live reload server.");
+				};
+
+				socket.onmessage = function(event) {
+					if (event.data === "reload") {
+						console.log("Reload event received. Refreshing page...");
+						location.reload();
+					}
+				};
+
+				socket.onerror = function(error) {
+					console.error("WebSocket error:", error);
+				};
+
+				socket.onclose = function() {
+					console.warn("WebSocket connection lost. Reconnecting in 15 seconds...");
+					setTimeout(connectWebSocket, 15000);
+				};
+			}
+
+			connectWebSocket();
+		</script>`, s.Config.DevServerAddr)
+
+		// Insert before </head> tag
+		htmlContent = strings.Replace(htmlContent, "</head>", websocketScript+"\n</head>", 1)
+	}
+
+	// Format the HTML output
+	formattedHTML := gohtml.Format(htmlContent)
+
+	// Write the final output to the file
 	outputFile, err := os.Create(outputPath)
 	if err != nil {
 		return err
 	}
 	defer outputFile.Close()
 
-	return tmpl.ExecuteTemplate(gohtml.NewWriter(outputFile), templateName, data)
+	_, err = outputFile.WriteString(formattedHTML)
+	return err
 }
 
 func copyFile(src, dst string) error {
