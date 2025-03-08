@@ -90,7 +90,7 @@ Pages can specify a parent layout by including a comment at the beginning of the
 ```html
 {{template "header.tmpl" .}}
 <main>
-    {{template %CONTENT% .}}
+    {{template "PageContent" .}}
 </main>
 {{template "footer.tmpl" .}}
 ```

@@ -25,7 +25,7 @@ func TestGenerateSite(t *testing.T) {
 			templates: map[string]string{
 				"components/header.tmpl": "<header>{{.Title}}</header>",
 				"components/footer.tmpl": "<footer>Footer</footer>",
-				"layouts/base.tmpl":      "<html><body>{{template \"header.tmpl\" .}}{{template %CONTENT% .}}{{template \"footer.tmpl\" .}}</body></html>",
+				"layouts/base.tmpl":      "<html><body>{{template \"header.tmpl\" .}}{{template \"PageContent\" .}}{{template \"footer.tmpl\" .}}</body></html>",
 				"pages/index.tmpl":       "{{- /* layout:base.tmpl */ -}}<p>Index Page</p>",
 			},
 			data: map[string]interface{}{

@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/yosssi/gohtml"
 	"html/template"
 	"io"
 	"os"
@@ -12,6 +11,8 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+
+	"github.com/yosssi/gohtml"
 )
 
 var parentTemplateRegex = regexp.MustCompile(`(?m)^{{-? /\* layout:(.*?) \*/ -?}}`)
@@ -254,15 +255,14 @@ func (s *SiteGenerator) renderPageTemplate(pagePath, outputPath string, componen
 			if err != nil {
 				return err
 			}
-			childTemplateName := filepath.ToSlash(filepath.Base(pagePath))
 
-			_, err = tmpl.New(childTemplateName).Parse(string(content))
+			// Parse the page content as "PageContent" template
+			_, err = tmpl.New("PageContent").Parse(string(content))
 			if err != nil {
 				return err
 			}
 
-			parentContent = strings.ReplaceAll(parentContent, "{{template %CONTENT% .}}", "{{template \""+childTemplateName+"\" .}}")
-			parentContent = strings.ReplaceAll(parentContent, "{{template %CONTENT%}}", "{{template \""+childTemplateName+"\" .}}")
+			// Parse the layout template as is (no substitution needed)
 			_, err = tmpl.New(parentName).Parse(parentContent)
 			if err != nil {
 				return err
