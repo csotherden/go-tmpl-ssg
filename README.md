@@ -130,6 +130,45 @@ If a `page.tmpl.json` file exists alongside a `page.tmpl`, it will be parsed and
 
 This allows dynamic data (like page titles) to be injected without modifying the templates directly.
 
+## Built-in Template Functions
+
+The generator provides several built-in functions that can be used in your templates:
+
+| Function | Description | Example |
+|----------|-------------|---------|
+| `html` | Outputs a string as HTML without escaping | `{{ html "<strong>Bold</strong>" }}` |
+| `now` | Returns the current time as a string | `{{ now }}` |
+| `nowFormat` | Returns the current time formatted according to the Go time format layout | `{{ nowFormat "2006-01-02" }}` |
+| `formatDate` | Formats a date string (RFC3339 format) using the specified layout | `{{ formatDate "2023-04-01T15:04:05Z" "January 2, 2006" }}` |
+| `upper` | Converts string to uppercase | `{{ upper "text" }}` |
+| `lower` | Converts string to lowercase | `{{ lower "TEXT" }}` |
+| `title` | Converts string to title case | `{{ title "hello world" }}` |
+| `add` | Adds two integers | `{{ add 1 2 }}` |
+| `sub` | Subtracts second integer from first | `{{ sub 5 2 }}` |
+| `seq` | Generates a sequence of integers from start to end | `{{ range seq 1 5 }}{{ . }}{{ end }}` |
+| `join` | Joins array elements with a separator | `{{ join .Items ", " }}` |
+
+### Examples
+
+#### Formatting current date:
+```html
+<p>Generated on {{ nowFormat "January 2, 2006" }}</p>
+```
+
+#### Creating pagination links:
+```html
+<nav>
+  {{ range seq 1 .Iterations.TotalPages }}
+    <a href="{{ $.Iterations.PageRoot }}/{{ . }}/">{{ . }}</a>
+  {{ end }}
+</nav>
+```
+
+#### Using HTML content without escaping:
+```html
+{{ html .RichTextContent }}
+```
+
 ## Running Tests
 
 To run tests, use:
