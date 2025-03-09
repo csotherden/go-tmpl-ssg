@@ -16,14 +16,49 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Find the current path
             const path = window.location.pathname;
-            // Find the sidebar item with a matching path
-            const sidebarItems = document.querySelectorAll('.go-sidebar-item');
-            sidebarItems.forEach(item => {
-                if (item.getAttribute('href') === path || 
-                    (path !== '/' && item.getAttribute('href').startsWith(path))) {
+            const pathSegments = path.split('/').filter(Boolean);
+            
+            // Get the first segment to determine section (or empty for home)
+            const currentSection = pathSegments.length > 0 ? pathSegments[0] : '';
+            
+            // Handle navbar highlighting
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                const href = item.getAttribute('href');
+                const section = href.split('/').filter(Boolean)[0] || '';
+                
+                // Highlight the navbar item if it matches the current section
+                if (section === currentSection) {
                     item.classList.add('active');
                 }
             });
+            
+            // Handle sidebar highlighting - only if we're not at a section root
+            if (pathSegments.length > 1) {
+                const sidebarItems = document.querySelectorAll('.go-sidebar-item');
+                
+                // Find the most specific match
+                let bestMatch = null;
+                let bestMatchLength = 0;
+                
+                sidebarItems.forEach(item => {
+                    const itemHref = item.getAttribute('href');
+                    
+                    // Skip items that don't match the current path at all
+                    if (!path.startsWith(itemHref)) return;
+                    
+                    // If this is a more specific match, update our best match
+                    if (itemHref.length > bestMatchLength) {
+                        bestMatch = item;
+                        bestMatchLength = itemHref.length;
+                    }
+                });
+                
+                // Highlight the best match if found
+                if (bestMatch) {
+                    bestMatch.classList.add('active');
+                }
+            }
         });
     </script>
 </head>
