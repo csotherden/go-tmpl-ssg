@@ -35,5 +35,5 @@ go.work.sum
 .env
 
 # User defined templates and output
-templates/
+/templates/
 output/

@@ -1,0 +1,266 @@
+{{- /* layout:base.tmpl */ -}}
+
+<div class="prose prose-blue max-w-none">
+    <p class="lead text-lg text-gray-600">
+        Components are reusable template fragments that can be included in layouts and pages. They help keep your templates DRY (Don't Repeat Yourself) and make maintenance easier by centralizing common elements.
+    </p>
+
+    <h2 id="what-are-components" class="text-2xl font-bold mt-8 mb-4">What Are Components?</h2>
+    <p>
+        In Go Template SSG, components are simply Go template files stored in the <code>components/</code> directory. They can be included in any other template using the <code>{{`{{template}}`}}</code> action.
+    </p>
+
+    <p>
+        Components can range from simple UI elements like buttons and cards to more complex structures like navigation bars, footers, or sidebar widgets.
+    </p>
+
+    <h2 id="creating-components" class="text-2xl font-bold mt-8 mb-4">Creating Components</h2>
+    <p>
+        To create a component, add a <code>.tmpl</code> file to the <code>components/</code> directory or a subdirectory within it. For example:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>// components/header.tmpl
+&lt;header class="bg-white shadow"&gt;
+    &lt;div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8"&gt;
+        &lt;h1 class="text-3xl font-bold text-gray-900"&gt;{{`{{.Title}}`}}&lt;/h1&gt;
+    &lt;/div&gt;
+&lt;/header&gt;</code></pre>
+    </div>
+
+    <p>
+        Components can access the data context that is passed to them when they are included.
+    </p>
+
+    <h2 id="organizing-components" class="text-2xl font-bold mt-8 mb-4">Organizing Components</h2>
+    <p>
+        For larger sites, you may want to organize components into subdirectories:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>components/
+├── layout/
+│   ├── header.tmpl
+│   ├── footer.tmpl
+│   └── sidebar.tmpl
+├── ui/
+│   ├── button.tmpl
+│   ├── card.tmpl
+│   └── alert.tmpl
+└── widgets/
+    ├── recent-posts.tmpl
+    ├── tag-cloud.tmpl
+    └── search-box.tmpl</code></pre>
+    </div>
+
+    <p>
+        When including components from subdirectories, include the relative path from the <code>components/</code> directory:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6">
+        <pre><code>{{`{{template "ui/button.tmpl" .}}`}}</code></pre>
+    </div>
+
+    <h2 id="using-components" class="text-2xl font-bold mt-8 mb-4">Using Components</h2>
+    <p>
+        To include a component in another template, use the <code>{{`{{template}}`}}</code> action:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;{{`{{.Title}}`}}&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    {{`{{template "header.tmpl" .}}`}}
+    
+    &lt;main&gt;
+        {{`{{template "PageContent" .}}`}}
+    &lt;/main&gt;
+    
+    {{`{{template "footer.tmpl" .}}`}}
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+    </div>
+
+    <p>
+        The <code>.</code> after the template name passes the current data context to the component. You can also pass a specific part of your data:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6">
+        <pre><code>{{`{{template "widgets/post-card.tmpl" .Post}}`}}</code></pre>
+    </div>
+
+    <h2 id="passing-data" class="text-2xl font-bold mt-8 mb-4">Passing Data to Components</h2>
+    <p>
+        Components receive whatever data context is passed to them. This can be:
+    </p>
+
+    <ul class="list-disc pl-5 mt-2 mb-4">
+        <li class="mb-1">The entire data context (<code>.</code>)</li>
+        <li class="mb-1">A specific field or subset of the data (<code>.User</code>, <code>.Post</code>, etc.)</li>
+        <li class="mb-1">A newly created map or struct</li>
+    </ul>
+
+    <p>
+        Here's an example of how to pass different data to components:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>// Pass the entire context
+{{`{{template "header.tmpl" .}}`}}
+
+// Pass a specific field
+{{`{{template "user-profile.tmpl" .User}}`}}
+
+// Pass data with a with statement
+{{`{{with .Post}}`}}
+    {{`{{template "post-content.tmpl" .}}`}}
+{{`{{end}}`}}</code></pre>
+    </div>
+
+    <h2 id="nested-components" class="text-2xl font-bold mt-8 mb-4">Nested Components</h2>
+    <p>
+        Components can include other components, allowing for composable UI elements:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>// components/post-card.tmpl
+&lt;div class="post-card"&gt;
+    &lt;h2&gt;{{`{{.Title}}`}}&lt;/h2&gt;
+    &lt;div class="post-meta"&gt;
+        {{`{{template "components/post-meta.tmpl" .}}`}}
+    &lt;/div&gt;
+    &lt;div class="post-excerpt"&gt;
+        {{`{{.Excerpt}}`}}
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <p>
+        This approach allows you to build complex UIs from simple, reusable components.
+    </p>
+
+    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 my-6">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="ml-3">
+                <h3 class="text-sm font-medium text-blue-800">Tip</h3>
+                <div class="mt-2 text-sm text-blue-700">
+                    <p>
+                        When including other components from within a component, prefix the path with "components/" to ensure the template engine can find it correctly.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2 id="best-practices" class="text-2xl font-bold mt-8 mb-4">Best Practices for Components</h2>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Keep Components Focused</h3>
+    <p>
+        Each component should do one thing well. For example, a <code>pagination.tmpl</code> component should only handle pagination. This makes components easier to maintain and reuse.
+    </p>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Use Consistent Naming</h3>
+    <p>
+        Adopt a consistent naming convention for your components:
+    </p>
+    <ul class="list-disc pl-5 mt-2 mb-4">
+        <li class="mb-1">Use hyphens for multi-word names (<code>post-card.tmpl</code>)</li>
+        <li class="mb-1">Group related components in subdirectories</li>
+        <li class="mb-1">Use prefixes for variants (<code>button-primary.tmpl</code>, <code>button-secondary.tmpl</code>)</li>
+    </ul>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Document Components</h3>
+    <p>
+        Add comments to your components explaining:
+    </p>
+    <ul class="list-disc pl-5 mt-2 mb-4">
+        <li class="mb-1">What the component does</li>
+        <li class="mb-1">What data it expects</li>
+        <li class="mb-1">Any special behavior or conditions</li>
+    </ul>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6">
+        <pre><code>{{`{{/*
+  alert.tmpl
+  Displays an alert box with a title and message.
+  
+  Expected data:
+  - Type: string ("success", "warning", "error")
+  - Title: string
+  - Message: string
+*/}}`}}
+
+&lt;div class="alert alert-{{`{{.Type}}`}}"&gt;
+    &lt;h4 class="alert-title"&gt;{{`{{.Title}}`}}&lt;/h4&gt;
+    &lt;p class="alert-message"&gt;{{`{{.Message}}`}}&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <h2 id="example-components" class="text-2xl font-bold mt-8 mb-4">Example Components</h2>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Navigation Component</h3>
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>// components/navbar.tmpl
+&lt;nav class="bg-white shadow"&gt;
+    &lt;div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"&gt;
+        &lt;div class="flex justify-between h-16"&gt;
+            &lt;div class="flex"&gt;
+                &lt;div class="flex-shrink-0 flex items-center"&gt;
+                    &lt;a href="/" class="text-blue-600 font-bold text-xl"&gt;My Site&lt;/a&gt;
+                &lt;/div&gt;
+                &lt;div class="hidden sm:ml-6 sm:flex sm:space-x-8"&gt;
+                    {{`{{range .Navigation}}`}}
+                    &lt;a href="{{`{{.URL}}`}}" class="border-transparent text-gray-500 hover:border-blue-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"&gt;
+                        {{`{{.Title}}`}}
+                    &lt;/a&gt;
+                    {{`{{end}}`}}
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/nav&gt;</code></pre>
+    </div>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Card Component</h3>
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>// components/ui/card.tmpl
+&lt;div class="bg-white shadow rounded-lg overflow-hidden"&gt;
+    {{`{{if .Image}}`}}
+    &lt;img class="w-full h-48 object-cover" src="{{`{{.Image}}`}}" alt="{{`{{.Title}}`}}"&gt;
+    {{`{{end}}`}}
+    &lt;div class="p-6"&gt;
+        &lt;h3 class="text-lg font-semibold text-gray-900 mb-2"&gt;{{`{{.Title}}`}}&lt;/h3&gt;
+        &lt;p class="text-gray-600"&gt;{{`{{.Description}}`}}&lt;/p&gt;
+        {{`{{if .URL}}`}}
+        &lt;div class="mt-4"&gt;
+            &lt;a href="{{`{{.URL}}`}}" class="text-blue-600 hover:text-blue-800"&gt;Read more &rarr;&lt;/a&gt;
+        &lt;/div&gt;
+        {{`{{end}}`}}
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <h2 id="next-steps">Next Steps</h2>
+    <p>
+        Now that you understand how to create and use components, you might want to explore:
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+        <a href="/guide/templates/pages/" class="go-card block hover:no-underline">
+            <h3 class="text-lg font-semibold text-go-blue">Pages</h3>
+            <p class="text-gray-600">Learn how to create pages that use layouts and components.</p>
+        </a>
+        <a href="/guide/templates/functions/" class="go-card block hover:no-underline">
+            <h3 class="text-lg font-semibold text-go-blue">Template Functions</h3>
+            <p class="text-gray-600">Learn about the template functions available to enhance your components.</p>
+        </a>
+    </div>
+</div> 

@@ -1,0 +1,135 @@
+{{- /* layout:base.tmpl */ -}}
+
+<div class="prose prose-blue max-w-none">
+    <p class="lead text-lg text-gray-600">
+        Layouts are templates that define the structure of your pages. They provide a consistent structure across your site while allowing each page to have its own unique content.
+    </p>
+
+    <h2 id="creating-layouts" class="text-2xl font-bold mt-8 mb-4">Creating Layouts</h2>
+    <p>
+        Layouts are stored in the <code>layouts/</code> directory of your template folder. Each layout is a Go template file with a <code>.tmpl</code> extension.
+    </p>
+
+    <p>
+        Here's an example of a simple layout template (<code>layouts/base.tmpl</code>):
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;{{`{{.Title}}`}}&lt;/title&gt;
+    &lt;link rel="stylesheet" href="/assets/style.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;header&gt;
+        {{`{{template "header.tmpl" .}}`}}
+    &lt;/header&gt;
+    
+    &lt;main&gt;
+        {{`{{template "PageContent" .}}`}}
+    &lt;/main&gt;
+    
+    &lt;footer&gt;
+        {{`{{template "footer.tmpl" .}}`}}
+    &lt;/footer&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+    </div>
+
+    <h2 id="using-layouts" class="text-2xl font-bold mt-8 mb-4">Using Layouts in Pages</h2>
+    <p>
+        To use a layout in a page, add a special comment at the beginning of your page template:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6">
+        <pre><code>{{`{{- /* layout:base.tmpl */ -}}`}}
+&lt;h1&gt;{{`{{.Title}}`}}&lt;/h1&gt;
+&lt;p&gt;Welcome to my page!&lt;/p&gt;</code></pre>
+    </div>
+
+    <p>
+        When the generator processes this page, it will:
+    </p>
+    <ol class="list-decimal pl-5 mt-2 mb-4">
+        <li class="mb-1">Detect the layout comment and find the appropriate layout template</li>
+        <li class="mb-1">Parse the page content into a template named <code>PageContent</code></li>
+        <li class="mb-1">Render the layout template, which includes the page content via <code>{{`{{template "PageContent" .}}`}}</code></li>
+    </ol>
+
+    <h2 id="nested-layouts" class="text-2xl font-bold mt-8 mb-4">Nested Layouts</h2>
+    <p>
+        You can create more complex layouts by nesting them. For example, you might have a base layout and specialized layouts for different sections of your site:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6">
+        <pre><code>// layouts/blog.tmpl
+{{`{{- /* layout:base.tmpl */ -}}`}}
+&lt;div class="blog-container"&gt;
+    &lt;aside class="sidebar"&gt;
+        {{`{{template "blog-sidebar.tmpl" .}}`}}
+    &lt;/aside&gt;
+    &lt;article class="content"&gt;
+        {{`{{template "PageContent" .}}`}}
+    &lt;/article&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <p>
+        Then in your blog post:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6">
+        <pre><code>{{`{{- /* layout:blog.tmpl */ -}}`}}
+&lt;h1&gt;{{`{{.Title}}`}}&lt;/h1&gt;
+&lt;div class="post-meta"&gt;Posted on {{`{{formatDate .Date "January 2, 2006"}}`}}&lt;/div&gt;
+&lt;div class="post-content"&gt;
+    {{`{{.Content}}`}}
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <h2 id="best-practices" class="text-2xl font-bold mt-8 mb-4">Best Practices for Layouts</h2>
+    
+    <ul class="list-disc pl-5 mt-2 mb-4">
+        <li class="mb-1"><strong>Keep layouts focused</strong> - Each layout should serve a specific purpose</li>
+        <li class="mb-1"><strong>Avoid deeply nested layouts</strong> - Too many nesting levels can make debugging difficult</li>
+        <li class="mb-1"><strong>Use components for reusable UI elements</strong> - Instead of repeating code in layouts</li>
+        <li class="mb-1"><strong>Pass data consistently</strong> - Always use <code>.</code> to pass the full data context to included templates</li>
+    </ul>
+
+    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 my-6">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="ml-3">
+                <h3 class="text-sm font-medium text-yellow-800">Important Note</h3>
+                <div class="mt-2 text-sm text-yellow-700">
+                    <p>
+                        Always use <code>{{`{{template "PageContent" .}}`}}</code> in your layouts to indicate where the page content should be inserted. This is a special template name that the generator looks for.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2 id="next-steps" class="text-2xl font-bold mt-8 mb-4">Next Steps</h2>
+    <p>
+        Now that you understand layouts, check out these related topics:
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+        <a href="/guide/templates/components/" class="go-card block hover:no-underline">
+            <h3 class="text-lg font-semibold text-go-blue">Components</h3>
+            <p class="text-gray-600">Learn how to create reusable components for your layouts and pages.</p>
+        </a>
+        <a href="/guide/templates/pages/" class="go-card block hover:no-underline">
+            <h3 class="text-lg font-semibold text-go-blue">Pages</h3>
+            <p class="text-gray-600">Learn how to create pages that use layouts and components.</p>
+        </a>
+    </div>
+</div> 

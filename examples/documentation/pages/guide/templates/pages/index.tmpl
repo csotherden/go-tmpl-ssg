@@ -1,0 +1,334 @@
+{{- /* layout:base.tmpl */ -}}
+
+<div class="prose prose-blue max-w-none">
+    <p class="lead text-lg text-gray-600">
+        Pages are the heart of your static site. They define the content that visitors will see when they browse your website. In Go Template SSG, pages are created using templates and can be enhanced with data from JSON files.
+    </p>
+
+    <h2 id="creating-pages" class="text-2xl font-bold mt-8 mb-4">Creating Pages</h2>
+    <p>
+        Pages are stored in the <code>pages/</code> directory of your template folder. Each page is a Go template file with a <code>.tmpl</code> extension that will be rendered as an HTML file in your output directory.
+    </p>
+
+    <p>
+        The simplest page template might look like this:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>{{`{{- /* layout:base.tmpl */ -}}`}}
+&lt;h1&gt;Welcome to My Site&lt;/h1&gt;
+&lt;p&gt;This is a simple page created with Go Template SSG.&lt;/p&gt;</code></pre>
+    </div>
+
+    <p>
+        The comment at the top specifies which layout to use for this page. The rest of the content is what will be inserted into the layout's <code>PageContent</code> template.
+    </p>
+
+    <h2 id="page-organization" class="text-2xl font-bold mt-8 mb-4">Page Organization</h2>
+    <p>
+        You can organize your pages into subdirectories to create a logical structure for your site:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>pages/
+├── index.tmpl                # Home page (/)
+├── about/
+│   └── index.tmpl            # About page (/about/)
+├── blog/
+│   ├── index.tmpl            # Blog index (/blog/)
+│   ├── post1/
+│   │   └── index.tmpl        # Blog post (/blog/post1/)
+│   └── post2/
+│       └── index.tmpl        # Blog post (/blog/post2/)
+└── contact.tmpl              # Contact page (/contact.html)</code></pre>
+    </div>
+
+    <p>
+        Using <code>index.tmpl</code> in subdirectories creates clean URLs without the <code>.html</code> extension (when the server is properly configured).
+    </p>
+
+    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 my-6">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="ml-3">
+                <h3 class="text-sm font-medium text-yellow-800">Note</h3>
+                <div class="mt-2 text-sm text-yellow-700">
+                    <p>
+                        When serving your static site, make sure your web server is configured to serve <code>index.html</code> files when a directory is requested. Most modern web servers and static hosting providers do this by default.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2 id="using-layouts" class="text-2xl font-bold mt-8 mb-4">Using Layouts with Pages</h2>
+    <p>
+        To apply a layout to a page, add a special comment at the beginning of your page template:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6">
+        <pre><code>{{`{{- /* layout:base.tmpl */ -}}`}}</code></pre>
+    </div>
+
+    <p>
+        This tells the generator to wrap your page content in the specified layout. The layout should include a <code>{{`{{template "PageContent" .}}`}}</code> directive where the page content will be inserted.
+    </p>
+
+    <h2 id="data-files" class="text-2xl font-bold mt-8 mb-4">Using JSON Data Files with Pages</h2>
+    <p>
+        You can associate JSON data with a page by creating a JSON file with the same name as your template but with a <code>.tmpl.json</code> extension:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>// pages/about/index.tmpl
+{{`{{- /* layout:base.tmpl */ -}}`}}
+&lt;h1&gt;{{`{{.Title}}`}}&lt;/h1&gt;
+&lt;div class="about-content"&gt;
+    &lt;p&gt;{{`{{.Description}}`}}&lt;/p&gt;
+    &lt;h2&gt;Our Team&lt;/h2&gt;
+    &lt;ul&gt;
+        {{`{{range .Team}}`}}
+        &lt;li&gt;{{`{{.Name}}`}} - {{`{{.Role}}`}}&lt;/li&gt;
+        {{`{{end}}`}}
+    &lt;/ul&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>// pages/about/index.tmpl.json
+{
+  "Title": "About Our Company",
+  "Description": "We are a team of passionate individuals dedicated to creating amazing products.",
+  "Team": [
+    {"Name": "Alice", "Role": "CEO"},
+    {"Name": "Bob", "Role": "CTO"},
+    {"Name": "Charlie", "Role": "Designer"}
+  ]
+}</code></pre>
+    </div>
+
+    <p>
+        The data from the JSON file is available in the page template, allowing you to separate content from presentation.
+    </p>
+
+    <h2 id="nested-templates" class="text-2xl font-bold mt-8 mb-4">Using Components in Pages</h2>
+    <p>
+        You can include components in your pages using the <code>{{`{{template}}`}}</code> action:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>{{`{{- /* layout:base.tmpl */ -}}`}}
+&lt;h1&gt;Our Products&lt;/h1&gt;
+
+&lt;div class="products-grid"&gt;
+    {{`{{range .Products}}`}}
+        {{`{{template "ui/product-card.tmpl" .}}`}}
+    {{`{{end}}`}}
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <p>
+        This creates a modular page structure where reusable UI elements are defined once and used throughout your site.
+    </p>
+
+    <h2 id="static-assets" class="text-2xl font-bold mt-8 mb-4">Including Static Assets</h2>
+    <p>
+        Any non-template files in the <code>pages/</code> directory will be copied as-is to the output directory. This is useful for static assets like:
+    </p>
+
+    <ul class="list-disc pl-5 mt-2 mb-4">
+        <li class="mb-1">Images (<code>pages/images/logo.png</code>)</li>
+        <li class="mb-1">CSS files (<code>pages/assets/style.css</code>)</li>
+        <li class="mb-1">JavaScript files (<code>pages/js/main.js</code>)</li>
+        <li class="mb-1">Robots.txt, favicon.ico, etc.</li>
+    </ul>
+
+    <p>
+        These files maintain their relative paths in the output directory.
+    </p>
+
+    <h2 id="pagination" class="text-2xl font-bold mt-8 mb-4">Creating Paginated Pages</h2>
+    <p>
+        For pages with large datasets (like blogs or product listings), you can use pagination to split the content across multiple pages:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>// pages/blog/index.tmpl.json
+{
+  "Title": "Blog",
+  "Iterations": {
+    "PageSize": 5,
+    "PageRoot": "/blog",
+    "Data": [
+      {"Title": "First Post", "Date": "2023-01-01", "Content": "..."},
+      {"Title": "Second Post", "Date": "2023-01-05", "Content": "..."},
+      ...more posts...
+    ]
+  }
+}</code></pre>
+    </div>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>// pages/blog/index.tmpl
+{{`{{- /* layout:base.tmpl */ -}}`}}
+&lt;h1&gt;{{`{{.Title}}`}}&lt;/h1&gt;
+
+&lt;div class="blog-posts"&gt;
+    {{`{{range .Iterations.Data}}`}}
+    &lt;article class="blog-post"&gt;
+        &lt;h2&gt;{{`{{.Title}}`}}&lt;/h2&gt;
+        &lt;div class="post-date"&gt;{{`{{formatDate .Date "January 2, 2006"}}`}}&lt;/div&gt;
+        &lt;div class="post-content"&gt;{{`{{.Content}}`}}&lt;/div&gt;
+    &lt;/article&gt;
+    {{`{{end}}`}}
+&lt;/div&gt;
+
+&lt;div class="pagination"&gt;
+    &lt;p&gt;Page {{`{{.Iterations.PageNumber}}`}} of {{`{{.Iterations.TotalPages}}`}}&lt;/p&gt;
+    &lt;div class="pagination-links"&gt;
+        {{`{{range seq 1 .Iterations.TotalPages}}`}}
+        &lt;a href="{{`{{$.Iterations.PageRoot}}`}}/{{`{{.}}`}}/" 
+           class="{{`{{if eq . $.Iterations.PageNumber}}`}}active{{`{{end}}`}}"&gt;
+            {{`{{.}}`}}
+        &lt;/a&gt;
+        {{`{{end}}`}}
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <p>
+        The generator will create multiple HTML files:
+    </p>
+    
+    <ul class="list-disc pl-5 mt-2 mb-4">
+        <li class="mb-1"><code>/blog/index.html</code> - First page of posts</li>
+        <li class="mb-1"><code>/blog/1/index.html</code> - Also the first page (duplicate)</li>
+        <li class="mb-1"><code>/blog/2/index.html</code> - Second page of posts</li>
+        <li class="mb-1">And so on...</li>
+    </ul>
+
+    <h2 id="best-practices" class="text-2xl font-bold mt-8 mb-4">Best Practices for Pages</h2>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Organize Content Logically</h3>
+    <p>
+        Use directories to organize your pages in a way that matches your site's navigation structure:
+    </p>
+    <ul class="list-disc pl-5 mt-2 mb-4">
+        <li class="mb-1">Group related pages in directories (e.g., <code>blog/</code>, <code>products/</code>)</li>
+        <li class="mb-1">Use descriptive directory names that reflect the content</li>
+        <li class="mb-1">Consider URL structures when planning your directory structure</li>
+    </ul>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Keep Templates Clean</h3>
+    <p>
+        Follow these principles to maintain clean templates:
+    </p>
+    <ul class="list-disc pl-5 mt-2 mb-4">
+        <li class="mb-1">Extract reusable parts into components</li>
+        <li class="mb-1">Use layouts for consistent page structure</li>
+        <li class="mb-1">Separate data from presentation using JSON files</li>
+        <li class="mb-1">Use comments to document complex template logic</li>
+    </ul>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Test Your Pages</h3>
+    <p>
+        Before deploying your site:
+    </p>
+    <ul class="list-disc pl-5 mt-2 mb-4">
+        <li class="mb-1">Test with the development server to ensure pages render correctly</li>
+        <li class="mb-1">Check responsive layouts on different screen sizes</li>
+        <li class="mb-1">Verify all links work as expected</li>
+        <li class="mb-1">Validate HTML output for errors</li>
+    </ul>
+
+    <h2 id="example-pages" class="text-2xl font-bold mt-8 mb-4">Example Pages</h2>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Home Page</h3>
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>// pages/index.tmpl
+{{`{{- /* layout:base.tmpl */ -}}`}}
+
+&lt;div class="hero bg-blue-50 py-12 px-4 sm:px-6 lg:px-8 rounded-lg"&gt;
+    &lt;div class="max-w-3xl mx-auto text-center"&gt;
+        &lt;h1 class="text-4xl font-extrabold text-gray-900 sm:text-5xl sm:tracking-tight lg:text-6xl"&gt;
+            {{`{{.Title}}`}}
+        &lt;/h1&gt;
+        &lt;p class="mt-6 text-xl text-gray-500"&gt;
+            {{`{{.Description}}`}}
+        &lt;/p&gt;
+        &lt;div class="mt-8"&gt;
+            &lt;a href="/get-started" class="go-btn px-5 py-3 rounded-md text-lg"&gt;Get Started&lt;/a&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class="py-12"&gt;
+    &lt;div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"&gt;
+        &lt;h2 class="text-3xl font-extrabold text-center text-gray-900"&gt;Features&lt;/h2&gt;
+        &lt;div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-8"&gt;
+            {{`{{range .Features}}`}}
+                {{`{{template "ui/feature-card.tmpl" .}}`}}
+            {{`{{end}}`}}
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Blog Post Page</h3>
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>// pages/blog/post1/index.tmpl
+{{`{{- /* layout:blog.tmpl */ -}}`}}
+
+&lt;article class="blog-post"&gt;
+    &lt;header&gt;
+        &lt;h1&gt;{{`{{.Title}}`}}&lt;/h1&gt;
+        &lt;div class="post-meta"&gt;
+            &lt;span class="post-date"&gt;{{`{{formatDate .Date "January 2, 2006"}}`}}&lt;/span&gt;
+            &lt;span class="post-author"&gt;by {{`{{.Author}}`}}&lt;/span&gt;
+        &lt;/div&gt;
+    &lt;/header&gt;
+    
+    &lt;div class="post-content"&gt;
+        {{`{{html .Content}}`}}
+    &lt;/div&gt;
+    
+    &lt;footer&gt;
+        &lt;div class="tags"&gt;
+            {{`{{range .Tags}}`}}
+            &lt;a href="/tags/{{`{{.}}`}}/" class="tag"&gt;{{`{{.}}`}}&lt;/a&gt;
+            {{`{{end}}`}}
+        &lt;/div&gt;
+    &lt;/footer&gt;
+&lt;/article&gt;
+
+&lt;div class="post-navigation"&gt;
+    {{`{{if .PreviousPost}}`}}
+    &lt;a href="{{`{{.PreviousPost.URL}}`}}" class="prev-post"&gt;&larr; {{`{{.PreviousPost.Title}}`}}&lt;/a&gt;
+    {{`{{end}}`}}
+    
+    {{`{{if .NextPost}}`}}
+    &lt;a href="{{`{{.NextPost.URL}}`}}" class="next-post"&gt;{{`{{.NextPost.Title}}`}} &rarr;&lt;/a&gt;
+    {{`{{end}}`}}
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <h2 id="next-steps">Next Steps</h2>
+    <p>
+        Now that you understand how to create pages, you might want to explore:
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+        <a href="/guide/data/" class="go-card block hover:no-underline">
+            <h3 class="text-lg font-semibold text-go-blue">Working with Data</h3>
+            <p class="text-gray-600">Learn more about using JSON data files to inject content into your templates.</p>
+        </a>
+        <a href="/guide/pagination/" class="go-card block hover:no-underline">
+            <h3 class="text-lg font-semibold text-go-blue">Pagination</h3>
+            <p class="text-gray-600">Learn how to paginate large datasets in your templates.</p>
+        </a>
+    </div>
+</div> 
