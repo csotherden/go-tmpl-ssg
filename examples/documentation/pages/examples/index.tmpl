@@ -1,0 +1,202 @@
+{{- /* layout:base.tmpl */ -}}
+
+<div class="prose prose-blue max-w-none">
+    <h1 class="text-3xl font-bold mb-6">Example Projects</h1>
+    
+    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 my-6">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="ml-3">
+                <p class="text-sm text-blue-700">
+                    Explore a collection of practical example projects that demonstrate how to build different types of websites using Go Template SSG. Each example showcases different features and use cases.
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <h2 id="overview" class="text-2xl font-bold mt-8 mb-4">Available Examples</h2>
+    <p class="text-gray-700 mb-6">
+        These fully-functional examples demonstrate various website types you can build with Go Template SSG. Each example comes with detailed documentation explaining its architecture, components, and implementation details.
+    </p>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 my-8">
+        <!-- Landing Page Example -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 flex flex-col h-full hover:shadow-lg transition-shadow duration-300">
+            <div class="p-1 bg-gradient-to-r from-blue-500 to-indigo-600"></div>
+            <div class="p-6 flex-grow">
+                <div class="flex items-center mb-4">
+                    <div class="rounded-full bg-blue-100 p-2 mr-3">
+                        <svg class="h-6 w-6 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800">Landing Page</h3>
+                </div>
+                <p class="text-gray-600 mb-4">
+                    A product launch landing page for a SaaS application, featuring a hero section, feature highlights, testimonials, pricing tables, and a waitlist signup form.
+                </p>
+                <ul class="text-gray-600 mb-6 text-sm space-y-1">
+                    <li class="flex items-center">
+                        <svg class="h-4 w-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                        </svg>
+                        Single-page design
+                    </li>
+                    <li class="flex items-center">
+                        <svg class="h-4 w-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                        </svg>
+                        Component-based architecture
+                    </li>
+                    <li class="flex items-center">
+                        <svg class="h-4 w-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                        </svg>
+                        Responsive design with Tailwind CSS
+                    </li>
+                </ul>
+            </div>
+            <div class="px-6 pb-6">
+                <a href="/examples/landing/" class="block w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded text-center transition duration-200">
+                    View Example Details
+                </a>
+            </div>
+        </div>
+        
+        <!-- Portfolio Example -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 flex flex-col h-full hover:shadow-lg transition-shadow duration-300">
+            <div class="p-1 bg-gradient-to-r from-purple-500 to-pink-600"></div>
+            <div class="p-6 flex-grow">
+                <div class="flex items-center mb-4">
+                    <div class="rounded-full bg-purple-100 p-2 mr-3">
+                        <svg class="h-6 w-6 text-purple-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800">Portfolio Website</h3>
+                </div>
+                <p class="text-gray-600 mb-4">
+                    A professional multi-page portfolio website for a web developer, featuring projects showcase, blog functionality, about page, and contact form.
+                </p>
+                <ul class="text-gray-600 mb-6 text-sm space-y-1">
+                    <li class="flex items-center">
+                        <svg class="h-4 w-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                        </svg>
+                        Multi-page architecture
+                    </li>
+                    <li class="flex items-center">
+                        <svg class="h-4 w-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                        </svg>
+                        Blog functionality
+                    </li>
+                    <li class="flex items-center">
+                        <svg class="h-4 w-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                        </svg>
+                        Project and blog cards components
+                    </li>
+                </ul>
+            </div>
+            <div class="px-6 pb-6">
+                <a href="/examples/portfolio/" class="block w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded text-center transition duration-200">
+                    View Example Details
+                </a>
+            </div>
+        </div>
+        
+        <!-- Documentation Site Example -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 flex flex-col h-full hover:shadow-lg transition-shadow duration-300">
+            <div class="p-1 bg-gradient-to-r from-green-500 to-teal-600"></div>
+            <div class="p-6 flex-grow">
+                <div class="flex items-center mb-4">
+                    <div class="rounded-full bg-green-100 p-2 mr-3">
+                        <svg class="h-6 w-6 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800">Documentation Site</h3>
+                </div>
+                <p class="text-gray-600 mb-4">
+                    A comprehensive technical documentation site with hierarchical content organization, navigation systems, and specialized components for documentation.
+                </p>
+                <ul class="text-gray-600 mb-6 text-sm space-y-1">
+                    <li class="flex items-center">
+                        <svg class="h-4 w-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                        </svg>
+                        Hierarchical content structure
+                    </li>
+                    <li class="flex items-center">
+                        <svg class="h-4 w-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                        </svg>
+                        Sidebar navigation and breadcrumbs
+                    </li>
+                    <li class="flex items-center">
+                        <svg class="h-4 w-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                        </svg>
+                        Code highlighting and callout boxes
+                    </li>
+                </ul>
+            </div>
+            <div class="px-6 pb-6">
+                <a href="/examples/documentation/" class="block w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded text-center transition duration-200">
+                    View Example Details
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <h2 id="usage" class="text-2xl font-bold mt-8 mb-4">Using These Examples</h2>
+    <p class="text-gray-700 mb-4">
+        Each example project can be used in different ways:
+    </p>
+    
+    <ul class="list-disc pl-6 mb-6 space-y-2">
+        <li class="text-gray-700"><strong class="font-semibold">Learning resources:</strong> Study the templates, components, and structure to understand how different websites can be built with Go Template SSG.</li>
+        <li class="text-gray-700"><strong class="font-semibold">Starter templates:</strong> Use any example as a starting point for your own project by copying and modifying the files.</li>
+        <li class="text-gray-700"><strong class="font-semibold">Component library:</strong> Borrow specific components from different examples to use in your own projects.</li>
+    </ul>
+    
+    <h2 id="running-examples" class="text-2xl font-bold mt-8 mb-4">Running Examples Locally</h2>
+    <p class="text-gray-700 mb-4">
+        To generate and serve any example site locally, use the following commands (replacing <code class="bg-gray-100 px-1 rounded">[example-name]</code> with <code class="bg-gray-100 px-1 rounded">landing</code>, <code class="bg-gray-100 px-1 rounded">portfolio</code>, or <code class="bg-gray-100 px-1 rounded">documentation</code>):
+    </p>
+    
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code># Generate the static site
+go run cmd/go-tmpl-generate/main.go --template examples/[example-name] --output examples/[example-name]/output
+
+# Serve the generated site using the development server
+go run cmd/go-tmpl-dev-server/main.go --source examples/[example-name] --root examples/[example-name]/output</code></pre>
+    </div>
+    
+    <h2 id="custom-examples" class="text-2xl font-bold mt-8 mb-4">Creating Your Own Examples</h2>
+    <p class="text-gray-700 mb-4">
+        We encourage the community to create and share additional examples for Go Template SSG. If you've built a project using this tool that demonstrates unique features or solves common problems, consider sharing it with others.
+    </p>
+    
+    <p class="text-gray-700 mb-4">
+        To contribute an example to the official repository:
+    </p>
+    
+    <ol class="list-decimal pl-6 mb-6 space-y-2">
+        <li class="text-gray-700">Fork the Go Template SSG repository</li>
+        <li class="text-gray-700">Create your example following the project structure conventions</li>
+        <li class="text-gray-700">Add documentation explaining your example's features and implementation</li>
+        <li class="text-gray-700">Submit a pull request to the main repository</li>
+    </ol>
+    
+    <div class="mt-10 flex justify-end">
+        <a href="/getting-started/quickstart/" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition duration-200 flex items-center">
+            Quick Start Guide →
+        </a>
+    </div>
+</div> 
