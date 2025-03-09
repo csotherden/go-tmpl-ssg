@@ -1,0 +1,269 @@
+{{- /* layout:base.tmpl */ -}}
+
+<div class="prose prose-blue max-w-none">
+    <h1 class="text-3xl font-bold mb-6">Documentation Site Example</h1>
+    
+    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 my-6">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="ml-3">
+                <p class="text-sm text-blue-700">
+                    This example demonstrates how to build a comprehensive documentation site with Go Template SSG. It showcases organized content structure, navigation systems, code highlighting, and responsive design with Tailwind CSS.
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <h2 id="overview" class="text-2xl font-bold mt-8 mb-4">Overview</h2>
+    <p class="text-gray-700 mb-4">
+        The documentation site example illustrates how to create a technical documentation platform for the Go Template SSG project itself. This multi-page site demonstrates best practices for organizing and presenting technical documentation, including:
+    </p>
+    
+    <ul class="list-disc pl-6 mb-6 space-y-2">
+        <li class="text-gray-700">Hierarchical content organization with intuitive navigation</li>
+        <li class="text-gray-700">Consistent page structure with improved readability</li>
+        <li class="text-gray-700">Syntax highlighting for code blocks</li>
+        <li class="text-gray-700">Interactive components like tabs, expandable sections, and tables</li>
+        <li class="text-gray-700">Responsive design that works across all device sizes</li>
+    </ul>
+    
+    <h2 id="directory-structure" class="text-2xl font-bold mt-8 mb-4">Project Structure</h2>
+    <p class="text-gray-700 mb-4">
+        The documentation site example follows an organized structure to support multiple sections and nested pages:
+    </p>
+    
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>examples/documentation/
+├── layouts/
+│   └── base.tmpl           # Base layout template with documentation styling
+├── components/
+│   ├── sidebar.tmpl        # Documentation navigation sidebar
+│   ├── header.tmpl         # Site header with search and links
+│   ├── footer.tmpl         # Site footer with useful links
+│   ├── breadcrumbs.tmpl    # Breadcrumb navigation component
+│   ├── code-block.tmpl     # Syntax-highlighted code display
+│   └── toc.tmpl            # Table of contents component
+└── pages/
+    ├── index.tmpl          # Documentation home page
+    ├── getting-started/    # Getting started guides
+    │   ├── index.tmpl      # Overview page
+    │   ├── installation.tmpl # Installation guide
+    │   └── quickstart.tmpl # Quick start guide
+    ├── concepts/           # Core concepts documentation
+    │   ├── index.tmpl      # Concepts overview
+    │   ├── templates.tmpl  # Templates explanation
+    │   └── data-files.tmpl # Data files explanation
+    ├── examples/           # Example projects documentation
+    │   ├── index.tmpl      # Examples overview
+    │   ├── landing/        # Landing page example docs
+    │   │   └── index.tmpl  # Landing page documentation
+    │   ├── portfolio/      # Portfolio example docs
+    │   │   └── index.tmpl  # Portfolio documentation
+    │   └── documentation/  # Documentation example docs
+    │       └── index.tmpl  # Documentation site documentation
+    └── api/                # API documentation
+        ├── index.tmpl      # API overview
+        ├── functions.tmpl  # Built-in functions
+        └── directives.tmpl # Template directives</code></pre>
+    </div>
+    
+    <h2 id="architecture" class="text-2xl font-bold mt-8 mb-4">Architecture</h2>
+    
+    <h3 id="layout" class="text-xl font-semibold mt-6 mb-3">Layout</h3>
+    <p class="text-gray-700 mb-4">
+        The documentation site uses a specialized documentation layout defined in <code class="bg-gray-100 px-1 rounded">layouts/base.tmpl</code>. This layout provides a three-column structure with:
+    </p>
+    
+    <ul class="list-disc pl-6 mb-6 space-y-2">
+        <li class="text-gray-700">A navigation sidebar for browsing documentation sections</li>
+        <li class="text-gray-700">A main content area with article content</li>
+        <li class="text-gray-700">A table of contents column for the current page (on larger screens)</li>
+    </ul>
+    
+    <p class="text-gray-700 mb-4">
+        The layout also includes metadata for SEO, responsive viewport settings, and loads the required CSS frameworks for styling and syntax highlighting.
+    </p>
+    
+    <h3 id="components" class="text-xl font-semibold mt-6 mb-3">Components</h3>
+    <p class="text-gray-700 mb-4">
+        The documentation site uses several specialized components to enhance navigation and content display:
+    </p>
+    
+    <div class="overflow-x-auto">
+        <table class="w-full mt-4 mb-6 border-collapse">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th class="py-2 px-4 text-left font-semibold border-b">Component</th>
+                    <th class="py-2 px-4 text-left font-semibold border-b">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="border-b">
+                    <td class="py-2 px-4"><code class="bg-gray-100 px-1 rounded">sidebar.tmpl</code></td>
+                    <td class="py-2 px-4">Collapsible navigation sidebar with section grouping and active state highlighting</td>
+                </tr>
+                <tr class="border-b">
+                    <td class="py-2 px-4"><code class="bg-gray-100 px-1 rounded">header.tmpl</code></td>
+                    <td class="py-2 px-4">Site header with logo, navigation links, and search functionality</td>
+                </tr>
+                <tr class="border-b">
+                    <td class="py-2 px-4"><code class="bg-gray-100 px-1 rounded">footer.tmpl</code></td>
+                    <td class="py-2 px-4">Site footer with copyright information, links, and GitHub repository reference</td>
+                </tr>
+                <tr class="border-b">
+                    <td class="py-2 px-4"><code class="bg-gray-100 px-1 rounded">breadcrumbs.tmpl</code></td>
+                    <td class="py-2 px-4">Hierarchical navigation showing the current page's location in the site structure</td>
+                </tr>
+                <tr class="border-b">
+                    <td class="py-2 px-4"><code class="bg-gray-100 px-1 rounded">code-block.tmpl</code></td>
+                    <td class="py-2 px-4">Syntax-highlighted code blocks with language selection and copy button</td>
+                </tr>
+                <tr class="border-b">
+                    <td class="py-2 px-4"><code class="bg-gray-100 px-1 rounded">toc.tmpl</code></td>
+                    <td class="py-2 px-4">Auto-generated table of contents from page headings, with smooth scrolling links</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <h3 id="pages" class="text-xl font-semibold mt-6 mb-3">Page Organization</h3>
+    <p class="text-gray-700 mb-4">
+        The documentation site is organized into several key sections, each containing multiple pages:
+    </p>
+    
+    <div class="overflow-x-auto">
+        <table class="w-full mt-4 mb-6 border-collapse">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th class="py-2 px-4 text-left font-semibold border-b">Section</th>
+                    <th class="py-2 px-4 text-left font-semibold border-b">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="border-b">
+                    <td class="py-2 px-4"><code class="bg-gray-100 px-1 rounded">Getting Started</code></td>
+                    <td class="py-2 px-4">Installation instructions, quickstart guides, and initial setup</td>
+                </tr>
+                <tr class="border-b">
+                    <td class="py-2 px-4"><code class="bg-gray-100 px-1 rounded">Concepts</code></td>
+                    <td class="py-2 px-4">Core concepts and principles behind the SSG, including templates and data structure</td>
+                </tr>
+                <tr class="border-b">
+                    <td class="py-2 px-4"><code class="bg-gray-100 px-1 rounded">Examples</code></td>
+                    <td class="py-2 px-4">Detailed documentation for example projects including landing page, portfolio, and the documentation site itself</td>
+                </tr>
+                <tr class="border-b">
+                    <td class="py-2 px-4"><code class="bg-gray-100 px-1 rounded">API</code></td>
+                    <td class="py-2 px-4">Reference documentation for built-in functions, directives, and configuration options</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <h3 id="data" class="text-xl font-semibold mt-6 mb-3">Data Structure</h3>
+    <p class="text-gray-700 mb-4">
+        The documentation site uses JSON data files to provide metadata for each page and to define the navigation structure. Key data elements include:
+    </p>
+    
+    <ul class="list-disc pl-6 mb-6 space-y-2">
+        <li class="text-gray-700">Page metadata (title, description, section)</li>
+        <li class="text-gray-700">Navigation structure (sections, pages, and hierarchies)</li>
+        <li class="text-gray-700">Version information</li>
+        <li class="text-gray-700">GitHub repository references</li>
+    </ul>
+    
+    <p class="text-gray-700 mb-4">
+        For example, each page has a corresponding JSON file with metadata such as:
+    </p>
+    
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>{
+  "Title": "Installation Guide | Go Template SSG Documentation",
+  "Description": "Learn how to install and set up Go Template SSG for your project",
+  "Section": "getting-started",
+  "PageTitle": "Installation Guide",
+  "Order": 2
+}</code></pre>
+    </div>
+    
+    <h2 id="implementation-details" class="text-2xl font-bold mt-8 mb-4">Implementation Details</h2>
+    
+    <h3 id="navigation-system" class="text-xl font-semibold mt-6 mb-3">Navigation System</h3>
+    <p class="text-gray-700 mb-4">
+        The documentation site implements a sophisticated navigation system with:
+    </p>
+    
+    <ul class="list-disc pl-6 mb-6 space-y-2">
+        <li class="text-gray-700">Hierarchical sidebar navigation with expandable sections</li>
+        <li class="text-gray-700">Automatically highlighted active page and section</li>
+        <li class="text-gray-700">Breadcrumb navigation showing the path in the content hierarchy</li>
+        <li class="text-gray-700">In-page table of contents that highlights the current section during scrolling</li>
+        <li class="text-gray-700">Previous/next page navigation at the bottom of each page</li>
+    </ul>
+    
+    <h3 id="content-formatting" class="text-xl font-semibold mt-6 mb-3">Content Formatting</h3>
+    <p class="text-gray-700 mb-4">
+        The documentation site includes special formatting for common documentation elements:
+    </p>
+    
+    <ul class="list-disc pl-6 mb-6 space-y-2">
+        <li class="text-gray-700">Syntax-highlighted code blocks with language indicators</li>
+        <li class="text-gray-700">Callout boxes for notes, warnings, and tips</li>
+        <li class="text-gray-700">Tabbed content for showing multiple examples or variations</li>
+        <li class="text-gray-700">Responsive tables that work on mobile devices</li>
+        <li class="text-gray-700">Interactive examples with "Try it" functionality</li>
+    </ul>
+    
+    <h3 id="responsive-behavior" class="text-xl font-semibold mt-6 mb-3">Responsive Behavior</h3>
+    <p class="text-gray-700 mb-4">
+        The documentation site is fully responsive with special considerations for different viewport sizes:
+    </p>
+    
+    <ul class="list-disc pl-6 mb-6 space-y-2">
+        <li class="text-gray-700">Collapsible sidebar on mobile that can be toggled with a menu button</li>
+        <li class="text-gray-700">Table of contents that shifts from a side column to an in-page component on smaller screens</li>
+        <li class="text-gray-700">Responsive typography that ensures readability at all screen sizes</li>
+        <li class="text-gray-700">Code blocks that horizontally scroll on smaller screens</li>
+    </ul>
+    
+    <h2 id="lessons-learned" class="text-2xl font-bold mt-8 mb-4">Key Takeaways</h2>
+    <p class="text-gray-700 mb-4">
+        The documentation site example demonstrates several important concepts for building technical documentation with Go Template SSG:
+    </p>
+    
+    <ol class="list-decimal pl-6 mb-6 space-y-2">
+        <li class="text-gray-700"><strong class="font-semibold">Hierarchical Content Structure:</strong> Organizing content into logical sections and subsections for easy navigation</li>
+        <li class="text-gray-700"><strong class="font-semibold">Navigation Systems:</strong> Implementing multiple navigation methods to help users find information</li>
+        <li class="text-gray-700"><strong class="font-semibold">Technical Content Presentation:</strong> Formatting technical content like code blocks, tables, and diagrams</li>
+        <li class="text-gray-700"><strong class="font-semibold">Content Reuse:</strong> Using components to maintain consistent formatting across the site</li>
+        <li class="text-gray-700"><strong class="font-semibold">Metadata Management:</strong> Using structured data to enhance navigation and SEO</li>
+    </ol>
+    
+    <h2 id="view-example" class="text-2xl font-bold mt-8 mb-4">Viewing the Example</h2>
+    <p class="text-gray-700 mb-4">
+        You can find the complete documentation site example in the <a href="https://github.com/csotherden/go-tmpl-ssg/tree/main/examples/documentation" class="text-blue-600 hover:text-blue-800 underline">GitHub repository</a>.
+    </p>
+    
+    <p class="text-gray-700 mb-4">To generate and view the documentation site locally:</p>
+    
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code># Generate the static site
+go run cmd/go-tmpl-generate/main.go --template examples/documentation --output examples/documentation/output
+
+# Serve the generated site using the development server
+go run cmd/go-tmpl-dev-server/main.go --source examples/documentation --root examples/documentation/output</code></pre>
+    </div>
+    
+    <div class="mt-10 flex justify-between">
+        <a href="/examples/portfolio/" class="px-4 py-2 border border-blue-600 text-blue-600 rounded hover:bg-blue-50 transition duration-200">
+            ← Portfolio Example
+        </a>
+        <a href="/examples/" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition duration-200 flex items-center">
+            Back to Examples
+        </a>
+    </div>
+</div> 
