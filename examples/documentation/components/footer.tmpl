@@ -1,0 +1,40 @@
+<footer class="go-footer mt-16 pt-8 pb-6 border-t border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+                <h3 class="text-lg font-semibold mb-4">Go Template SSG</h3>
+                <p class="text-gray-600 text-sm">
+                    A simple, flexible static site generator using Go templates
+                </p>
+                <p class="text-gray-500 text-xs mt-4">
+                    Generated with go-tmpl-ssg {{nowFormat "2006-01-02"}}
+                </p>
+            </div>
+            <div>
+                <h4 class="text-sm font-semibold mb-4 uppercase tracking-wider">Documentation</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="/guide" class="text-gray-600 hover:text-go-blue">Guide</a></li>
+                    <li><a href="/api" class="text-gray-600 hover:text-go-blue">API</a></li>
+                    <li><a href="/examples" class="text-gray-600 hover:text-go-blue">Examples</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-sm font-semibold mb-4 uppercase tracking-wider">Resources</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="https://github.com/csotherden/go-tmpl-ssg" class="text-gray-600 hover:text-go-blue">GitHub Repository</a></li>
+                    <li><a href="https://golang.org/pkg/html/template/" class="text-gray-600 hover:text-go-blue">Go Template Documentation</a></li>
+                    <li><a href="https://tailwindcss.com/docs" class="text-gray-600 hover:text-go-blue">Tailwind CSS</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-sm font-semibold mb-4 uppercase tracking-wider">Legal</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="/license.txt" class="text-gray-600 hover:text-go-blue">MIT License</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="mt-8 pt-8 border-t border-gray-200 text-center text-sm text-gray-500">
+            <p>© {{nowFormat "2006"}} Chris Sotherden. All rights reserved.</p>
+        </div>
+    </div>
+</footer> 

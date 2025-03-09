@@ -1,0 +1,377 @@
+{{- /* layout:base.tmpl */ -}}
+
+<div class="prose prose-blue max-w-none">
+    <p class="lead text-lg text-gray-600">
+        This Quick Start guide will help you create your first static site with Go Template SSG in just a few minutes. By the end, you'll have a working site with multiple pages, layouts, and components.
+    </p>
+
+    <h2 id="prerequisites" class="text-2xl font-bold mt-8 mb-4">Prerequisites</h2>
+    <p>
+        Before you begin, make sure you have:
+    </p>
+    <ul class="list-disc pl-5 mt-2 mb-4">
+        <li class="mb-1">Go installed (version 1.18 or later)</li>
+        <li class="mb-1">Go Template SSG installed (see the <a href="/guide/installation" class="text-blue-600 hover:text-blue-800">Installation Guide</a>)</li>
+        <li class="mb-1">Basic familiarity with HTML and Go templates</li>
+    </ul>
+
+    <h2 id="step-1-create-project" class="text-2xl font-bold mt-8 mb-4">Step 1: Create Your Project Structure</h2>
+    <p>
+        First, let's set up the basic directory structure for our project:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code># Create project directories
+mkdir -p mysite/{templates/{layouts,components,pages/assets},output}
+cd mysite</code></pre>
+    </div>
+
+    <p>
+        This creates a project with the following structure:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>mysite/
+├── templates/          # Source templates
+│   ├── components/     # Reusable components
+│   ├── layouts/        # Page layouts
+│   └── pages/          # Content pages
+│       └── assets/     # Static assets
+└── output/             # Generated site</code></pre>
+    </div>
+
+    <h2 id="step-2-create-layout" class="text-2xl font-bold mt-8 mb-4">Step 2: Create a Base Layout</h2>
+    <p>
+        Create a base layout that will be used by all pages in your site. Create a file at <code>templates/layouts/base.tmpl</code> with the following content:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;{{`{{.Title}}`}}&lt;/title&gt;
+    &lt;link rel="stylesheet" href="/assets/style.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;header&gt;
+        {{`{{template "navbar.tmpl" .}}`}}
+    &lt;/header&gt;
+    
+    &lt;main class="container mx-auto px-4 py-8"&gt;
+        {{`{{template "PageContent" .}}`}}
+    &lt;/main&gt;
+    
+    &lt;footer&gt;
+        {{`{{template "footer.tmpl" .}}`}}
+    &lt;/footer&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+    </div>
+
+    <h2 id="step-3-create-components" class="text-2xl font-bold mt-8 mb-4">Step 3: Create Components</h2>
+    <p>
+        Now let's create some reusable components for the navigation and footer:
+    </p>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Navigation Component</h3>
+    <p>Create a file at <code>templates/components/navbar.tmpl</code> with the following content:</p>
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>&lt;nav class="bg-blue-600 text-white p-4"&gt;
+    &lt;div class="container mx-auto flex justify-between items-center"&gt;
+        &lt;a href="/" class="text-xl font-bold"&gt;{{`{{.SiteName}}`}}&lt;/a&gt;
+        &lt;ul class="flex space-x-4"&gt;
+            &lt;li&gt;&lt;a href="/" class="hover:underline"&gt;Home&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href="/about/" class="hover:underline"&gt;About&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href="/contact.html" class="hover:underline"&gt;Contact&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/div&gt;
+&lt;/nav&gt;</code></pre>
+    </div>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Footer Component</h3>
+    <p>Create a file at <code>templates/components/footer.tmpl</code> with the following content:</p>
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>&lt;div class="bg-gray-800 text-white p-4 mt-8"&gt;
+    &lt;div class="container mx-auto"&gt;
+        &lt;p class="text-center"&gt;&copy; {{`{{.Year}}`}} {{`{{.SiteName}}`}}. All rights reserved.&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <h2 id="step-4-create-css" class="text-2xl font-bold mt-8 mb-4">Step 4: Add CSS</h2>
+    <p>
+        Create a simple CSS file for styling your site at <code>templates/pages/assets/style.css</code>:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>/* Simple CSS reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+h2 {
+    font-size: 2rem;
+    margin: 1.5rem 0 1rem;
+}
+
+p {
+    margin-bottom: 1rem;
+}
+
+/* Utility classes based on Tailwind */
+.mx-auto { margin-left: auto; margin-right: auto; }
+.mt-8 { margin-top: 2rem; }
+.p-4 { padding: 1rem; }
+.px-4 { padding-left: 1rem; padding-right: 1rem; }
+.py-8 { padding-top: 2rem; padding-bottom: 2rem; }
+.text-center { text-align: center; }
+.text-white { color: white; }
+.text-xl { font-size: 1.25rem; }
+.font-bold { font-weight: 700; }
+.bg-blue-600 { background-color: #2563eb; }
+.bg-gray-800 { background-color: #1f2937; }
+.flex { display: flex; }
+.space-x-4 > * + * { margin-left: 1rem; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.hover\:underline:hover { text-decoration: underline; }</code></pre>
+    </div>
+
+    <h2 id="step-5-create-pages" class="text-2xl font-bold mt-8 mb-4">Step 5: Create Content Pages</h2>
+    <p>
+        Let's create some basic content pages with their corresponding data files:
+    </p>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Home Page</h3>
+    <p>Create the template at <code>templates/pages/index.tmpl</code>:</p>
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>{{`{{- /* layout:base.tmpl */ -}}`}}
+&lt;div class="text-center py-8"&gt;
+    &lt;h1&gt;{{`{{.Title}}`}}&lt;/h1&gt;
+    &lt;p class="text-xl"&gt;{{`{{.Description}}`}}&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div class="grid grid-cols-1 md:grid-cols-2 gap-8"&gt;
+    {{`{{range .Features}}`}}
+    &lt;div class="bg-gray-100 p-6 rounded-lg"&gt;
+        &lt;h3 class="text-lg font-semibold mb-2"&gt;{{`{{.Title}}`}}&lt;/h3&gt;
+        &lt;p&gt;{{`{{.Description}}`}}&lt;/p&gt;
+    &lt;/div&gt;
+    {{`{{end}}`}}
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <p>Create the data file at <code>templates/pages/index.tmpl.json</code>:</p>
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>{
+  "Title": "Welcome to My Site",
+  "Description": "A beautiful site created with Go Template SSG",
+  "SiteName": "My Awesome Site",
+  "Year": 2023,
+  "Features": [
+    {
+      "Title": "Easy to Use",
+      "Description": "Simple templating system based on Go's html/template package."
+    },
+    {
+      "Title": "Fast Generation",
+      "Description": "Quickly generate static HTML files that can be hosted anywhere."
+    },
+    {
+      "Title": "Component-Based",
+      "Description": "Build your site with reusable components for consistency."
+    },
+    {
+      "Title": "Data-Driven",
+      "Description": "Separate content from presentation with JSON data files."
+    }
+  ]
+}</code></pre>
+    </div>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">About Page</h3>
+    <p>Create the template at <code>templates/pages/about/index.tmpl</code>:</p>
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>{{`{{- /* layout:base.tmpl */ -}}`}}
+&lt;h1&gt;{{`{{.Title}}`}}&lt;/h1&gt;
+&lt;p&gt;{{`{{.Description}}`}}&lt;/p&gt;
+
+&lt;h2&gt;Our Team&lt;/h2&gt;
+&lt;div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4"&gt;
+    {{`{{range .Team}}`}}
+    &lt;div class="bg-gray-100 p-4 rounded-lg"&gt;
+        &lt;h3 class="font-semibold"&gt;{{`{{.Name}}`}}&lt;/h3&gt;
+        &lt;p class="text-gray-600"&gt;{{`{{.Role}}`}}&lt;/p&gt;
+        &lt;p&gt;{{`{{.Bio}}`}}&lt;/p&gt;
+    &lt;/div&gt;
+    {{`{{end}}`}}
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <p>Create the data file at <code>templates/pages/about/index.tmpl.json</code>:</p>
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>{
+  "Title": "About Us",
+  "Description": "Learn more about our team and mission.",
+  "SiteName": "My Awesome Site",
+  "Year": 2023,
+  "Team": [
+    {
+      "Name": "Jane Smith",
+      "Role": "Founder & CEO",
+      "Bio": "Jane has over 10 years of experience in the industry."
+    },
+    {
+      "Name": "John Doe",
+      "Role": "CTO",
+      "Bio": "John is an expert in web technologies and cloud infrastructure."
+    },
+    {
+      "Name": "Alice Johnson",
+      "Role": "Lead Designer",
+      "Bio": "Alice creates beautiful, user-friendly interfaces."
+    }
+  ]
+}</code></pre>
+    </div>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Contact Page</h3>
+    <p>Create the template at <code>templates/pages/contact.tmpl</code>:</p>
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>{{`{{- /* layout:base.tmpl */ -}}`}}
+&lt;h1&gt;{{`{{.Title}}`}}&lt;/h1&gt;
+&lt;p&gt;{{`{{.Description}}`}}&lt;/p&gt;
+
+&lt;div class="bg-gray-100 p-6 rounded-lg mt-6"&gt;
+    &lt;h2&gt;Contact Information&lt;/h2&gt;
+    &lt;p&gt;&lt;strong&gt;Email:&lt;/strong&gt; {{`{{.Email}}`}}&lt;/p&gt;
+    &lt;p&gt;&lt;strong&gt;Phone:&lt;/strong&gt; {{`{{.Phone}}`}}&lt;/p&gt;
+    &lt;p&gt;&lt;strong&gt;Address:&lt;/strong&gt; {{`{{.Address}}`}}&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <p>Create the data file at <code>templates/pages/contact.tmpl.json</code>:</p>
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>{
+  "Title": "Contact Us",
+  "Description": "Get in touch with our team. We'd love to hear from you!",
+  "SiteName": "My Awesome Site",
+  "Year": 2023,
+  "Email": "info@example.com",
+  "Phone": "+1 (555) 123-4567",
+  "Address": "123 Main St, Anytown, AN 12345"
+}</code></pre>
+    </div>
+
+    <h2 id="step-6-generate-site" class="text-2xl font-bold mt-8 mb-4">Step 6: Generate Your Site</h2>
+    <p>
+        Now, let's generate the static site using Go Template SSG:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code># Generate the site
+go-tmpl-generate --template ./templates --output ./output</code></pre>
+    </div>
+
+    <p>
+        Your static site will be generated in the <code>output/</code> directory with the following files:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>output/
+├── about/
+│   └── index.html
+├── assets/
+│   └── style.css
+├── contact.html
+└── index.html</code></pre>
+    </div>
+
+    <h2 id="step-7-serve-site" class="text-2xl font-bold mt-8 mb-4">Step 7: Preview Your Site</h2>
+    <p>
+        To preview your site with live reloading during development, use the development server:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code># Start the development server
+go-tmpl-dev-server --port 8080 --root ./output --source ./templates</code></pre>
+    </div>
+
+    <p>
+        Now you can access your site by navigating to <code>http://localhost:8080</code> in your web browser. The development server will automatically reload the page when you make changes to your templates.
+    </p>
+
+    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 my-6">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="ml-3">
+                <h3 class="text-sm font-medium text-blue-800">Tip</h3>
+                <div class="mt-2 text-sm text-blue-700">
+                    <p>
+                        During development, you can keep the development server running while you make changes to your templates. The page will automatically refresh when you save changes.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2 id="next-steps" class="text-2xl font-bold mt-8 mb-4">Next Steps</h2>
+    <p>
+        Now that you have a basic site up and running, you can:
+    </p>
+
+    <ul class="list-disc pl-5 mt-2 mb-4">
+        <li class="mb-1">Add more pages and components</li>
+        <li class="mb-1">Create additional layouts for different page types</li>
+        <li class="mb-1">Customize the CSS to match your design preferences</li>
+        <li class="mb-1">Explore <a href="/guide/pagination" class="text-blue-600 hover:text-blue-800">pagination</a> for blog posts or product listings</li>
+        <li class="mb-1">Enable <a href="/guide/sitemap" class="text-blue-600 hover:text-blue-800">sitemap generation</a> for better SEO</li>
+    </ul>
+
+    <p>
+        For more detailed information about each aspect of Go Template SSG, check out the other guide pages:
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+        <a href="/guide/concepts/" class="go-card block hover:no-underline">
+            <h3 class="text-lg font-semibold text-go-blue">Core Concepts</h3>
+            <p class="text-gray-600">Understand the key concepts and architecture of Go Template SSG.</p>
+        </a>
+        <a href="/guide/templates/layouts/" class="go-card block hover:no-underline">
+            <h3 class="text-lg font-semibold text-go-blue">Layouts</h3>
+            <p class="text-gray-600">Learn how to create flexible page layouts.</p>
+        </a>
+        <a href="/guide/templates/components/" class="go-card block hover:no-underline">
+            <h3 class="text-lg font-semibold text-go-blue">Components</h3>
+            <p class="text-gray-600">Create reusable template components for your site.</p>
+        </a>
+        <a href="/guide/data/" class="go-card block hover:no-underline">
+            <h3 class="text-lg font-semibold text-go-blue">Data Files</h3>
+            <p class="text-gray-600">Separate content from presentation with JSON data files.</p>
+        </a>
+    </div>
+</div> 

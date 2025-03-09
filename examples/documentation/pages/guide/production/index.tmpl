@@ -1,0 +1,254 @@
+{{- /* layout:base.tmpl */ -}}
+
+<div class="prose prose-blue max-w-none">
+    <p class="lead text-lg text-gray-600">
+        Preparing your Go Template SSG site for production involves optimizing performance, securing your site, and implementing best practices for deployment. This guide covers the steps to create a production-ready build of your static site.
+    </p>
+
+    <h2 id="build-process" class="text-2xl font-bold mt-8 mb-4">Production Build Process</h2>
+    <p>
+        The production build process for a Go Template SSG site typically involves these steps:
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+        <div class="go-card">
+            <h3 class="text-lg font-semibold text-go-blue">1. Optimize Assets</h3>
+            <p>Minify CSS/JS, compress images, and reduce load times</p>
+        </div>
+        <div class="go-card">
+            <h3 class="text-lg font-semibold text-go-blue">2. Generate Static Files</h3>
+            <p>Create the final HTML output with all optimizations enabled</p>
+        </div>
+        <div class="go-card">
+            <h3 class="text-lg font-semibold text-go-blue">3. Test Performance</h3>
+            <p>Verify load times and user experience before deployment</p>
+        </div>
+        <div class="go-card">
+            <h3 class="text-lg font-semibold text-go-blue">4. Deploy to Hosting</h3>
+            <p>Upload to a static file server or CDN for distribution</p>
+        </div>
+    </div>
+
+    <h2 id="optimization" class="text-2xl font-bold mt-8 mb-4">Optimizing Your Site</h2>
+    <p>
+        Before creating your production build, consider implementing these optimizations:
+    </p>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Asset Optimization</h3>
+    <p>
+        Static assets like CSS, JavaScript, and images should be optimized to reduce file sizes and improve loading performance.
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6">
+        <h4 class="font-semibold mb-2">CSS/JS Minification</h4>
+        <p class="mb-2">
+            Consider using tools like <a href="https://github.com/tdewolff/minify" target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-800">minify</a> to reduce file sizes:
+        </p>
+        <pre><code>go get -u github.com/tdewolff/minify/cmd/minify
+minify -o styles.min.css styles.css</code></pre>
+    </div>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6">
+        <h4 class="font-semibold mb-2">Image Optimization</h4>
+        <p class="mb-2">
+            Optimize images using tools like <a href="https://github.com/imagemin/imagemin" target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-800">imagemin</a> or modern formats like WebP:
+        </p>
+        <pre><code># Using tools like imagemin or cwebp
+cwebp -q 80 image.png -o image.webp</code></pre>
+    </div>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Performance Considerations</h3>
+    <p>
+        Implement performance best practices in your templates:
+    </p>
+
+    <ul class="list-disc pl-5 my-4">
+        <li class="mb-2">Use async/defer for non-critical JavaScript</li>
+        <li class="mb-2">Implement lazy loading for images and videos</li>
+        <li class="mb-2">Consider critical CSS inlining for above-the-fold content</li>
+        <li class="mb-2">Implement browser caching through appropriate headers</li>
+    </ul>
+
+    <h2 id="build-command" class="text-2xl font-bold mt-8 mb-4">Production Build Command</h2>
+    <p>
+        To create a production build, use the <code>go-tmpl-generate</code> command with the <code>--clean</code> flag to ensure a fresh build:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>go-tmpl-generate --template ./templates --output ./dist --clean</code></pre>
+    </div>
+
+    <p>
+        For reproducible builds in CI/CD environments, consider using the exact version of the tools:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code># In a Makefile or CI script
+build-prod:
+    go-tmpl-generate --template ./templates --output ./dist --clean</code></pre>
+    </div>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Docker Production Build</h3>
+    <p>
+        For containerized environments, use the Docker image to create a production build:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>docker run --rm -v $(pwd)/templates:/templates -v $(pwd)/dist:/output go-tmpl-ssg generate</code></pre>
+    </div>
+
+    <h2 id="testing" class="text-2xl font-bold mt-8 mb-4">Testing Your Production Build</h2>
+    <p>
+        Before deployment, it's essential to test your production build thoroughly:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6">
+        <h4 class="font-semibold mb-2">Local Testing</h4>
+        <p>
+            Test your production build locally using a simple HTTP server:
+        </p>
+        <pre><code># Using Python's built-in HTTP server
+cd dist && python -m http.server 8000
+
+# Or using Go's http package
+cd dist && go run -v github.com/syntaqx/serve</code></pre>
+    </div>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6">
+        <h4 class="font-semibold mb-2">Performance Testing</h4>
+        <p>
+            Use tools like <a href="https://developers.google.com/web/tools/lighthouse" target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-800">Lighthouse</a> or <a href="https://www.webpagetest.org/" target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-800">WebPageTest</a> to identify performance issues:
+        </p>
+        <pre><code># Using Lighthouse CLI
+npm install -g lighthouse
+lighthouse http://localhost:8000 --view</code></pre>
+    </div>
+
+    <h2 id="deployment" class="text-2xl font-bold mt-8 mb-4">Deployment Strategies</h2>
+    <p>
+        Once your production build is ready, you can deploy it to various hosting platforms:
+    </p>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Traditional Web Hosts</h3>
+    <p>
+        Upload your <code>dist</code> directory to any traditional web host that supports static files:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code># Using FTP
+ftp -u ftp://user:password@example.com/public_html dist/*
+
+# Using SCP
+scp -r dist/* user@example.com:/var/www/html/</code></pre>
+    </div>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Cloud Storage Solutions</h3>
+    <p>
+        Deploy to cloud storage services that offer static website hosting:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code># AWS S3
+aws s3 sync dist/ s3://your-bucket-name/ --delete
+
+# Google Cloud Storage
+gsutil -m rsync -r dist/ gs://your-bucket-name/</code></pre>
+    </div>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Specialized Static Site Hosts</h3>
+    <p>
+        Consider platforms specifically designed for static sites:
+    </p>
+
+    <ul class="list-disc pl-5 my-4">
+        <li class="mb-2"><a href="https://www.netlify.com/" target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-800">Netlify</a> - Offers continuous deployment from Git</li>
+        <li class="mb-2"><a href="https://vercel.com/" target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-800">Vercel</a> - Great for frontend deployments with previews</li>
+        <li class="mb-2"><a href="https://pages.github.com/" target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-800">GitHub Pages</a> - Free hosting for personal and project sites</li>
+        <li class="mb-2"><a href="https://firebase.google.com/products/hosting" target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-800">Firebase Hosting</a> - Fast and secure hosting with CDN</li>
+    </ul>
+
+    <h2 id="ci-cd" class="text-2xl font-bold mt-8 mb-4">Continuous Integration and Deployment</h2>
+    <p>
+        Implement CI/CD pipelines to automate your build and deployment process:
+    </p>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">GitHub Actions Example</h3>
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>name: Build and Deploy
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: '1.18'
+          
+      - name: Install Go Template SSG
+        run: go install github.com/csotherden/go-tmpl-ssg/cmd/go-tmpl-generate@latest
+        
+      - name: Build static site
+        run: go-tmpl-generate --template ./templates --output ./dist --clean
+        
+      - name: Deploy to hosting
+        # Add your deployment steps here</code></pre>
+    </div>
+
+    <h2 id="best-practices" class="text-2xl font-bold mt-8 mb-4">Production Best Practices</h2>
+    <p>
+        Follow these best practices for production deployments:
+    </p>
+
+    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 my-6">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="ml-3">
+                <h3 class="text-sm font-medium text-blue-800">Security Checklist</h3>
+                <div class="mt-2 text-sm text-blue-700">
+                    <ul class="list-disc pl-5">
+                        <li class="mb-1">Implement proper <code>robots.txt</code> and <code>sitemap.xml</code></li>
+                        <li class="mb-1">Configure appropriate <code>Content-Security-Policy</code> headers</li>
+                        <li class="mb-1">Set up HTTPS (most modern hosting platforms handle this for you)</li>
+                        <li class="mb-1">Add proper <code>rel="noopener"</code> attributes to external links</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Performance Checklist</h3>
+    <ul class="list-disc pl-5 my-4">
+        <li class="mb-2">Use a Content Delivery Network (CDN) for global distribution</li>
+        <li class="mb-2">Implement browser caching through appropriate headers</li>
+        <li class="mb-2">Enable Gzip/Brotli compression on your server</li>
+        <li class="mb-2">Set up proper cache invalidation for deployments</li>
+        <li class="mb-2">Implement monitoring to track site performance over time</li>
+    </ul>
+
+    <h2 id="next-steps" class="text-2xl font-bold mt-8 mb-4">Next Steps</h2>
+    <p>
+        After deploying your production site, consider these next steps:
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+        <a href="/guide/hosting" class="go-card block hover:no-underline">
+            <h3 class="text-lg font-semibold text-go-blue">Hosting Options</h3>
+            <p class="text-gray-600">Explore different hosting providers and their features.</p>
+        </a>
+        <a href="/guide/api" class="go-card block hover:no-underline">
+            <h3 class="text-lg font-semibold text-go-blue">API Documentation</h3>
+            <p class="text-gray-600">Learn about advanced configuration options.</p>
+        </a>
+    </div>
+</div> 

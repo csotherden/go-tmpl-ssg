@@ -1,0 +1,224 @@
+{{- /* layout:base.tmpl */ -}}
+
+<div class="prose prose-blue max-w-none">
+    <p class="lead text-lg text-gray-600">
+        The built-in development server allows you to preview your site locally during development, with automatic live reloading whenever your templates change.
+    </p>
+
+    <h2 id="starting-the-server" class="text-2xl font-bold mt-8 mb-4">Starting the Development Server</h2>
+    <p>
+        To start the development server, use the <code>go-tmpl-dev-server</code> command:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>go run ./cmd/go-tmpl-dev-server --port 8080 --root output --source templates</code></pre>
+    </div>
+
+    <p>The available command line flags are:</p>
+
+    <table class="go-table w-full mt-4 mb-6">
+        <thead class="bg-gray-100">
+            <tr>
+                <th class="py-2 px-4 text-left font-semibold border-b">Flag</th>
+                <th class="py-2 px-4 text-left font-semibold border-b">Description</th>
+                <th class="py-2 px-4 text-left font-semibold border-b">Default</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="border-b">
+                <td class="py-2 px-4"><code>--port</code></td>
+                <td class="py-2 px-4">The port to run the server on</td>
+                <td class="py-2 px-4"><code>8080</code></td>
+            </tr>
+            <tr class="border-b">
+                <td class="py-2 px-4"><code>--root</code></td>
+                <td class="py-2 px-4">Root directory to serve files from</td>
+                <td class="py-2 px-4"><code>./output</code></td>
+            </tr>
+            <tr class="border-b">
+                <td class="py-2 px-4"><code>--source</code></td>
+                <td class="py-2 px-4">Source directory to watch for changes</td>
+                <td class="py-2 px-4"><code>./templates</code></td>
+            </tr>
+            <tr class="border-b">
+                <td class="py-2 px-4"><code>--live-reload</code></td>
+                <td class="py-2 px-4">Enable or disable live reload functionality</td>
+                <td class="py-2 px-4"><code>true</code></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2 id="how-it-works" class="text-2xl font-bold mt-8 mb-4">How It Works</h2>
+    <p>
+        When you start the development server, it:
+    </p>
+    <ol class="list-decimal pl-5 mt-2 mb-4">
+        <li class="mb-1">Generates your site using the templates in your source directory</li>
+        <li class="mb-1">Starts a web server to serve the files from your output directory</li>
+        <li class="mb-1">Begins watching your source directory for changes</li>
+        <li class="mb-1">Automatically regenerates the site when changes are detected</li>
+        <li class="mb-1">Notifies connected browsers to reload via WebSocket</li>
+    </ol>
+
+    <h2 id="live-reload" class="text-2xl font-bold mt-8 mb-4">Live Reload</h2>
+    <p>
+        The development server automatically injects a small WebSocket client into each HTML page. This client connects to the server and listens for reload events.
+    </p>
+
+    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 my-6">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="ml-3">
+                <h3 class="text-sm font-medium text-blue-800">Disabling Live Reload</h3>
+                <div class="mt-2 text-sm text-blue-700">
+                    <p>
+                        You can disable the live reload functionality by setting <code>--live-reload=false</code>. This can be useful in environments where WebSocket connections are not available or when you prefer to manually refresh the browser.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <p>
+        When you make a change to any template file, the server:
+    </p>
+    <ol class="list-decimal pl-5 mt-2 mb-4">
+        <li class="mb-1">Detects the change through file system monitoring</li>
+        <li class="mb-1">Waits for a short debounce period (to avoid multiple rapid reloads)</li>
+        <li class="mb-1">Regenerates all templates</li>
+        <li class="mb-1">Sends a reload signal to all connected clients</li>
+    </ol>
+
+    <p>
+        Your browser will automatically refresh, displaying the updated page with your changes.
+    </p>
+
+    <h2 id="implementation" class="text-2xl font-bold mt-8 mb-4">Technical Implementation</h2>
+    <p>
+        The development server is built using the standard Go HTTP server and implements several key features:
+    </p>
+
+    <h3 id="file-watching" class="text-xl font-semibold mt-6 mb-3">File Watching</h3>
+    <p>
+        File monitoring is handled by the <code>fsnotify</code> package, which provides cross-platform file system notifications:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>func watchSourceDir(source string, cfg generator.SiteConfig) {
+    watcher, err := fsnotify.NewWatcher()
+    if err != nil {
+        log.Fatalf("Failed to create watcher: %v", err)
+    }
+    defer watcher.Close()
+
+    err = filepath.Walk(source, func(path string, info os.FileInfo, err error) error {
+        if err != nil {
+            return err
+        }
+        return watcher.Add(path)
+    })
+    
+    for {
+        select {
+        case event, ok := &lt;-watcher.Events:
+            if !ok {
+                return
+            }
+            log.Printf("File changed: %s", event.Name)
+            debounceRecompile(cfg)
+        // ...
+        }
+    }
+}</code></pre>
+    </div>
+
+    <h3 id="websocket" class="text-xl font-semibold mt-6 mb-3">WebSocket Communication</h3>
+    <p>
+        The server maintains WebSocket connections with all connected browsers:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>func handleWebSocket(w http.ResponseWriter, r *http.Request) {
+    conn, err := upgrader.Upgrade(w, r, nil)
+    if err != nil {
+        log.Println("WebSocket upgrade error:", err)
+        return
+    }
+    defer conn.Close()
+
+    clientsMutex.Lock()
+    clients[conn] = true
+    clientsMutex.Unlock()
+
+    // Wait for client to disconnect
+    for {
+        _, _, err := conn.ReadMessage()
+        if err != nil {
+            clientsMutex.Lock()
+            delete(clients, conn)
+            clientsMutex.Unlock()
+            break
+        }
+    }
+}</code></pre>
+    </div>
+
+    <p>
+        When the site is recompiled, it sends a reload message to all connected clients:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>func notifyClients() {
+    clientsMutex.Lock()
+    defer clientsMutex.Unlock()
+
+    for client := range clients {
+        if err := client.WriteMessage(websocket.TextMessage, []byte("reload")); err != nil {
+            log.Println("Error sending reload message:", err)
+            client.Close()
+            delete(clients, client)
+        }
+    }
+}</code></pre>
+    </div>
+
+    <h2 id="common-issues" class="text-2xl font-bold mt-8 mb-4">Common Issues and Solutions</h2>
+
+    <h3 id="port-in-use" class="text-xl font-semibold mt-6 mb-3">Port Already In Use</h3>
+    <p>
+        If you see an error like <code>listen tcp :8080: bind: address already in use</code>, it means another application is already using the specified port. Try using a different port:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>go-tmpl-dev-server --port 3000 --root output --source templates</code></pre>
+    </div>
+
+    <h3 id="file-watching-limits" class="text-xl font-semibold mt-6 mb-3">File Watching Limits on Linux</h3>
+    <p>
+        On Linux systems, you might encounter an error about inotify watch limits if your project has many files. Increase the limit by running:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p</code></pre>
+    </div>
+
+    <h2 id="next-steps" class="text-2xl font-bold mt-8 mb-4">Next Steps</h2>
+    <p>
+        Now that you understand how to use the development server, you might want to learn about:
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+        <a href="/guide/livereload" class="go-card block hover:no-underline">
+            <h3 class="text-lg font-semibold text-go-blue">Live Reload</h3>
+            <p class="text-gray-600">Learn more about the live reload feature and advanced configurations.</p>
+        </a>
+        <a href="/guide/production" class="go-card block hover:no-underline">
+            <h3 class="text-lg font-semibold text-go-blue">Production Builds</h3>
+            <p class="text-gray-600">Learn how to build and optimize your site for production deployment.</p>
+        </a>
+    </div>
+</div> 

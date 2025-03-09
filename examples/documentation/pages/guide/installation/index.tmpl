@@ -1,0 +1,282 @@
+{{- /* layout:base.tmpl */ -}}
+
+<div class="prose prose-blue max-w-none">
+    <p class="lead text-lg text-gray-600">
+        Getting started with Go Template SSG is quick and easy. This guide will walk you through installing the tools you need to start building static sites.
+    </p>
+
+    <h2 id="prerequisites" class="text-2xl font-bold mt-8 mb-4">Prerequisites</h2>
+    <p>
+        Before installing Go Template SSG, you need to have Go installed on your system. Go Template SSG requires Go 1.18 or later.
+    </p>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Installing Go</h3>
+    <p>
+        If you don't have Go installed, you can download it from the <a href="https://golang.org/dl/" target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-800">official Go website</a>.
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6">
+        <p class="text-sm mb-2">To verify your Go installation, run:</p>
+        <pre><code>go version</code></pre>
+        <p class="text-sm mt-2">You should see output similar to <code>go version go1.18.x</code> or higher.</p>
+    </div>
+
+    <h2 id="installation-options" class="text-2xl font-bold mt-8 mb-4">Installation Options</h2>
+    <p>
+        There are two main ways to install Go Template SSG:
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-6">
+        <div>
+            <h3 class="text-xl font-semibold text-go-blue">Option 1: Using go install (Recommended)</h3>
+            <p class="mb-2">This is the easiest way to install for most users who just want to use the tools.</p>
+        </div>
+        <div>
+            <h3 class="text-xl font-semibold text-go-blue">Option 2: Building from Source</h3>
+            <p class="mb-2">This option is for those who want to modify the source code or contribute to the project.</p>
+        </div>
+    </div>
+
+    <h2 id="go-install" class="text-2xl font-bold mt-8 mb-4">Using go install (Recommended)</h2>
+    <p>
+        You can install Go Template SSG directly from GitHub using the <code>go install</code> command, which will download, compile, and install the executables to your <code>$GOPATH/bin</code> directory.
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code># Install the static site generator
+go install github.com/csotherden/go-tmpl-ssg/cmd/go-tmpl-generate@latest
+
+# Install the development server with live reload
+go install github.com/csotherden/go-tmpl-ssg/cmd/go-tmpl-dev-server@latest</code></pre>
+    </div>
+
+    <p>
+        After installation, make sure your <code>$GOPATH/bin</code> directory is in your system PATH to easily run the executables from anywhere.
+    </p>
+
+    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 my-6">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="ml-3">
+                <h3 class="text-sm font-medium text-blue-800">Tip: Setting up your PATH</h3>
+                <div class="mt-2 text-sm text-blue-700">
+                    <p>
+                        You can check your GOPATH using <code>go env GOPATH</code>. To add it to your PATH:
+                    </p>
+                    <ul class="list-disc pl-5 mt-1">
+                        <li class="mb-1"><strong>For Bash/Zsh</strong>: Add <code>export PATH=$PATH:$(go env GOPATH)/bin</code> to your <code>.bashrc</code> or <code>.zshrc</code> file.</li>
+                        <li class="mb-1"><strong>For Windows</strong>: Add <code>%GOPATH%\bin</code> to your system's PATH environment variable.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Verifying Installation</h3>
+    <p>
+        To verify that the tools were installed correctly, run:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>go-tmpl-generate --version
+go-tmpl-dev-server --version</code></pre>
+    </div>
+
+    <p>
+        You should see version information for each tool.
+    </p>
+
+    <h2 id="build-from-source" class="text-2xl font-bold mt-8 mb-4">Building from Source</h2>
+    <p>
+        If you want to modify the source code or contribute to the project, you can build from source:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code># Clone the repository
+git clone https://github.com/csotherden/go-tmpl-ssg.git
+
+# Change to the project directory
+cd go-tmpl-ssg
+
+# Build the generator
+go build -o go-tmpl-generate ./cmd/go-tmpl-generate
+
+# Build the development server
+go build -o go-tmpl-dev-server ./cmd/go-tmpl-dev-server</code></pre>
+    </div>
+
+    <p>
+        The built executables will be in your current directory. You can move them to a directory in your PATH for easier access:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code># For Linux/macOS
+mv go-tmpl-generate go-tmpl-dev-server /usr/local/bin/
+
+# For Windows, move to a directory in your PATH</code></pre>
+    </div>
+
+    <h2 id="docker" class="text-2xl font-bold mt-8 mb-4">Using Docker</h2>
+    <p>
+        If you prefer to use Docker, Go Template SSG provides Docker support out of the box. This option is ideal if you don't want to install Go locally or if you want a consistent environment across different machines.
+    </p>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Using Docker Compose (Recommended)</h3>
+    <p>
+        The easiest way to use Docker is with Docker Compose:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code># Clone the repository
+git clone https://github.com/csotherden/go-tmpl-ssg.git
+
+# Change to the project directory
+cd go-tmpl-ssg
+
+# Start the development server
+docker-compose up dev-server
+
+# In another terminal, generate the site
+docker-compose run generate</code></pre>
+    </div>
+
+    <p>
+        The Docker Compose configuration mounts the example templates and output directories by default. To use your own directories, you can either:
+    </p>
+    <ul class="list-disc pl-5 mt-1">
+        <li class="mb-1">Edit the <code>docker-compose.yml</code> file to change the volume mounts</li>
+        <li class="mb-1">Create an override file, <code>docker-compose.override.yml</code>, with your custom configuration</li>
+    </ul>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Using Docker Directly</h3>
+    <p>
+        If you prefer to use Docker without Docker Compose, you can build and run the containers manually:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code># Clone the repository
+git clone https://github.com/csotherden/go-tmpl-ssg.git
+
+# Change to the project directory
+cd go-tmpl-ssg
+
+# Build the Docker image
+docker build -t go-tmpl-ssg .
+
+# Run the generator
+docker run --rm -v $(pwd)/templates:/templates -v $(pwd)/output:/output go-tmpl-ssg generate
+
+# Run the development server
+docker run --rm -p 8080:8080 -v $(pwd)/templates:/templates -v $(pwd)/output:/output go-tmpl-ssg dev-server</code></pre>
+    </div>
+
+    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 my-6">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="ml-3">
+                <h3 class="text-sm font-medium text-blue-800">Windows Path Considerations</h3>
+                <div class="mt-2 text-sm text-blue-700">
+                    <p>
+                        On Windows, you may need to modify the volume paths when using Docker commands:
+                    </p>
+                    <ul class="list-disc pl-5 mt-1">
+                        <li class="mb-1"><strong>PowerShell</strong>: Use <code>${PWD}</code> instead of <code>$(pwd)</code></li>
+                        <li class="mb-1"><strong>CMD</strong>: Use <code>%cd%</code> instead of <code>$(pwd)</code></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Custom Docker Configuration</h3>
+    <p>
+        You can customize the Docker environment using environment variables:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code># Custom port for the development server
+docker run --rm -p 3000:3000 -e PORT=3000 -v $(pwd)/templates:/templates -v $(pwd)/output:/output go-tmpl-ssg dev-server
+
+# Custom templates and output directories
+docker run --rm -v $(pwd)/my-templates:/templates -v $(pwd)/my-output:/output \
+    -e TEMPLATES_DIR=/templates -e OUTPUT_DIR=/output go-tmpl-ssg generate</code></pre>
+    </div>
+
+    <h2 id="next-steps" class="text-2xl font-bold mt-8 mb-4">Next Steps</h2>
+    <p>
+        Now that you have Go Template SSG installed, you can:
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+        <a href="/guide/quickstart" class="go-card block hover:no-underline">
+            <h3 class="text-lg font-semibold text-go-blue">Quick Start Guide</h3>
+            <p class="text-gray-600">Learn how to create your first static site with Go Template SSG.</p>
+        </a>
+        <a href="/guide/concepts" class="go-card block hover:no-underline">
+            <h3 class="text-lg font-semibold text-go-blue">Core Concepts</h3>
+            <p class="text-gray-600">Understand the key concepts and structure of Go Template SSG projects.</p>
+        </a>
+    </div>
+
+    <h2 id="troubleshooting" class="text-2xl font-bold mt-8 mb-4">Troubleshooting</h2>
+    <h3 class="text-xl font-semibold mt-6 mb-3">Common Issues</h3>
+
+    <div class="my-4">
+        <h4 class="font-semibold">Command not found after installing</h4>
+        <p>
+            If you get a "command not found" error after installation, ensure that your Go bin directory is in your PATH:
+        </p>
+        <div class="bg-gray-50 rounded-md p-4 my-2 overflow-x-auto">
+            <pre><code>echo $PATH</code></pre>
+        </div>
+        <p>
+            The output should include your Go bin directory (typically <code>~/go/bin</code> or <code>$GOPATH/bin</code>).
+        </p>
+    </div>
+
+    <div class="my-4">
+        <h4 class="font-semibold">Go module errors</h4>
+        <p>
+            If you encounter module-related errors when building from source, try cleaning the Go module cache:
+        </p>
+        <div class="bg-gray-50 rounded-md p-4 my-2 overflow-x-auto">
+            <pre><code>go clean -modcache</code></pre>
+        </div>
+    </div>
+
+    <div class="my-4">
+        <h4 class="font-semibold">Permission issues (Linux/macOS)</h4>
+        <p>
+            If you encounter permission errors when installing executables, you might need to use <code>sudo</code> or fix the permissions of your Go directories:
+        </p>
+        <div class="bg-gray-50 rounded-md p-4 my-2 overflow-x-auto">
+            <pre><code>sudo go install github.com/csotherden/go-tmpl-ssg/cmd/go-tmpl-generate@latest
+
+# Or fix permissions
+sudo chown -R $(whoami) $(go env GOPATH)</code></pre>
+        </div>
+    </div>
+
+    <h2 id="uninstall" class="text-2xl font-bold mt-8 mb-4">Uninstalling</h2>
+    <p>
+        To uninstall Go Template SSG, simply remove the executables:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code># If installed with go install
+rm $(go env GOPATH)/bin/go-tmpl-generate
+rm $(go env GOPATH)/bin/go-tmpl-dev-server
+
+# If installed manually to /usr/local/bin
+sudo rm /usr/local/bin/go-tmpl-generate
+sudo rm /usr/local/bin/go-tmpl-dev-server</code></pre>
+    </div>
+</div> 

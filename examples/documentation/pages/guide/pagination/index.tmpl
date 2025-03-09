@@ -1,0 +1,474 @@
+{{- /* layout:base.tmpl */ -}}
+
+<div class="prose prose-blue max-w-none">
+    <p class="lead text-lg text-gray-600">
+        Pagination is essential for managing large collections of content on your website. Go Template SSG provides a built-in pagination system that makes it easy to split your content across multiple pages.
+    </p>
+
+    <h2 id="what-is-pagination" class="text-2xl font-bold mt-8 mb-4">What Is Pagination?</h2>
+    <p>
+        Pagination is the process of dividing content into separate pages. This is especially useful for:
+    </p>
+
+    <ul class="list-disc pl-5 mt-2 mb-4">
+        <li class="mb-1">Blog listing pages with many posts</li>
+        <li class="mb-1">Product catalogs with numerous items</li>
+        <li class="mb-1">Image galleries with multiple images</li>
+        <li class="mb-1">Any content collection that would be too long for a single page</li>
+    </ul>
+
+    <p>
+        Proper pagination improves user experience by making content more manageable and reducing page load times.
+    </p>
+
+    <h2 id="pagination-structure" class="text-2xl font-bold mt-8 mb-4">Pagination in Go Template SSG</h2>
+    <p>
+        Go Template SSG implements pagination through a special <code>Iterations</code> structure in your data files. This structure tells the generator how to split your data across multiple pages and how to name the output files.
+    </p>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Basic Pagination Structure</h3>
+    <p>
+        To paginate content, structure your data file like this:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>{
+  "Title": "Blog Posts",
+  "Description": "Our collection of articles",
+  "Iterations": {
+    "PageSize": 5,
+    "PageRoot": "/blog",
+    "Data": [
+      { "Title": "First Post", "Content": "..." },
+      { "Title": "Second Post", "Content": "..." },
+      { "Title": "Third Post", "Content": "..." },
+      // ... more items ...
+    ]
+  }
+}</code></pre>
+    </div>
+
+    <p>The key elements of the <code>Iterations</code> structure are:</p>
+
+    <table class="go-table w-full mt-4 mb-6">
+        <thead class="bg-gray-100">
+            <tr>
+                <th class="py-2 px-4 text-left font-semibold border-b">Property</th>
+                <th class="py-2 px-4 text-left font-semibold border-b">Description</th>
+                <th class="py-2 px-4 text-left font-semibold border-b">Example</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="border-b">
+                <td class="py-2 px-4"><code>PageSize</code></td>
+                <td class="py-2 px-4">Number of items to display per page</td>
+                <td class="py-2 px-4"><code>5</code></td>
+            </tr>
+            <tr class="border-b">
+                <td class="py-2 px-4"><code>PageRoot</code></td>
+                <td class="py-2 px-4">Base URL path for the paginated pages</td>
+                <td class="py-2 px-4"><code>"/blog"</code></td>
+            </tr>
+            <tr>
+                <td class="py-2 px-4"><code>Data</code></td>
+                <td class="py-2 px-4">Array of items to be paginated</td>
+                <td class="py-2 px-4"><code>[{}, {}, {}]</code></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2 id="how-it-works" class="text-2xl font-bold mt-8 mb-4">How Pagination Works</h2>
+    <p>
+        When the generator processes a template with an <code>Iterations</code> structure:
+    </p>
+
+    <ol class="list-decimal pl-5 mt-2 mb-4">
+        <li class="mb-2">It divides the <code>Data</code> array into chunks of <code>PageSize</code> items</li>
+        <li class="mb-2">It generates a separate HTML file for each chunk</li>
+        <li class="mb-2">The first page is placed at <code>PageRoot/index.html</code></li>
+        <li class="mb-2">Subsequent pages are placed at <code>PageRoot/2/index.html</code>, <code>PageRoot/3/index.html</code>, etc.</li>
+        <li class="mb-2">The generator adds pagination metadata to each page for navigation</li>
+    </ol>
+
+    <p>
+        For example, with a <code>PageSize</code> of 5 and 12 items, the generator will create:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>/blog/index.html        # Items 1-5
+/blog/2/index.html       # Items 6-10
+/blog/3/index.html       # Items 11-12</code></pre>
+    </div>
+
+    <h2 id="pagination-template" class="text-2xl font-bold mt-8 mb-4">Creating a Pagination Template</h2>
+    <p>
+        Your template can access both the current page's items and pagination metadata. Here's an example template for a blog listing page:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>{{`{{- /* layout:base.tmpl */ -}}`}}
+
+&lt;h1&gt;{{`{{.Title}}`}}&lt;/h1&gt;
+&lt;p&gt;{{`{{.Description}}`}}&lt;/p&gt;
+
+&lt;div class="posts"&gt;
+  {{`{{range .Iterations.Data}}`}}
+    &lt;article class="post"&gt;
+      &lt;h2&gt;{{`{{.Title}}`}}&lt;/h2&gt;
+      &lt;div class="content"&gt;{{`{{.Content}}`}}&lt;/div&gt;
+    &lt;/article&gt;
+  {{`{{end}}`}}
+&lt;/div&gt;
+
+&lt;div class="pagination"&gt;
+  &lt;p&gt;Page {{`{{.Iterations.PageNumber}}`}} of {{`{{.Iterations.TotalPages}}`}}&lt;/p&gt;
+  
+  &lt;div class="page-links"&gt;
+    {{`{{if gt .Iterations.PageNumber 1}}`}}
+      &lt;a href="{{`{{.Iterations.PageRoot}}`}}{{`{{if eq .Iterations.PageNumber 2}}`}}/{{`{{else}}`}}/{{`{{sub .Iterations.PageNumber 1}}`}}/{{`{{end}}`}}"&gt;&laquo; Previous&lt;/a&gt;
+    {{`{{end}}`}}
+    
+    {{`{{range $i := seq 1 .Iterations.TotalPages}}`}}
+      &lt;a href="{{`{{$.Iterations.PageRoot}}`}}{{`{{if ne $i 1}}`}}/{{`{{$i}}`}}/{{`{{end}}`}}" 
+         {{`{{if eq $i $.Iterations.PageNumber}}`}}class="active"{{`{{end}}`}}&gt;
+        {{`{{$i}}`}}
+      &lt;/a&gt;
+    {{`{{end}}`}}
+    
+    {{`{{if lt .Iterations.PageNumber .Iterations.TotalPages}}`}}
+      &lt;a href="{{`{{.Iterations.PageRoot}}`}}/{{`{{add .Iterations.PageNumber 1}}`}}/"&gt;Next &raquo;&lt;/a&gt;
+    {{`{{end}}`}}
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 my-6">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="ml-3">
+                <h3 class="text-sm font-medium text-blue-800">Note</h3>
+                <div class="mt-2 text-sm text-blue-700">
+                    <p>
+                        The <code>seq</code>, <code>add</code>, and <code>sub</code> functions used in this example are template functions that would need to be defined in your generator. The standard functions are typically available in the Go Template SSG.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2 id="pagination-metadata" class="text-2xl font-bold mt-8 mb-4">Pagination Metadata</h2>
+    <p>
+        Each paginated page has access to these additional properties through the <code>Iterations</code> object:
+    </p>
+
+    <table class="go-table w-full mt-4 mb-6">
+        <thead class="bg-gray-100">
+            <tr>
+                <th class="py-2 px-4 text-left font-semibold border-b">Property</th>
+                <th class="py-2 px-4 text-left font-semibold border-b">Description</th>
+                <th class="py-2 px-4 text-left font-semibold border-b">Example</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="border-b">
+                <td class="py-2 px-4"><code>PageNumber</code></td>
+                <td class="py-2 px-4">Current page number (1-based)</td>
+                <td class="py-2 px-4"><code>2</code></td>
+            </tr>
+            <tr class="border-b">
+                <td class="py-2 px-4"><code>TotalPages</code></td>
+                <td class="py-2 px-4">Total number of pages</td>
+                <td class="py-2 px-4"><code>5</code></td>
+            </tr>
+            <tr class="border-b">
+                <td class="py-2 px-4"><code>PageRoot</code></td>
+                <td class="py-2 px-4">Base URL path for pagination</td>
+                <td class="py-2 px-4"><code>"/blog"</code></td>
+            </tr>
+            <tr class="border-b">
+                <td class="py-2 px-4"><code>PageSize</code></td>
+                <td class="py-2 px-4">Number of items per page</td>
+                <td class="py-2 px-4"><code>10</code></td>
+            </tr>
+            <tr class="border-b">
+                <td class="py-2 px-4"><code>TotalItems</code></td>
+                <td class="py-2 px-4">Total number of items across all pages</td>
+                <td class="py-2 px-4"><code>47</code></td>
+            </tr>
+            <tr>
+                <td class="py-2 px-4"><code>Data</code></td>
+                <td class="py-2 px-4">Array of items for the current page</td>
+                <td class="py-2 px-4"><code>[{}, {}, {}]</code></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2 id="real-world-example" class="text-2xl font-bold mt-8 mb-4">Real-World Example</h2>
+    <p>
+        Let's create a complete example of a product catalog with pagination:
+    </p>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Data File (<code>products.tmpl.json</code>)</h3>
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>{
+  "Title": "Product Catalog",
+  "Description": "Browse our collection of handcrafted items",
+  "Iterations": {
+    "PageSize": 6,
+    "PageRoot": "/products",
+    "Data": [
+      {
+        "Name": "Wooden Chair",
+        "Price": 149.99,
+        "Image": "/images/products/chair.jpg",
+        "Category": "Furniture"
+      },
+      {
+        "Name": "Ceramic Vase",
+        "Price": 39.99,
+        "Image": "/images/products/vase.jpg",
+        "Category": "Home Decor"
+      },
+      {
+        "Name": "Wool Blanket",
+        "Price": 89.99,
+        "Image": "/images/products/blanket.jpg",
+        "Category": "Textiles"
+      },
+      // ... more products ...
+    ]
+  },
+  "Categories": [
+    "All",
+    "Furniture",
+    "Home Decor",
+    "Textiles",
+    "Kitchen",
+    "Lighting"
+  ]
+}</code></pre>
+    </div>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Template File (<code>products.tmpl</code>)</h3>
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>{{`{{- /* layout:base.tmpl */ -}}`}}
+
+&lt;div class="container mx-auto px-4 py-8"&gt;
+  &lt;h1 class="text-3xl font-bold mb-2"&gt;{{`{{.Title}}`}}&lt;/h1&gt;
+  &lt;p class="text-gray-600 mb-8"&gt;{{`{{.Description}}`}}&lt;/p&gt;
+  
+  &lt;div class="mb-8"&gt;
+    &lt;h2 class="text-xl font-semibold mb-4"&gt;Categories&lt;/h2&gt;
+    &lt;div class="flex flex-wrap gap-2"&gt;
+      {{`{{range .Categories}}`}}
+        &lt;a href="/products/category/{{`{{.}}`}}/" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md"&gt;
+          {{`{{.}}`}}
+        &lt;/a&gt;
+      {{`{{end}}`}}
+    &lt;/div&gt;
+  &lt;/div&gt;
+  
+  &lt;div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8"&gt;
+    {{`{{range .Iterations.Data}}`}}
+      &lt;div class="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow"&gt;
+        &lt;img src="{{`{{.Image}}`}}" alt="{{`{{.Name}}`}}" class="w-full h-48 object-cover"&gt;
+        &lt;div class="p-4"&gt;
+          &lt;h3 class="font-bold text-lg mb-2"&gt;{{`{{.Name}}`}}&lt;/h3&gt;
+          &lt;span class="text-gray-700"&gt;${{`{{.Price}}`}}&lt;/span&gt;
+          &lt;span class="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded ml-2"&gt;{{`{{.Category}}`}}&lt;/span&gt;
+          &lt;a href="/products/{{`{{.Slug}}`}}/" class="block mt-4 text-center bg-blue-600 hover:bg-blue-700 text-white py-2 rounded"&gt;
+            View Details
+          &lt;/a&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    {{`{{end}}`}}
+  &lt;/div&gt;
+  
+  &lt;!-- Pagination Controls --&gt;
+  {{`{{if gt .Iterations.TotalPages 1}}`}}
+    &lt;div class="pagination flex justify-center items-center space-x-2 py-4"&gt;
+      {{`{{if gt .Iterations.PageNumber 1}}`}}
+        &lt;a href="{{`{{.Iterations.PageRoot}}`}}{{`{{if eq .Iterations.PageNumber 2}}`}}/{{`{{else}}`}}/{{`{{sub .Iterations.PageNumber 1}}`}}/{{`{{end}}`}}" 
+           class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md"&gt;
+          &laquo; Previous
+        &lt;/a&gt;
+      {{`{{else}}`}}
+        &lt;span class="px-4 py-2 bg-gray-50 text-gray-400 rounded-md cursor-not-allowed"&gt;
+          &laquo; Previous
+        &lt;/span&gt;
+      {{`{{end}}`}}
+      
+      {{`{{range $i := seq 1 .Iterations.TotalPages}}`}}
+        &lt;a href="{{`{{$.Iterations.PageRoot}}`}}{{`{{if ne $i 1}}`}}/{{`{{$i}}`}}/{{`{{end}}`}}" 
+           class="{{`{{if eq $i $.Iterations.PageNumber}}`}}bg-blue-600 text-white{{`{{else}}`}}bg-gray-100 hover:bg-gray-200 text-gray-800{{`{{end}}`}} px-3 py-1 rounded-md"&gt;
+          {{`{{$i}}`}}
+        &lt;/a&gt;
+      {{`{{end}}`}}
+      
+      {{`{{if lt .Iterations.PageNumber .Iterations.TotalPages}}`}}
+        &lt;a href="{{`{{.Iterations.PageRoot}}`}}/{{`{{add .Iterations.PageNumber 1}}`}}/" 
+           class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md"&gt;
+          Next &raquo;
+        &lt;/a&gt;
+      {{`{{else}}`}}
+        &lt;span class="px-4 py-2 bg-gray-50 text-gray-400 rounded-md cursor-not-allowed"&gt;
+          Next &raquo;
+        &lt;/span&gt;
+      {{`{{end}}`}}
+    &lt;/div&gt;
+    
+    &lt;div class="text-center text-gray-600 text-sm mt-2"&gt;
+      Showing page {{`{{.Iterations.PageNumber}}`}} of {{`{{.Iterations.TotalPages}}`}} 
+      ({{`{{.Iterations.TotalItems}}`}} total items)
+    &lt;/div&gt;
+  {{`{{end}}`}}
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <h2 id="advanced-pagination" class="text-2xl font-bold mt-8 mb-4">Advanced Pagination Techniques</h2>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Handling Edge Cases</h3>
+    <p>
+        Make sure your pagination UI handles these edge cases properly:
+    </p>
+    <ul class="list-disc pl-5 mt-2 mb-4">
+        <li class="mb-1">First page (no "Previous" link)</li>
+        <li class="mb-1">Last page (no "Next" link)</li>
+        <li class="mb-1">Only one page (hide pagination completely)</li>
+        <li class="mb-1">Many pages (consider adding ellipses to show a limited range of page numbers)</li>
+    </ul>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Limited Page Number Display</h3>
+    <p>
+        For sites with many pages, you might want to display a limited range of page numbers:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>&lt;!-- Show current page, 2 before, and 2 after --&gt;
+{{`{{$current := .Iterations.PageNumber}}`}}
+{{`{{$total := .Iterations.TotalPages}}`}}
+
+{{`{{if gt $total 1}}`}}
+  &lt;div class="pagination"&gt;
+    {{`{{if gt $current 1}}`}}
+      &lt;a href="..."&gt;Previous&lt;/a&gt;
+    {{`{{end}}`}}
+    
+    {{`{{range $i := seq 1 $total}}`}}
+      {{`{{if or (le $i 2) (ge $i (sub $total 1)) (and (ge $i (sub $current 2)) (le $i (add $current 2)))}}`}}
+        &lt;a href="..."&gt;{{`{{$i}}`}}&lt;/a&gt;
+      {{`{{else if or (eq $i 3) (eq $i (sub $total 2))}}`}}
+        &lt;span&gt;...&lt;/span&gt;
+      {{`{{end}}`}}
+    {{`{{end}}`}}
+    
+    {{`{{if lt $current $total}}`}}
+      &lt;a href="..."&gt;Next&lt;/a&gt;
+    {{`{{end}}`}}
+  &lt;/div&gt;
+{{`{{end}}`}}</code></pre>
+    </div>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Custom Pagination Paths</h3>
+    <p>
+        If you need a different URL structure for your paginated pages, you can adjust the template to generate the correct links:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>{{`{{/* For URLs like /blog/page/2/ instead of /blog/2/ */}}`}}
+&lt;a href="{{`{{.Iterations.PageRoot}}`}}{{`{{if eq $i 1}}`}}/{{`{{else}}`}}/page/{{`{{$i}}`}}/{{`{{end}}`}}"&gt;
+  {{`{{$i}}`}}
+&lt;/a&gt;</code></pre>
+    </div>
+
+    <p>
+        Note that this approach only changes the links in your HTML, not the actual output file structure. To change the file structure, you would need to modify the generator code.
+    </p>
+
+    <h2 id="best-practices" class="text-2xl font-bold mt-8 mb-4">Best Practices for Pagination</h2>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Choose an Appropriate Page Size</h3>
+    <p>
+        The ideal page size depends on your content type and design:
+    </p>
+    <ul class="list-disc pl-5 mt-2 mb-4">
+        <li class="mb-1">Blog posts: 5-10 items per page</li>
+        <li class="mb-1">Product listings: 12-24 items per page</li>
+        <li class="mb-1">Image galleries: 20-30 items per page</li>
+    </ul>
+    <p>
+        Consider the loading time and user experience when determining page size.
+    </p>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Use Clear Navigation</h3>
+    <p>
+        Your pagination controls should be:
+    </p>
+    <ul class="list-disc pl-5 mt-2 mb-4">
+        <li class="mb-1">Easy to notice (positioned prominently at the top and/or bottom of the content)</li>
+        <li class="mb-1">Clear about the current page (highlight the current page number)</li>
+        <li class="mb-1">Accessible (provide adequate clickable areas, use descriptive text)</li>
+    </ul>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Include Contextual Information</h3>
+    <p>
+        Help users understand where they are in the content:
+    </p>
+    <ul class="list-disc pl-5 mt-2 mb-4">
+        <li class="mb-1">"Showing items 11-20 of 47"</li>
+        <li class="mb-1">"Page 2 of 5"</li>
+    </ul>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Consider SEO</h3>
+    <p>
+        Pagination affects how search engines index your content:
+    </p>
+    <ul class="list-disc pl-5 mt-2 mb-4">
+        <li class="mb-1">Include canonical links to help search engines understand the relationship between paginated pages</li>
+        <li class="mb-1">Consider using <code>rel="prev"</code> and <code>rel="next"</code> links in your page head</li>
+        <li class="mb-1">For content that should be seen as a single piece (like articles split across pages), consider also providing a "view all" option</li>
+    </ul>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>&lt;!-- In the &lt;head&gt; section of your layout --&gt;
+{{`{{if .Iterations}}`}}
+  {{`{{if gt .Iterations.PageNumber 1}}`}}
+    &lt;link rel="prev" href="{{`{{.Iterations.PageRoot}}`}}{{`{{if eq .Iterations.PageNumber 2}}`}}/{{`{{else}}`}}/{{`{{sub .Iterations.PageNumber 1}}`}}/{{`{{end}}`}}"&gt;
+  {{`{{end}}`}}
+  {{`{{if lt .Iterations.PageNumber .Iterations.TotalPages}}`}}
+    &lt;link rel="next" href="{{`{{.Iterations.PageRoot}}`}}/{{`{{add .Iterations.PageNumber 1}}`}}/"&gt;
+  {{`{{end}}`}}
+  &lt;link rel="canonical" href="{{`{{.Iterations.PageRoot}}`}}{{`{{if ne .Iterations.PageNumber 1}}`}}/{{`{{.Iterations.PageNumber}}`}}/{{`{{end}}`}}"&gt;
+{{`{{end}}`}}</code></pre>
+    </div>
+
+    <h2 id="limitations" class="text-2xl font-bold mt-8 mb-4">Current Limitations</h2>
+    <p>
+        The current pagination implementation in Go Template SSG has a few limitations:
+    </p>
+    <ul class="list-disc pl-5 mt-2 mb-4">
+        <li class="mb-1">The output file structure is fixed (following the <code>/path/[page_number]/</code> pattern)</li>
+        <li class="mb-1">The pagination can only be applied to a single data array per template</li>
+        <li class="mb-1">Sorting of items must be done in the data file before generating the site</li>
+    </ul>
+
+    <h2 id="next-steps" class="text-2xl font-bold mt-8 mb-4">Next Steps</h2>
+    <p>
+        Now that you understand how to use pagination, you might want to explore:
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+        <a href="/guide/data/" class="go-card block hover:no-underline">
+            <h3 class="text-lg font-semibold text-go-blue">Data Files</h3>
+            <p class="text-gray-600">Learn more about structuring your data files for various content types.</p>
+        </a>
+        <a href="/guide/templates/functions/" class="go-card block hover:no-underline">
+            <h3 class="text-lg font-semibold text-go-blue">Template Functions</h3>
+            <p class="text-gray-600">Discover functions that help you build dynamic templates and navigation.</p>
+        </a>
+    </div>
+</div> 

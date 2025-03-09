@@ -1,0 +1,462 @@
+{{- /* layout:base.tmpl */ -}}
+
+<div class="prose prose-blue max-w-none">
+    <p class="lead text-lg text-gray-600">
+        Understanding the core concepts of Go Template SSG will help you build efficient and well-structured static sites. This guide explains the fundamental architecture and principles that make the system work.
+    </p>
+
+    <h2 id="overview" class="text-2xl font-bold mt-8 mb-4">Overview</h2>
+    <p>
+        Go Template SSG is a static site generator that uses Go's <a href="https://golang.org/pkg/html/template/" target="_blank" rel="noopener">html/template</a> package to transform template files into HTML. The system is designed around several key concepts:
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+        <div class="go-card">
+            <h3 class="text-lg font-semibold text-go-blue">Separation of Concerns</h3>
+            <p>Templates for presentation, data files for content, layouts for structure</p>
+        </div>
+        <div class="go-card">
+            <h3 class="text-lg font-semibold text-go-blue">Convention over Configuration</h3>
+            <p>File naming and directory structure follow predictable patterns</p>
+        </div>
+        <div class="go-card">
+            <h3 class="text-lg font-semibold text-go-blue">Component-Based Architecture</h3>
+            <p>Reusable components that can be composed into complex layouts</p>
+        </div>
+        <div class="go-card">
+            <h3 class="text-lg font-semibold text-go-blue">Static Output</h3>
+            <p>Pure HTML/CSS/JS output that can be hosted anywhere</p>
+        </div>
+    </div>
+
+    <h2 id="directory-structure" class="text-2xl font-bold mt-8 mb-4">Directory Structure</h2>
+    <p>
+        A typical Go Template SSG project has a structure like this:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>my-site/
+├── templates/              # Source templates
+│   ├── components/         # Reusable template components
+│   │   ├── header.tmpl
+│   │   ├── footer.tmpl
+│   │   └── sidebar.tmpl
+│   ├── layouts/            # Page layouts
+│   │   ├── base.tmpl
+│   │   └── blog-post.tmpl
+│   ├── pages/              # Content pages
+│   │   ├── index.tmpl
+│   │   ├── index.tmpl.json # Data file for index.tmpl
+│   │   ├── about/
+│   │   │   ├── index.tmpl
+│   │   │   └── index.tmpl.json
+│   │   └── blog/
+│   │       ├── index.tmpl
+│   │       ├── index.tmpl.json
+│   │       └── post1/
+│   │           ├── index.tmpl
+│   │           └── index.tmpl.json
+│   └── assets/             # Static assets to be copied
+│       ├── css/
+│       ├── images/
+│       └── js/
+└── output/                 # Generated static site (created by the generator)</code></pre>
+    </div>
+
+    <h2 id="templates" class="text-2xl font-bold mt-8 mb-4">Templates</h2>
+    <p>
+        Templates are the building blocks of your site. Go Template SSG uses three types of templates:
+    </p>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Page Templates</h3>
+    <p>
+        Page templates (in the <code>pages/</code> directory) represent actual content pages of your site. Each page template:
+    </p>
+    <ul class="list-disc pl-5 mt-2 mb-4">
+        <li class="mb-1">Specifies which layout it uses via a special comment at the top (<code>{{`{{- /* layout:base.tmpl */ -}}`}}</code>)</li>
+        <li class="mb-1">Contains the page-specific content that will be inserted into the layout</li>
+        <li class="mb-1">Can access data from a corresponding JSON file with the same base name</li>
+    </ul>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>{{`{{- /* layout:base.tmpl */ -}}`}}
+
+&lt;div class="content"&gt;
+  &lt;h1&gt;{{`{{.Title}}`}}&lt;/h1&gt;
+  &lt;p&gt;{{`{{.Description}}`}}&lt;/p&gt;
+  
+  {{`{{template "components/feature-list.tmpl" .Features}}`}}
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Layout Templates</h3>
+    <p>
+        Layout templates (in the <code>layouts/</code> directory) define the common structure shared by multiple pages. A layout template:
+    </p>
+    <ul class="list-disc pl-5 mt-2 mb-4">
+        <li class="mb-1">Contains the overall structure of the HTML document</li>
+        <li class="mb-1">Includes a special <code>{{`{{template "PageContent" .}}`}}</code> directive where the page content will be inserted</li>
+        <li class="mb-1">Can include common elements like headers, footers, and navigation</li>
+    </ul>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+  &lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;{{`{{.Title}}`}}&lt;/title&gt;
+    &lt;link rel="stylesheet" href="/assets/style.css"&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    {{`{{template "components/header.tmpl" .}}`}}
+    
+    &lt;main&gt;
+      {{`{{template "PageContent" .}}`}}
+    &lt;/main&gt;
+    
+    {{`{{template "components/footer.tmpl" .}}`}}
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+    </div>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Component Templates</h3>
+    <p>
+        Component templates (in the <code>components/</code> directory) are reusable template fragments that can be included in layouts or pages. Components:
+    </p>
+    <ul class="list-disc pl-5 mt-2 mb-4">
+        <li class="mb-1">Help you avoid duplicating code for common UI elements</li>
+        <li class="mb-1">Can be included using <code>{{`{{template "components/name.tmpl" .}}`}}</code></li>
+        <li class="mb-1">Can access the data passed to them through the dot (<code>.</code>)</li>
+    </ul>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>&lt;!-- components/navigation.tmpl --&gt;
+&lt;nav class="main-nav"&gt;
+  &lt;ul&gt;
+    {{`{{range .NavItems}}`}}
+      &lt;li&gt;&lt;a href="{{`{{.URL}}`}}" {{`{{if .Active}}`}}class="active"{{`{{end}}`}}&gt;{{`{{.Name}}`}}&lt;/a&gt;&lt;/li&gt;
+    {{`{{end}}`}}
+  &lt;/ul&gt;
+&lt;/nav&gt;</code></pre>
+    </div>
+
+    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 my-6">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="ml-3">
+                <h3 class="text-sm font-medium text-blue-800">Template Naming</h3>
+                <div class="mt-2 text-sm text-blue-700">
+                    <p>
+                        When including templates with the <code>{{`{{template}}`}}</code> directive, you need to use the relative path from the templates root directory, including the <code>.tmpl</code> extension.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2 id="data-files" class="text-2xl font-bold mt-8 mb-4">Data Files</h2>
+    <p>
+        Data files are JSON files that provide content for your templates. This separation of content and presentation makes it easier to maintain and update your site.
+    </p>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Basic Structure</h3>
+    <p>
+        Data files are placed alongside their corresponding template files with a <code>.tmpl.json</code> extension:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>// pages/about/index.tmpl.json
+{
+  "Title": "About Our Company",
+  "Description": "Learn more about what we do and who we are.",
+  "Team": [
+    {
+      "Name": "Jane Smith",
+      "Role": "CEO",
+      "Bio": "Jane founded the company in 2010..."
+    },
+    {
+      "Name": "John Doe",
+      "Role": "CTO",
+      "Bio": "John leads our technical team..."
+    }
+  ]
+}</code></pre>
+    </div>
+
+    <p>
+        The data is automatically parsed and made available to your templates, allowing you to access it using Go template syntax:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>&lt;h1&gt;{{`{{.Title}}`}}&lt;/h1&gt;
+&lt;p&gt;{{`{{.Description}}`}}&lt;/p&gt;
+
+&lt;h2&gt;Our Team&lt;/h2&gt;
+&lt;div class="team"&gt;
+  {{`{{range .Team}}`}}
+    &lt;div class="team-member"&gt;
+      &lt;h3&gt;{{`{{.Name}}`}} - {{`{{.Role}}`}}&lt;/h3&gt;
+      &lt;p&gt;{{`{{.Bio}}`}}&lt;/p&gt;
+    &lt;/div&gt;
+  {{`{{end}}`}}
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Pagination Data</h3>
+    <p>
+        For content that needs to be paginated (like blog posts or product listings), you can use a special <code>Iterations</code> structure in your data file:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>{
+  "Title": "Blog Posts",
+  "Iterations": {
+    "PageSize": 5,
+    "PageRoot": "/blog",
+    "Data": [
+      { "Title": "First Post", "Content": "..." },
+      { "Title": "Second Post", "Content": "..." },
+      // ... more posts ...
+    ]
+  }
+}</code></pre>
+    </div>
+
+    <p>
+        For more information on data files, see the <a href="/guide/data/" class="text-blue-600 hover:text-blue-800">Data Files guide</a>.
+    </p>
+
+    <h2 id="build-process" class="text-2xl font-bold mt-8 mb-4">Build Process</h2>
+    <p>
+        When you run the generator, it follows these steps to build your site:
+    </p>
+
+    <ol class="list-decimal pl-5 mt-2 mb-4">
+        <li class="mb-3">
+            <strong class="font-semibold">Template Discovery</strong>
+            <p class="mt-1">The generator scans the <code>templates/</code> directory to find all template files.</p>
+        </li>
+        <li class="mb-3">
+            <strong class="font-semibold">Data Loading</strong>
+            <p class="mt-1">It identifies and parses JSON data files that correspond to templates.</p>
+        </li>
+        <li class="mb-3">
+            <strong class="font-semibold">Template Processing</strong>
+            <p class="mt-1">For each page template, it:</p>
+            <ul class="list-disc pl-5 mt-1">
+                <li class="mb-1">Determines which layout to use from the comment directive</li>
+                <li class="mb-1">Loads the associated data file (if any)</li>
+                <li class="mb-1">Renders the page content using the template</li>
+                <li class="mb-1">Inserts the rendered content into the layout</li>
+            </ul>
+        </li>
+        <li class="mb-3">
+            <strong class="font-semibold">Pagination</strong>
+            <p class="mt-1">If a template's data file contains an <code>Iterations</code> structure, it generates multiple pages.</p>
+        </li>
+        <li class="mb-3">
+            <strong class="font-semibold">Asset Copying</strong>
+            <p class="mt-1">Static assets from the <code>assets/</code> directory are copied to the output directory.</p>
+        </li>
+        <li class="mb-3">
+            <strong class="font-semibold">Special Files Generation</strong>
+            <p class="mt-1">If enabled, it generates special files like <code>sitemap.xml</code> and <code>robots.txt</code>.</p>
+        </li>
+    </ol>
+
+    <h2 id="template-functions" class="text-2xl font-bold mt-8 mb-4">Template Functions</h2>
+    <p>
+        Go Template SSG provides several built-in functions to enhance the capabilities of your templates:
+    </p>
+
+    <table class="go-table w-full mt-4 mb-6">
+        <thead class="bg-gray-100">
+            <tr>
+                <th class="py-2 px-4 text-left font-semibold border-b">Function</th>
+                <th class="py-2 px-4 text-left font-semibold border-b">Description</th>
+                <th class="py-2 px-4 text-left font-semibold border-b">Example</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="border-b">
+                <td class="py-2 px-4"><code>add</code></td>
+                <td class="py-2 px-4">Adds two numbers</td>
+                <td class="py-2 px-4"><code>{{`{{add 1 2}}`}} → 3</code></td>
+            </tr>
+            <tr class="border-b">
+                <td class="py-2 px-4"><code>sub</code></td>
+                <td class="py-2 px-4">Subtracts second number from first</td>
+                <td class="py-2 px-4"><code>{{`{{sub 5 2}}`}} → 3</code></td>
+            </tr>
+            <tr class="border-b">
+                <td class="py-2 px-4"><code>mul</code></td>
+                <td class="py-2 px-4">Multiplies two numbers</td>
+                <td class="py-2 px-4"><code>{{`{{mul 2 3}}`}} → 6</code></td>
+            </tr>
+            <tr class="border-b">
+                <td class="py-2 px-4"><code>div</code></td>
+                <td class="py-2 px-4">Divides first number by second</td>
+                <td class="py-2 px-4"><code>{{`{{div 6 2}}`}} → 3</code></td>
+            </tr>
+            <tr class="border-b">
+                <td class="py-2 px-4"><code>seq</code></td>
+                <td class="py-2 px-4">Generates a sequence of integers</td>
+                <td class="py-2 px-4"><code>{{`{{range seq 1 3}}`}}{{`{{.}}`}}{{`{{end}}`}} → 123</code></td>
+            </tr>
+            <tr>
+                <td class="py-2 px-4"><code>truncate</code></td>
+                <td class="py-2 px-4">Truncates text to specified length</td>
+                <td class="py-2 px-4"><code>{{`{{truncate "Hello World" 5}}`}} → Hello...</code></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>
+        For more details on template functions, see the <a href="/guide/templates/functions/" class="text-blue-600 hover:text-blue-800">Template Functions guide</a>.
+    </p>
+
+    <h2 id="urls-and-linking" class="text-2xl font-bold mt-8 mb-4">URLs and Linking</h2>
+    <p>
+        Go Template SSG uses a file-based routing system where the output URL structure mirrors your template directory structure:
+    </p>
+
+    <table class="go-table w-full mt-4 mb-6">
+        <thead class="bg-gray-100">
+            <tr>
+                <th class="py-2 px-4 text-left font-semibold border-b">Template Path</th>
+                <th class="py-2 px-4 text-left font-semibold border-b">Output Path</th>
+                <th class="py-2 px-4 text-left font-semibold border-b">URL</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="border-b">
+                <td class="py-2 px-4"><code>pages/index.tmpl</code></td>
+                <td class="py-2 px-4"><code>index.html</code></td>
+                <td class="py-2 px-4"><code>/</code></td>
+            </tr>
+            <tr class="border-b">
+                <td class="py-2 px-4"><code>pages/about.tmpl</code></td>
+                <td class="py-2 px-4"><code>about.html</code></td>
+                <td class="py-2 px-4"><code>/about</code></td>
+            </tr>
+            <tr class="border-b">
+                <td class="py-2 px-4"><code>pages/about/index.tmpl</code></td>
+                <td class="py-2 px-4"><code>about/index.html</code></td>
+                <td class="py-2 px-4"><code>/about/</code></td>
+            </tr>
+            <tr class="border-b">
+                <td class="py-2 px-4"><code>pages/blog/post1.tmpl</code></td>
+                <td class="py-2 px-4"><code>blog/post1.html</code></td>
+                <td class="py-2 px-4"><code>/blog/post1</code></td>
+            </tr>
+            <tr>
+                <td class="py-2 px-4"><code>pages/blog/post1/index.tmpl</code></td>
+                <td class="py-2 px-4"><code>blog/post1/index.html</code></td>
+                <td class="py-2 px-4"><code>/blog/post1/</code></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>
+        When linking between pages in your templates, use absolute paths starting with a slash:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>&lt;a href="/about/"&gt;About Us&lt;/a&gt;
+&lt;a href="/blog/"&gt;Blog&lt;/a&gt;</code></pre>
+    </div>
+
+    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 my-6">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="ml-3">
+                <h3 class="text-sm font-medium text-yellow-800">Important</h3>
+                <div class="mt-2 text-sm text-yellow-700">
+                    <p>
+                        For clean URLs (without the <code>.html</code> extension), use directory-based templates (<code>about/index.tmpl</code> instead of <code>about.tmpl</code>). Most web servers will serve <code>index.html</code> when a directory URL is requested.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2 id="workflow" class="text-2xl font-bold mt-8 mb-4">Typical Workflow</h2>
+    <p>
+        Here's a typical workflow for developing a site with Go Template SSG:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code># 1. Create project directories
+mkdir -p mysite/templates/{components,layouts,pages,assets}
+cd mysite
+
+# 2. Create a basic layout
+# File: templates/layouts/base.tmpl
+
+# 3. Create some components
+# File: templates/components/header.tmpl
+# File: templates/components/footer.tmpl
+
+# 4. Create your first page with data
+# File: templates/pages/index.tmpl
+# File: templates/pages/index.tmpl.json
+
+# 5. Run the development server
+go-tmpl-dev-server --port 8080 --root output --source templates
+
+# 6. Build for production
+go-tmpl-generate --template templates --output output</code></pre>
+    </div>
+
+    <h2 id="development-server" class="text-2xl font-bold mt-8 mb-4">Development Server</h2>
+    <p>
+        The development server provides a local environment for testing your site:
+    </p>
+    <ul class="list-disc pl-5 mt-2 mb-4">
+        <li class="mb-1">It watches your template directory for changes</li>
+        <li class="mb-1">When files change, it automatically regenerates the affected pages</li>
+        <li class="mb-1">It serves the generated site on a local port (default: 8080)</li>
+        <li class="mb-1">It injects live reload functionality, so your browser refreshes automatically</li>
+    </ul>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>go-tmpl-dev-server --port 8080 --root output --source templates</code></pre>
+    </div>
+
+    <p>
+        For more information, see the <a href="/guide/dev-server/" class="text-blue-600 hover:text-blue-800">Development Server guide</a>.
+    </p>
+
+    <h2 id="next-steps" class="text-2xl font-bold mt-8 mb-4">Next Steps</h2>
+    <p>
+        Now that you understand the core concepts, you might want to explore:
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+        <a href="/guide/templates/layouts/" class="go-card block hover:no-underline">
+            <h3 class="text-lg font-semibold text-go-blue">Layouts</h3>
+            <p class="text-gray-600">Learn how to create and use layouts for consistent page structure.</p>
+        </a>
+        <a href="/guide/templates/components/" class="go-card block hover:no-underline">
+            <h3 class="text-lg font-semibold text-go-blue">Components</h3>
+            <p class="text-gray-600">Discover how to build reusable components for your site.</p>
+        </a>
+        <a href="/guide/data/" class="go-card block hover:no-underline">
+            <h3 class="text-lg font-semibold text-go-blue">Data Files</h3>
+            <p class="text-gray-600">Learn how to use JSON data files to separate content from presentation.</p>
+        </a>
+        <a href="/guide/quickstart/" class="go-card block hover:no-underline">
+            <h3 class="text-lg font-semibold text-go-blue">Quick Start</h3>
+            <p class="text-gray-600">Follow a step-by-step tutorial to build your first site.</p>
+        </a>
+    </div>
+</div> 

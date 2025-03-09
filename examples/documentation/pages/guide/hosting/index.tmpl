@@ -1,0 +1,630 @@
+{{- /* layout:base.tmpl */ -}}
+
+<div class="prose prose-blue max-w-none">
+    <p class="lead text-lg text-gray-600">
+        Static sites built with Go Template SSG can be hosted on virtually any web hosting platform. This guide will help you choose the right hosting solution for your needs and provide configuration instructions for popular hosting providers.
+    </p>
+
+    <h2 id="hosting-types" class="text-2xl font-bold mt-8 mb-4">Types of Hosting</h2>
+    <p>
+        There are several types of hosting options available for static sites, each with its own advantages:
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+        <div class="go-card">
+            <h3 class="text-lg font-semibold text-go-blue">Specialized Static Site Hosts</h3>
+            <p>Purpose-built platforms with optimized workflows for static sites</p>
+        </div>
+        <div class="go-card">
+            <h3 class="text-lg font-semibold text-go-blue">Cloud Storage Solutions</h3>
+            <p>Low-cost, high-performance options with scalable storage</p>
+        </div>
+        <div class="go-card">
+            <h3 class="text-lg font-semibold text-go-blue">Traditional Web Hosting</h3>
+            <p>Standard hosting with FTP/SFTP access to upload files</p>
+        </div>
+        <div class="go-card">
+            <h3 class="text-lg font-semibold text-go-blue">Self-Hosted Solutions</h3>
+            <p>Complete control with your own server or container infrastructure</p>
+        </div>
+    </div>
+
+    <h2 id="specialized-hosts" class="text-2xl font-bold mt-8 mb-4">Specialized Static Site Hosts</h2>
+    <p>
+        Specialized static site hosting platforms offer the best developer experience and often include features like automatic builds, preview deployments, and global CDN distribution.
+    </p>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Netlify</h3>
+    <p>
+        <a href="https://www.netlify.com/" target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-800">Netlify</a> is one of the most popular platforms for hosting static sites, offering a generous free tier and advanced features.
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6">
+        <h4 class="font-semibold mb-2">Deployment Steps</h4>
+        <ol class="list-decimal pl-5 my-2">
+            <li class="mb-1">Create a Netlify account and connect your Git repository</li>
+            <li class="mb-1">Configure the build settings:
+                <ul class="list-disc pl-5 mt-1">
+                    <li>Build command: <code>go-tmpl-generate --template ./templates --output ./dist --clean</code></li>
+                    <li>Publish directory: <code>dist</code></li>
+                </ul>
+            </li>
+            <li class="mb-1">Click "Deploy site" and Netlify will automatically build and deploy your site</li>
+        </ol>
+    </div>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6">
+        <h4 class="font-semibold mb-2">Netlify Configuration File</h4>
+        <p class="mb-2">
+            Create a <code>netlify.toml</code> file in your repository root:
+        </p>
+        <pre><code>[build]
+  publish = "dist"
+  command = "go install github.com/csotherden/go-tmpl-ssg/cmd/go-tmpl-generate@latest && go-tmpl-generate --template ./templates --output ./dist --clean"
+
+[build.environment]
+  GO_VERSION = "1.18"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  force = false
+  conditions = {Role = ["anonymous"]}</code></pre>
+    </div>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Vercel</h3>
+    <p>
+        <a href="https://vercel.com/" target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-800">Vercel</a> provides a seamless deployment experience with automatic preview deployments and an excellent free tier.
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6">
+        <h4 class="font-semibold mb-2">Deployment Steps</h4>
+        <ol class="list-decimal pl-5 my-2">
+            <li class="mb-1">Create a Vercel account and import your Git repository</li>
+            <li class="mb-1">Configure the build settings:
+                <ul class="list-disc pl-5 mt-1">
+                    <li>Build command: <code>go install github.com/csotherden/go-tmpl-ssg/cmd/go-tmpl-generate@latest && go-tmpl-generate --template ./templates --output ./dist --clean</code></li>
+                    <li>Output directory: <code>dist</code></li>
+                </ul>
+            </li>
+            <li class="mb-1">Click "Deploy" and your site will be built and published</li>
+        </ol>
+    </div>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6">
+        <h4 class="font-semibold mb-2">Vercel Configuration File</h4>
+        <p class="mb-2">
+            Create a <code>vercel.json</code> file in your repository root:
+        </p>
+        <pre><code>{
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    }
+  ],
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "dest": "/index.html" }
+  ]
+}</code></pre>
+    </div>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">GitHub Pages</h3>
+    <p>
+        <a href="https://pages.github.com/" target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-800">GitHub Pages</a> offers free hosting directly from your GitHub repository, ideal for personal or project sites.
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6">
+        <h4 class="font-semibold mb-2">GitHub Actions Workflow</h4>
+        <p class="mb-2">
+            Create a file at <code>.github/workflows/deploy.yml</code> in your repository:
+        </p>
+        <pre><code>name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: '1.18'
+          
+      - name: Install Go Template SSG
+        run: go install github.com/csotherden/go-tmpl-ssg/cmd/go-tmpl-generate@latest
+        
+      - name: Build static site
+        run: go-tmpl-generate --template ./templates --output ./dist --clean
+        
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: dist
+          branch: gh-pages</code></pre>
+    </div>
+
+    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 my-6">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="ml-3">
+                <h3 class="text-sm font-medium text-blue-800">GitHub Pages Custom Domain</h3>
+                <div class="mt-2 text-sm text-blue-700">
+                    <p>
+                        To use a custom domain with GitHub Pages:
+                    </p>
+                    <ol class="list-decimal pl-5 mt-1">
+                        <li class="mb-1">Add a file named <code>CNAME</code> to your <code>templates/pages</code> directory containing your domain name</li>
+                        <li class="mb-1">Configure your domain's DNS settings with a CNAME record pointing to <code>username.github.io</code></li>
+                        <li class="mb-1">Set up your custom domain in your repository settings under "Pages"</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2 id="cloud-storage" class="text-2xl font-bold mt-8 mb-4">Cloud Storage Solutions</h2>
+    <p>
+        Cloud storage providers offer cost-effective options for hosting static sites with high scalability and performance.
+    </p>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">AWS S3 + CloudFront</h3>
+    <p>
+        Amazon Web Services provides robust static site hosting with S3 for storage and CloudFront for CDN distribution.
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6">
+        <h4 class="font-semibold mb-2">Basic Setup</h4>
+        <ol class="list-decimal pl-5 my-2">
+            <li class="mb-1">Create an S3 bucket with a name matching your domain (e.g., <code>www.example.com</code>)</li>
+            <li class="mb-1">Enable "Static website hosting" in the bucket properties</li>
+            <li class="mb-1">Set the index document to <code>index.html</code> and error document to <code>404.html</code></li>
+            <li class="mb-1">Configure the bucket policy to allow public read access:
+                <pre><code>{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "PublicReadGetObject",
+      "Effect": "Allow",
+      "Principal": "*",
+      "Action": "s3:GetObject",
+      "Resource": "arn:aws:s3:::your-bucket-name/*"
+    }
+  ]
+}</code></pre>
+            </li>
+            <li class="mb-1">Create a CloudFront distribution pointing to your S3 bucket's website endpoint</li>
+            <li class="mb-1">Upload your generated files:
+                <pre><code>aws s3 sync dist/ s3://your-bucket-name/ --delete</code></pre>
+            </li>
+        </ol>
+    </div>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Google Cloud Storage</h3>
+    <p>
+        Google Cloud Storage provides a simple way to host static websites with global distribution.
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6">
+        <h4 class="font-semibold mb-2">Setup Steps</h4>
+        <ol class="list-decimal pl-5 my-2">
+            <li class="mb-1">Create a new GCS bucket with a unique name</li>
+            <li class="mb-1">Set the bucket's access control to "Fine-grained" or "Uniform"</li>
+            <li class="mb-1">Make the bucket public:
+                <pre><code>gsutil iam ch allUsers:objectViewer gs://your-bucket-name</code></pre>
+            </li>
+            <li class="mb-1">Enable website configuration:
+                <pre><code>gsutil web set -m index.html -e 404.html gs://your-bucket-name</code></pre>
+            </li>
+            <li class="mb-1">Upload your files:
+                <pre><code>gsutil -m rsync -r dist/ gs://your-bucket-name/</code></pre>
+            </li>
+        </ol>
+    </div>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Azure Storage</h3>
+    <p>
+        Microsoft Azure Storage provides static website hosting with integration to Azure CDN for global distribution.
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6">
+        <h4 class="font-semibold mb-2">Setup Steps</h4>
+        <ol class="list-decimal pl-5 my-2">
+            <li class="mb-1">Create a storage account in the Azure portal</li>
+            <li class="mb-1">Go to "Static website" in the left menu and enable it</li>
+            <li class="mb-1">Set the index document to <code>index.html</code> and error document to <code>404.html</code></li>
+            <li class="mb-1">Upload your files using Azure Storage Explorer or AzCopy:
+                <pre><code>azcopy copy "dist/*" "https://youraccount.blob.core.windows.net/$web" --recursive</code></pre>
+            </li>
+            <li class="mb-1">Optionally, set up Azure CDN for better performance</li>
+        </ol>
+    </div>
+
+    <h2 id="traditional-hosting" class="text-2xl font-bold mt-8 mb-4">Traditional Web Hosting</h2>
+    <p>
+        Traditional web hosting providers can easily host static sites generated with Go Template SSG.
+    </p>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Shared Hosting</h3>
+    <p>
+        Hosts like Bluehost, SiteGround, or HostGator provide simple hosting with FTP/SFTP access.
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6">
+        <h4 class="font-semibold mb-2">Deployment Steps</h4>
+        <ol class="list-decimal pl-5 my-2">
+            <li class="mb-1">Generate your site: <code>go-tmpl-generate --template ./templates --output ./dist --clean</code></li>
+            <li class="mb-1">Upload the contents of your <code>dist</code> directory to your web host using FTP:
+                <pre><code>ftp -u ftp://username:password@example.com/public_html dist/*</code></pre>
+            </li>
+            <li class="mb-1">Alternatively, use an FTP client like FileZilla or Cyberduck</li>
+        </ol>
+    </div>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">VPS/Dedicated Hosting</h3>
+    <p>
+        For virtual private servers or dedicated hosting, you can set up a web server like Nginx or Apache.
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6">
+        <h4 class="font-semibold mb-2">Nginx Configuration</h4>
+        <p class="mb-2">
+            Basic Nginx configuration for serving static files:
+        </p>
+        <pre><code>server {
+    listen 80;
+    server_name example.com www.example.com;
+    root /var/www/html;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    # Cache static assets
+    location ~* \.(jpg|jpeg|png|gif|ico|css|js)$ {
+        expires 30d;
+        add_header Cache-Control "public, no-transform";
+    }
+
+    # Set security headers
+    add_header X-Content-Type-Options "nosniff";
+    add_header X-Frame-Options "SAMEORIGIN";
+    add_header X-XSS-Protection "1; mode=block";
+}</code></pre>
+    </div>
+
+    <h2 id="hosting-docker" class="text-2xl font-bold mt-8 mb-4">Docker-Based Hosting</h2>
+    <p>
+        Using Docker, you can easily deploy your static site to any platform that supports containers.
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6">
+        <h4 class="font-semibold mb-2">Nginx Docker Container</h4>
+        <p class="mb-2">
+            Create a Dockerfile for serving your static site:
+        </p>
+        <pre><code>FROM nginx:alpine
+
+COPY dist/ /usr/share/nginx/html/
+
+# Copy custom nginx config if needed
+# COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]</code></pre>
+    </div>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6">
+        <h4 class="font-semibold mb-2">Build and Run the Container</h4>
+        <pre><code># Build the Docker image
+docker build -t my-static-site .
+
+# Run the container
+docker run -p 8080:80 my-static-site</code></pre>
+    </div>
+
+    <h2 id="compare" class="text-2xl font-bold mt-8 mb-4">Comparing Hosting Options</h2>
+    <p>
+        Choose the right hosting option based on your specific needs:
+    </p>
+
+    <div class="overflow-x-auto mb-6">
+        <table class="min-w-full border-collapse">
+            <thead>
+                <tr class="bg-gray-100">
+                    <th class="border p-2 text-left">Hosting Type</th>
+                    <th class="border p-2 text-left">Pros</th>
+                    <th class="border p-2 text-left">Cons</th>
+                    <th class="border p-2 text-left">Best For</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="border p-2 font-medium">Netlify/Vercel</td>
+                    <td class="border p-2">
+                        <ul class="list-disc pl-4">
+                            <li>Easy CI/CD integration</li>
+                            <li>Preview deployments</li>
+                            <li>Global CDN included</li>
+                        </ul>
+                    </td>
+                    <td class="border p-2">
+                        <ul class="list-disc pl-4">
+                            <li>Limited control over infrastructure</li>
+                            <li>Can be expensive at scale</li>
+                        </ul>
+                    </td>
+                    <td class="border p-2">Projects needing rapid deployment and CI/CD workflows</td>
+                </tr>
+                <tr>
+                    <td class="border p-2 font-medium">Cloud Storage (S3, GCS)</td>
+                    <td class="border p-2">
+                        <ul class="list-disc pl-4">
+                            <li>Very low cost</li>
+                            <li>Highly scalable</li>
+                            <li>Pay-as-you-go pricing</li>
+                        </ul>
+                    </td>
+                    <td class="border p-2">
+                        <ul class="list-disc pl-4">
+                            <li>More complex setup</li>
+                            <li>Requires separate CDN configuration</li>
+                        </ul>
+                    </td>
+                    <td class="border p-2">Projects with cost sensitivity and high traffic</td>
+                </tr>
+                <tr>
+                    <td class="border p-2 font-medium">GitHub Pages</td>
+                    <td class="border p-2">
+                        <ul class="list-disc pl-4">
+                            <li>Free hosting</li>
+                            <li>Simple integration with repos</li>
+                        </ul>
+                    </td>
+                    <td class="border p-2">
+                        <ul class="list-disc pl-4">
+                            <li>Limited customization</li>
+                            <li>Not suitable for high-traffic sites</li>
+                        </ul>
+                    </td>
+                    <td class="border p-2">Personal projects, documentation sites</td>
+                </tr>
+                <tr>
+                    <td class="border p-2 font-medium">Traditional Hosting</td>
+                    <td class="border p-2">
+                        <ul class="list-disc pl-4">
+                            <li>Familiar workflow</li>
+                            <li>Often includes other services</li>
+                        </ul>
+                    </td>
+                    <td class="border p-2">
+                        <ul class="list-disc pl-4">
+                            <li>Manual deployment process</li>
+                            <li>Less optimized for static sites</li>
+                        </ul>
+                    </td>
+                    <td class="border p-2">Sites that are part of larger hosting packages</td>
+                </tr>
+                <tr>
+                    <td class="border p-2 font-medium">Docker-Based</td>
+                    <td class="border p-2">
+                        <ul class="list-disc pl-4">
+                            <li>Highly portable</li>
+                            <li>Consistent environments</li>
+                        </ul>
+                    </td>
+                    <td class="border p-2">
+                        <ul class="list-disc pl-4">
+                            <li>More complex setup</li>
+                            <li>Overkill for simple sites</li>
+                        </ul>
+                    </td>
+                    <td class="border p-2">DevOps-focused teams, containerized architectures</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h2 id="custom-domains" class="text-2xl font-bold mt-8 mb-4">Custom Domain Configuration</h2>
+    <p>
+        Setting up a custom domain involves two main steps: purchasing a domain and configuring DNS records.
+    </p>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Domain Registrars</h3>
+    <p>
+        Popular domain registrars include:
+    </p>
+    <ul class="list-disc pl-5 my-4">
+        <li class="mb-2"><a href="https://domains.google/" target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-800">Google Domains</a> - Clean interface with transparent pricing</li>
+        <li class="mb-2"><a href="https://www.namecheap.com/" target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-800">Namecheap</a> - Competitive pricing and free WhoisGuard</li>
+        <li class="mb-2"><a href="https://www.cloudflare.com/products/registrar/" target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-800">Cloudflare Registrar</a> - At-cost domain registration</li>
+    </ul>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">DNS Configuration</h3>
+    <p>
+        Common DNS records for static sites:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6">
+        <table class="min-w-full border-collapse">
+            <thead>
+                <tr class="bg-gray-100">
+                    <th class="border p-2 text-left">Record Type</th>
+                    <th class="border p-2 text-left">Host</th>
+                    <th class="border p-2 text-left">Value</th>
+                    <th class="border p-2 text-left">Purpose</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="border p-2">A</td>
+                    <td class="border p-2">@</td>
+                    <td class="border p-2">IP address of your host</td>
+                    <td class="border p-2">Root domain</td>
+                </tr>
+                <tr>
+                    <td class="border p-2">CNAME</td>
+                    <td class="border p-2">www</td>
+                    <td class="border p-2">your-domain.com</td>
+                    <td class="border p-2">www subdomain</td>
+                </tr>
+                <tr>
+                    <td class="border p-2">CNAME</td>
+                    <td class="border p-2">www</td>
+                    <td class="border p-2">your-site.netlify.app</td>
+                    <td class="border p-2">For Netlify/Vercel</td>
+                </tr>
+                <tr>
+                    <td class="border p-2">TXT</td>
+                    <td class="border p-2">@</td>
+                    <td class="border p-2">Verification strings</td>
+                    <td class="border p-2">Service verification</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 my-6">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="ml-3">
+                <h3 class="text-sm font-medium text-blue-800">DNS Propagation</h3>
+                <div class="mt-2 text-sm text-blue-700">
+                    <p>
+                        After updating DNS records, changes can take 24-48 hours to propagate globally. You can check propagation using tools like <a href="https://www.whatsmydns.net/" target="_blank" rel="noopener" class="text-blue-600 hover:underline">whatsmydns.net</a>.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2 id="best-practices" class="text-2xl font-bold mt-8 mb-4">Hosting Best Practices</h2>
+    <p>
+        Follow these best practices regardless of your chosen hosting platform:
+    </p>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Performance Optimization</h3>
+    <ul class="list-disc pl-5 my-4">
+        <li class="mb-2">Use a CDN to serve your content from edge locations</li>
+        <li class="mb-2">Configure appropriate cache headers for static assets</li>
+        <li class="mb-2">Enable Gzip or Brotli compression</li>
+        <li class="mb-2">Implement HTTP/2 or HTTP/3 where available</li>
+        <li class="mb-2">Consider using image optimization services like Cloudinary or imgix</li>
+    </ul>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Security Considerations</h3>
+    <ul class="list-disc pl-5 my-4">
+        <li class="mb-2">Always use HTTPS (most platforms provide this by default)</li>
+        <li class="mb-2">Implement proper security headers:
+            <ul class="list-disc pl-5 mt-1">
+                <li>Content-Security-Policy</li>
+                <li>X-Content-Type-Options</li>
+                <li>X-Frame-Options</li>
+                <li>Referrer-Policy</li>
+            </ul>
+        </li>
+        <li class="mb-2">Keep your build tools and dependencies updated</li>
+        <li class="mb-2">Consider using a security scanner like Mozilla Observatory</li>
+    </ul>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Monitoring and Analytics</h3>
+    <ul class="list-disc pl-5 my-4">
+        <li class="mb-2">Set up uptime monitoring with tools like Uptime Robot or Pingdom</li>
+        <li class="mb-2">Implement web analytics (Google Analytics, Plausible, Fathom)</li>
+        <li class="mb-2">Use real user monitoring (RUM) for performance insights</li>
+        <li class="mb-2">Set up error tracking with services like Sentry</li>
+    </ul>
+
+    <h2 id="costs" class="text-2xl font-bold mt-8 mb-4">Cost Considerations</h2>
+    <p>
+        Hosting static sites is generally very affordable, but costs can vary:
+    </p>
+
+    <div class="overflow-x-auto mb-6">
+        <table class="min-w-full border-collapse">
+            <thead>
+                <tr class="bg-gray-100">
+                    <th class="border p-2 text-left">Hosting Type</th>
+                    <th class="border p-2 text-left">Free Tier</th>
+                    <th class="border p-2 text-left">Paid Plans Start At</th>
+                    <th class="border p-2 text-left">Cost Factors</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="border p-2">Netlify</td>
+                    <td class="border p-2">Yes (100GB bandwidth/month)</td>
+                    <td class="border p-2">$19/month</td>
+                    <td class="border p-2">Bandwidth, build minutes, team size</td>
+                </tr>
+                <tr>
+                    <td class="border p-2">Vercel</td>
+                    <td class="border p-2">Yes (100GB bandwidth/month)</td>
+                    <td class="border p-2">$20/month</td>
+                    <td class="border p-2">Team size, bandwidth</td>
+                </tr>
+                <tr>
+                    <td class="border p-2">GitHub Pages</td>
+                    <td class="border p-2">Yes (unlimited for public repos)</td>
+                    <td class="border p-2">N/A (part of GitHub plans)</td>
+                    <td class="border p-2">Repository visibility</td>
+                </tr>
+                <tr>
+                    <td class="border p-2">AWS S3 + CloudFront</td>
+                    <td class="border p-2">No (Free tier for 12 months)</td>
+                    <td class="border p-2">~$1-2/month for small sites</td>
+                    <td class="border p-2">Storage, requests, bandwidth</td>
+                </tr>
+                <tr>
+                    <td class="border p-2">Google Cloud Storage</td>
+                    <td class="border p-2">No (Free tier with credits)</td>
+                    <td class="border p-2">~$1-2/month for small sites</td>
+                    <td class="border p-2">Storage, egress, operations</td>
+                </tr>
+                <tr>
+                    <td class="border p-2">Traditional Hosting</td>
+                    <td class="border p-2">Rarely</td>
+                    <td class="border p-2">$5-10/month</td>
+                    <td class="border p-2">Plan level, contract length</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h2 id="next-steps" class="text-2xl font-bold mt-8 mb-4">Next Steps</h2>
+    <p>
+        Now that you understand your hosting options, consider these next steps:
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+        <a href="/guide/production" class="go-card block hover:no-underline">
+            <h3 class="text-lg font-semibold text-go-blue">Production Build</h3>
+            <p class="text-gray-600">Learn how to optimize your site for production deployment.</p>
+        </a>
+        <a href="/guide/api" class="go-card block hover:no-underline">
+            <h3 class="text-lg font-semibold text-go-blue">API Documentation</h3>
+            <p class="text-gray-600">Advanced configuration options for the Go Template SSG.</p>
+        </a>
+    </div>
+</div> 

@@ -1,0 +1,215 @@
+{{- /* layout:base.tmpl */ -}}
+
+<div class="prose prose-blue max-w-none">
+    <p class="lead text-lg text-gray-600">
+        Live Reload is a powerful feature that automatically refreshes your browser when you make changes to your templates, allowing you to see your changes instantly without manual refreshing.
+    </p>
+
+    <h2 id="how-live-reload-works" class="text-2xl font-bold mt-8 mb-4">How Live Reload Works</h2>
+    <p>
+        The Live Reload feature is built into the Go Template SSG development server and works through a simple mechanism:
+    </p>
+
+    <ol class="list-decimal pl-5 mt-2 mb-4">
+        <li class="mb-1">The development server injects a small JavaScript client into each HTML page it serves</li>
+        <li class="mb-1">This client establishes a WebSocket connection back to the server</li>
+        <li class="mb-1">When you make changes to any template file, the server detects these changes</li>
+        <li class="mb-1">The server regenerates the affected pages</li>
+        <li class="mb-1">The server sends a reload signal to all connected browsers via WebSocket</li>
+        <li class="mb-1">Your browser automatically refreshes to show the updated content</li>
+    </ol>
+
+    <p>
+        This seamless process eliminates the need to manually refresh your browser, making development much more efficient.
+    </p>
+
+    <h2 id="enabling-live-reload" class="text-2xl font-bold mt-8 mb-4">Enabling Live Reload</h2>
+    <p>
+        Live Reload is automatically enabled by default when you use the development server. To start the server with Live Reload:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>go-tmpl-dev-server --port 8080 --root output --source templates</code></pre>
+    </div>
+
+    <p>
+        No additional configuration is required. Simply make changes to your template files, and your browser will refresh automatically.
+    </p>
+
+    <h2 id="disabling-live-reload" class="text-2xl font-bold mt-8 mb-4">Disabling Live Reload</h2>
+    <p>
+        In some cases, you might want to disable Live Reload. For example:
+    </p>
+    
+    <ul class="list-disc pl-5 my-4">
+        <li class="mb-2">When working in environments where WebSocket connections are blocked</li>
+        <li class="mb-2">When manually testing page refreshes or cache-related functionality</li>
+        <li class="mb-2">When working with large sites where rebuilding can take longer</li>
+    </ul>
+
+    <p>
+        To disable Live Reload, use the <code>--live-reload=false</code> flag:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>go-tmpl-dev-server --port 8080 --root output --source templates --live-reload=false</code></pre>
+    </div>
+
+    <p>
+        With Live Reload disabled, the server will still detect and process changes to your templates, but you'll need to manually refresh your browser to see the changes.
+    </p>
+
+    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 my-6">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="ml-3">
+                <h3 class="text-sm font-medium text-blue-800">Note</h3>
+                <div class="mt-2 text-sm text-blue-700">
+                    <p>
+                        Live Reload works with any modern browser that supports WebSocket connections, including Chrome, Firefox, Safari, and Edge.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2 id="javascript-injection" class="text-2xl font-bold mt-8 mb-4">JavaScript Injection</h2>
+    <p>
+        The development server automatically injects a small JavaScript snippet into the <code>&lt;head&gt;</code> of each HTML page. This script establishes a WebSocket connection to the server and listens for reload events.
+    </p>
+
+    <p>
+        The injected JavaScript code looks similar to this:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>&lt;script&gt;
+(function() {
+    var socket = new WebSocket("ws://" + window.location.host + "/livereload");
+    
+    socket.onmessage = function(event) {
+        if (event.data === "reload") {
+            window.location.reload();
+        }
+    };
+    
+    socket.onclose = function() {
+        console.log("Live reload connection closed. Reconnecting in 1s...");
+        setTimeout(function() { window.location.reload(); }, 1000);
+    };
+})();
+&lt;/script&gt;</code></pre>
+    </div>
+
+    <p>
+        This script is injected automatically by the server before sending the HTML to the browser, so you don't need to modify your templates.
+    </p>
+
+    <h2 id="file-watching" class="text-2xl font-bold mt-8 mb-4">File Watching</h2>
+    <p>
+        The development server monitors your template directory for changes using file system watchers. It watches for the following events:
+    </p>
+
+    <ul class="list-disc pl-5 mt-2 mb-4">
+        <li class="mb-1">File creation</li>
+        <li class="mb-1">File modification</li>
+        <li class="mb-1">File deletion</li>
+    </ul>
+
+    <p>
+        When any of these events occur, the server waits for a brief debounce period (to avoid multiple rapid reloads) and then regenerates the affected pages.
+    </p>
+
+    <h2 id="debouncing" class="text-2xl font-bold mt-8 mb-4">Debounce Mechanism</h2>
+    <p>
+        To prevent excessive rebuilds when multiple files change in quick succession, the development server implements a debounce mechanism. This means that it waits for file changes to stabilize before triggering a rebuild.
+    </p>
+
+    <p>
+        The default debounce period is 300 milliseconds, which means that if multiple file changes occur within 300ms of each other, only one rebuild will be triggered.
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>var debounceTimer *time.Timer
+var debounceInterval = 300 * time.Millisecond
+
+func debounceRecompile(cfg generator.SiteConfig) {
+    if debounceTimer != nil {
+        debounceTimer.Stop()
+    }
+    
+    debounceTimer = time.AfterFunc(debounceInterval, func() {
+        log.Println("Regenerating site...")
+        if err := generator.GenerateSite(cfg); err != nil {
+            log.Printf("Error regenerating site: %v", err)
+            return
+        }
+        notifyClients()
+    })
+}</code></pre>
+    </div>
+
+    <h2 id="troubleshooting" class="text-2xl font-bold mt-8 mb-4">Troubleshooting</h2>
+
+    <h3 id="reload-not-working" class="text-xl font-semibold mt-6 mb-3">Live Reload Not Working</h3>
+    <p>
+        If Live Reload isn't working as expected, try these solutions:
+    </p>
+
+    <ol class="list-decimal pl-5 mt-2 mb-4">
+        <li class="mb-1">
+            <strong>Check browser console for errors</strong> - Open your browser's developer tools (F12 or Ctrl+Shift+I) and check the console for any error messages related to WebSocket connection.
+        </li>
+        <li class="mb-1">
+            <strong>Verify the server is running</strong> - Make sure the development server is running and watching for changes.
+        </li>
+        <li class="mb-1">
+            <strong>Check network connectivity</strong> - Ensure that WebSocket connections are not blocked by your network or firewall.
+        </li>
+        <li class="mb-1">
+            <strong>Restart the server</strong> - Sometimes, stopping and restarting the development server can resolve issues.
+        </li>
+    </ol>
+
+    <h3 id="multiple-reloads" class="text-xl font-semibold mt-6 mb-3">Multiple Reloads</h3>
+    <p>
+        If your browser reloads multiple times for a single change, it might be due to your editor creating temporary files or backup files. Try:
+    </p>
+
+    <ul class="list-disc pl-5 mt-2 mb-4">
+        <li class="mb-1">Disabling auto-save features in your editor</li>
+        <li class="mb-1">Configuring your editor to place backup files outside your project directory</li>
+    </ul>
+
+    <h2 id="advanced-usage" class="text-2xl font-bold mt-8 mb-4">Advanced Usage</h2>
+
+    <h3 id="selective-reloading" class="text-xl font-semibold mt-6 mb-3">Selective Reloading</h3>
+    <p>
+        In a future version, Go Template SSG may support selective reloading, where only the affected pages are regenerated instead of rebuilding the entire site. This would make the development experience even faster for large sites.
+    </p>
+
+    <h3 id="css-injection" class="text-xl font-semibold mt-6 mb-3">CSS Hot Reloading</h3>
+    <p>
+        Another potential future feature is CSS hot reloading, which would update the styles without fully reloading the page, preserving the current state of your application.
+    </p>
+
+    <h2 id="next-steps" class="text-2xl font-bold mt-8 mb-4">Next Steps</h2>
+    <p>
+        Now that you understand how Live Reload works, you might want to explore:
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+        <a href="/guide/dev-server/" class="go-card block hover:no-underline">
+            <h3 class="text-lg font-semibold text-go-blue">Development Server</h3>
+            <p class="text-gray-600">Learn more about the development server capabilities and configuration.</p>
+        </a>
+        <a href="/guide/templates/components/" class="go-card block hover:no-underline">
+            <h3 class="text-lg font-semibold text-go-blue">Components</h3>
+            <p class="text-gray-600">Create reusable components that update seamlessly with Live Reload.</p>
+        </a>
+    </div>
+</div> 

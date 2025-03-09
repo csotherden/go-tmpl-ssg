@@ -1,0 +1,279 @@
+{{- /* layout:base.tmpl */ -}}
+
+<div class="prose prose-blue max-w-none">
+    <p class="lead text-lg text-gray-600">
+        This API documentation provides details on the command-line interfaces, environment variables, and helper functions available in Go Template SSG for advanced customization and integration.
+    </p>
+
+    <h2 id="command-line-interface" class="text-2xl font-bold mt-8 mb-4">Command-Line Interface</h2>
+    <p>
+        Go Template SSG provides two main command-line tools:
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-6">
+        <div class="go-card">
+            <h3 class="text-lg font-semibold text-go-blue">go-tmpl-generate</h3>
+            <p class="mb-2">Static site generator that transforms templates into HTML files.</p>
+        </div>
+        <div class="go-card">
+            <h3 class="text-lg font-semibold text-go-blue">go-tmpl-dev-server</h3>
+            <p class="mb-2">Development server with live-reload functionality for real-time preview.</p>
+        </div>
+    </div>
+
+    <h3 id="go-tmpl-generate" class="text-xl font-semibold mt-6 mb-3">go-tmpl-generate</h3>
+    <p>
+        The generator tool processes templates and data files to produce a static site.
+    </p>
+
+    <h4 class="font-semibold mt-4 mb-2">Usage</h4>
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>go-tmpl-generate [flags]</code></pre>
+    </div>
+
+    <h4 class="font-semibold mt-4 mb-2">Flags</h4>
+    <div class="overflow-x-auto mb-6">
+        <table class="min-w-full border-collapse">
+            <thead>
+                <tr class="bg-gray-100">
+                    <th class="border p-2 text-left">Flag</th>
+                    <th class="border p-2 text-left">Default</th>
+                    <th class="border p-2 text-left">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="border p-2 font-mono text-sm">--template</td>
+                    <td class="border p-2"><code>./templates</code></td>
+                    <td class="border p-2">Directory containing template files</td>
+                </tr>
+                <tr>
+                    <td class="border p-2 font-mono text-sm">--output</td>
+                    <td class="border p-2"><code>./output</code></td>
+                    <td class="border p-2">Directory where generated files will be written</td>
+                </tr>
+                <tr>
+                    <td class="border p-2 font-mono text-sm">--clean</td>
+                    <td class="border p-2"><code>false</code></td>
+                    <td class="border p-2">Clean the output directory before generating</td>
+                </tr>
+                <tr>
+                    <td class="border p-2 font-mono text-sm">--help</td>
+                    <td class="border p-2"><code>false</code></td>
+                    <td class="border p-2">Display help information</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h4 class="font-semibold mt-4 mb-2">Example</h4>
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>go-tmpl-generate --template ./my-templates --output ./public --clean</code></pre>
+    </div>
+
+    <h3 id="go-tmpl-dev-server" class="text-xl font-semibold mt-6 mb-3">go-tmpl-dev-server</h3>
+    <p>
+        The development server provides a local environment for previewing your site with live reload capabilities.
+    </p>
+
+    <h4 class="font-semibold mt-4 mb-2">Usage</h4>
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>go-tmpl-dev-server [flags]</code></pre>
+    </div>
+
+    <h4 class="font-semibold mt-4 mb-2">Flags</h4>
+    <div class="overflow-x-auto mb-6">
+        <table class="min-w-full border-collapse">
+            <thead>
+                <tr class="bg-gray-100">
+                    <th class="border p-2 text-left">Flag</th>
+                    <th class="border p-2 text-left">Default</th>
+                    <th class="border p-2 text-left">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="border p-2 font-mono text-sm">--port</td>
+                    <td class="border p-2"><code>8080</code></td>
+                    <td class="border p-2">Port to run the server on</td>
+                </tr>
+                <tr>
+                    <td class="border p-2 font-mono text-sm">--root</td>
+                    <td class="border p-2"><code>./output</code></td>
+                    <td class="border p-2">Root directory to serve files from</td>
+                </tr>
+                <tr>
+                    <td class="border p-2 font-mono text-sm">--source</td>
+                    <td class="border p-2"><code>./templates</code></td>
+                    <td class="border p-2">Source directory containing template files</td>
+                </tr>
+                <tr>
+                    <td class="border p-2 font-mono text-sm">--live-reload</td>
+                    <td class="border p-2"><code>true</code></td>
+                    <td class="border p-2">Enable live reload functionality</td>
+                </tr>
+                <tr>
+                    <td class="border p-2 font-mono text-sm">--help</td>
+                    <td class="border p-2"><code>false</code></td>
+                    <td class="border p-2">Display help information</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h4 class="font-semibold mt-4 mb-2">Example</h4>
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>go-tmpl-dev-server --port 3000 --root ./public --source ./my-templates</code></pre>
+    </div>
+
+    <h2 id="template-functions" class="text-2xl font-bold mt-8 mb-4">Template Functions</h2>
+    <p>
+        Go Template SSG extends Go's default template functions with additional helpers to make template authoring easier.
+    </p>
+
+    <h2 id="available-functions" class="text-2xl font-bold mt-8 mb-4">Available Functions</h2>
+
+    <table class="go-table w-full mt-4 mb-6">
+        <thead class="bg-gray-100">
+            <tr>
+                <th class="py-2 px-4 text-left font-semibold border-b">Function</th>
+                <th class="py-2 px-4 text-left font-semibold border-b">Description</th>
+                <th class="py-2 px-4 text-left font-semibold border-b">Example</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="border-b">
+                <td class="py-2 px-4"><code>html</code></td>
+                <td class="py-2 px-4">Outputs a string as HTML without escaping</td>
+                <td class="py-2 px-4"><code>{{ "{{" }} html "&lt;strong&gt;Bold&lt;/strong&gt;" {{ "}}" }}</code></td>
+            </tr>
+            <tr class="border-b">
+                <td class="py-2 px-4"><code>now</code></td>
+                <td class="py-2 px-4">Returns the current time as a string</td>
+                <td class="py-2 px-4"><code>{{ "{{" }} now {{ "}}" }}</code></td>
+            </tr>
+            <tr class="border-b">
+                <td class="py-2 px-4"><code>nowFormat</code></td>
+                <td class="py-2 px-4">Returns the current time formatted according to the Go time format layout</td>
+                <td class="py-2 px-4"><code>{{ "{{" }} nowFormat "2006-01-02" {{ "}}" }}</code></td>
+            </tr>
+            <tr class="border-b">
+                <td class="py-2 px-4"><code>formatDate</code></td>
+                <td class="py-2 px-4">Formats a date string (RFC3339 format) using the specified layout</td>
+                <td class="py-2 px-4"><code>{{ "{{" }} formatDate "2023-04-01T15:04:05Z" "January 2, 2006" {{ "}}" }}</code></td>
+            </tr>
+            <tr class="border-b">
+                <td class="py-2 px-4"><code>upper</code></td>
+                <td class="py-2 px-4">Converts string to uppercase</td>
+                <td class="py-2 px-4"><code>{{ "{{" }} upper "text" {{ "}}" }}</code></td>
+            </tr>
+            <tr class="border-b">
+                <td class="py-2 px-4"><code>lower</code></td>
+                <td class="py-2 px-4">Converts string to lowercase</td>
+                <td class="py-2 px-4"><code>{{ "{{" }} lower "TEXT" {{ "}}" }}</code></td>
+            </tr>
+            <tr class="border-b">
+                <td class="py-2 px-4"><code>title</code></td>
+                <td class="py-2 px-4">Converts string to title case</td>
+                <td class="py-2 px-4"><code>{{ "{{" }} title "hello world" {{ "}}" }}</code></td>
+            </tr>
+            <tr class="border-b">
+                <td class="py-2 px-4"><code>add</code></td>
+                <td class="py-2 px-4">Adds two integers</td>
+                <td class="py-2 px-4"><code>{{ "{{" }} add 1 2 {{ "}}" }}</code></td>
+            </tr>
+            <tr class="border-b">
+                <td class="py-2 px-4"><code>sub</code></td>
+                <td class="py-2 px-4">Subtracts second integer from first</td>
+                <td class="py-2 px-4"><code>{{ "{{" }} sub 5 2 {{ "}}" }}</code></td>
+            </tr>
+            <tr class="border-b">
+                <td class="py-2 px-4"><code>seq</code></td>
+                <td class="py-2 px-4">Generates a sequence of integers from start to end</td>
+                <td class="py-2 px-4"><code>{{ "{{" }} range seq 1 5 {{ "}}" }}{{ "{{" }} . {{ "}}" }}{{ "{{" }} end {{ "}}" }}</code></td>
+            </tr>
+            <tr>
+                <td class="py-2 px-4"><code>join</code></td>
+                <td class="py-2 px-4">Joins array elements with a separator</td>
+                <td class="py-2 px-4"><code>{{ "{{" }} join .Items ", " {{ "}}" }}</code></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3 id="function-examples" class="text-xl font-semibold mt-6 mb-3">Function Usage</h3>
+    <p>
+        Template functions are used within double curly braces in your Go templates. For detailed examples and usage patterns, please refer to the specific function documentation or the project repository.
+    </p>
+
+    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 my-6">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="ml-3">
+                <h3 class="text-sm font-medium text-blue-800">Note on Template Functions</h3>
+                <div class="mt-2 text-sm text-blue-700">
+                    <p>
+                        The exact set of available functions may vary depending on your Go Template SSG version. Always check the latest documentation for the most up-to-date information.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2 id="extending" class="text-2xl font-bold mt-8 mb-4">Extending Go Template SSG</h2>
+    <p>
+        Go Template SSG is designed to be extendable. You can add custom template functions, modify existing ones, or create plugins by forking the repository and building your own version.
+    </p>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Adding Custom Functions</h3>
+    <p>
+        If you're building from source, you can add custom functions in the <code>pkg/generator/template_funcs.go</code> file:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>// Add a custom function to the FuncMap
+func addCustomFunctions(funcMap template.FuncMap) template.FuncMap {
+    // Your custom function
+    funcMap["myCustomFunc"] = func(s string) string {
+        return "Custom: " + s
+    }
+    
+    return funcMap
+}</code></pre>
+    </div>
+
+    <h2 id="api-references" class="text-2xl font-bold mt-8 mb-4">API References</h2>
+    <p>
+        For more advanced usage and integration, you can explore the Go Template SSG source code or use the packages as libraries in your own Go code.
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+        <a href="https://github.com/csotherden/go-tmpl-ssg" target="_blank" rel="noopener" class="go-card block hover:no-underline">
+            <h3 class="text-lg font-semibold text-go-blue">GitHub Repository</h3>
+            <p class="text-gray-600">Explore the source code and contribute to the project.</p>
+        </a>
+        <a href="https://pkg.go.dev/" target="_blank" rel="noopener" class="go-card block hover:no-underline">
+            <h3 class="text-lg font-semibold text-go-blue">GoDoc Documentation</h3>
+            <p class="text-gray-600">Generated API documentation for Go packages.</p>
+        </a>
+    </div>
+
+    <h2 id="next-steps" class="text-2xl font-bold mt-8 mb-4">Next Steps</h2>
+    <p>
+        Now that you understand the API, you might want to:
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+        <a href="/guide/data" class="go-card block hover:no-underline">
+            <h3 class="text-lg font-semibold text-go-blue">Data Files Guide</h3>
+            <p class="text-gray-600">Learn how to use data files to separate content from presentation.</p>
+        </a>
+        <a href="/guide/templates" class="go-card block hover:no-underline">
+            <h3 class="text-lg font-semibold text-go-blue">Advanced Templates</h3>
+            <p class="text-gray-600">Dive deeper into template functionality and best practices.</p>
+        </a>
+    </div>
+</div> 

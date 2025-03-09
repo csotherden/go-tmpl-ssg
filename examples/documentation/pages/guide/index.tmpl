@@ -1,0 +1,120 @@
+{{- /* layout:base.tmpl */ -}}
+
+<div class="prose prose-blue max-w-none">
+    <p class="lead text-lg text-gray-600">
+        Welcome to the Go Template SSG documentation. This guide will help you learn how to use the static site generator to create beautiful, efficient static websites.
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+        <!-- Getting Started Section -->
+        <div class="go-card">
+            <h2 class="text-xl font-bold text-go-blue mb-4">Getting Started</h2>
+            <ul class="space-y-2">
+                <li><a href="/guide/installation" class="text-gray-700 hover:text-go-blue">Installation</a></li>
+                <li><a href="/guide/quickstart" class="text-gray-700 hover:text-go-blue">Quick Start</a></li>
+                <li><a href="/guide/concepts" class="text-gray-700 hover:text-go-blue">Core Concepts</a></li>
+            </ul>
+        </div>
+
+        <!-- Templates Section -->
+        <div class="go-card">
+            <h2 class="text-xl font-bold text-go-blue mb-4">Templates</h2>
+            <ul class="space-y-2">
+                <li><a href="/guide/templates/layouts" class="text-gray-700 hover:text-go-blue">Layouts</a></li>
+                <li><a href="/guide/templates/components" class="text-gray-700 hover:text-go-blue">Components</a></li>
+                <li><a href="/guide/templates/pages" class="text-gray-700 hover:text-go-blue">Pages</a></li>
+                <li><a href="/guide/templates/functions" class="text-gray-700 hover:text-go-blue">Template Functions</a></li>
+            </ul>
+        </div>
+
+        <!-- Features Section -->
+        <div class="go-card">
+            <h2 class="text-xl font-bold text-go-blue mb-4">Features</h2>
+            <ul class="space-y-2">
+                <li><a href="/guide/data" class="text-gray-700 hover:text-go-blue">Data Files</a></li>
+                <li><a href="/guide/pagination" class="text-gray-700 hover:text-go-blue">Pagination</a></li>
+                <li><a href="/guide/sitemap" class="text-gray-700 hover:text-go-blue">Sitemap Generation</a></li>
+            </ul>
+        </div>
+
+        <!-- Development Section -->
+        <div class="go-card">
+            <h2 class="text-xl font-bold text-go-blue mb-4">Development</h2>
+            <ul class="space-y-2">
+                <li><a href="/guide/dev-server" class="text-gray-700 hover:text-go-blue">Development Server</a></li>
+                <li><a href="/guide/livereload" class="text-gray-700 hover:text-go-blue">Live Reload</a></li>
+            </ul>
+        </div>
+
+        <!-- Deployment Section -->
+        <div class="go-card">
+            <h2 class="text-xl font-bold text-go-blue mb-4">Deployment</h2>
+            <ul class="space-y-2">
+                <li><a href="/guide/production" class="text-gray-700 hover:text-go-blue">Production Build</a></li>
+                <li><a href="/guide/hosting" class="text-gray-700 hover:text-go-blue">Hosting Options</a></li>
+            </ul>
+        </div>
+
+        <!-- API Reference -->
+        <div class="go-card">
+            <h2 class="text-xl font-bold text-go-blue mb-4">API Reference</h2>
+            <ul class="space-y-2">
+                <li><a href="/guide/api" class="text-gray-700 hover:text-go-blue">API Documentation</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <h2 class="text-2xl font-bold mt-8 mb-4">Quick Reference</h2>
+    
+    <div class="bg-gray-50 rounded-md p-6 mb-8">
+        <h3 class="text-xl font-semibold mt-6 mb-3">Basic Usage</h3>
+        <pre class="overflow-x-auto"><code>// Generate a static site
+go run ./cmd/go-tmpl-generate --template path/to/templates --output path/to/output
+
+// Run development server
+go run ./cmd/go-tmpl-dev-server --port 8080 --root output --source templates</code></pre>
+
+        <h3 class="text-xl font-semibold mt-6 mb-3">Directory Structure</h3>
+        <pre class="overflow-x-auto"><code>templates/
+├── components/       # Reusable template components
+│   ├── header.tmpl
+│   ├── footer.tmpl
+├── layouts/          # Layout templates for pages
+│   ├── base.tmpl
+├── pages/            # Page templates and content
+│   ├── index.tmpl
+│   ├── index.tmpl.json
+│   ├── robots.txt    # Non-template files are copied as-is
+│   ├── assets/       # Static assets
+│   │   ├── theme.css</code></pre>
+
+        <h3 class="text-xl font-semibold mt-6 mb-3">Layout Usage</h3>
+        <pre class="overflow-x-auto"><code>{{`{{- /* layout:base.tmpl */ -}}`}}
+<h1>{{`{{.Title}}`}}</h1>
+<p>This content will be placed into the layout's {{`{{template "PageContent" .}}`}} block.</p></code></pre>
+    </div>
+
+    <h2 class="text-2xl font-bold mt-8 mb-4">Examples</h2>
+    <p>
+        The best way to learn is by example. Check out these practical examples:
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+        <a href="/examples/blog" class="go-card block hover:no-underline">
+            <h3 class="text-lg font-semibold text-go-blue">Blog Template</h3>
+            <p class="text-gray-600">A complete blog template with pagination, categories, and tags.</p>
+        </a>
+        <a href="/examples/portfolio" class="go-card block hover:no-underline">
+            <h3 class="text-lg font-semibold text-go-blue">Portfolio Template</h3>
+            <p class="text-gray-600">A portfolio site template for showcasing your work.</p>
+        </a>
+        <a href="/examples/documentation" class="go-card block hover:no-underline">
+            <h3 class="text-lg font-semibold text-go-blue">Documentation Site</h3>
+            <p class="text-gray-600">A documentation site template (like this one!)</p>
+        </a>
+        <a href="/examples/landing-page" class="go-card block hover:no-underline">
+            <h3 class="text-lg font-semibold text-go-blue">Landing Page</h3>
+            <p class="text-gray-600">A simple landing page template for products or services.</p>
+        </a>
+    </div>
+</div> 

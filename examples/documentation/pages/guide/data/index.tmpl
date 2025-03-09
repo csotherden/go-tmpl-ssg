@@ -1,0 +1,420 @@
+{{- /* layout:base.tmpl */ -}}
+
+<div class="prose prose-blue max-w-none">
+    <p class="lead text-lg text-gray-600">
+        Data files allow you to separate your content from your templates. This makes your site easier to maintain and update, while providing a clean separation of concerns.
+    </p>
+
+    <h2 id="what-are-data-files" class="text-2xl font-bold mt-8 mb-4">What Are Data Files?</h2>
+    <p>
+        In Go Template SSG, data files are JSON files that provide data to your templates. Each page template can have a corresponding JSON data file that contains the dynamic content for that page.
+    </p>
+
+    <p>
+        Data files are especially useful for:
+    </p>
+    <ul class="list-disc pl-5 mt-2 mb-4">
+        <li class="mb-1">Pages with a lot of content that would make the template difficult to read</li>
+        <li class="mb-1">Content that needs to be updated frequently without changing the template structure</li>
+        <li class="mb-1">Content that might be managed by non-technical users</li>
+        <li class="mb-1">Data that might eventually come from a CMS or API</li>
+    </ul>
+
+    <h2 id="data-file-location" class="text-2xl font-bold mt-8 mb-4">Data File Location and Naming</h2>
+    <p>
+        Data files should be placed alongside their corresponding template files with a <code>.tmpl.json</code> extension. For example:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>templates/
+├── pages/
+│   ├── about/
+│   │   ├── index.tmpl           # The template file
+│   │   └── index.tmpl.json      # The data file for this template
+│   ├── blog/
+│   │   ├── index.tmpl
+│   │   └── index.tmpl.json</code></pre>
+    </div>
+
+    <p>
+        The generator automatically looks for a JSON file with the same base name as the template file but with a <code>.tmpl.json</code> extension.
+    </p>
+
+    <h2 id="data-file-structure" class="text-2xl font-bold mt-8 mb-4">Data File Structure</h2>
+    <p>
+        Data files are standard JSON files containing key-value pairs. The structure is flexible and depends on what data your template needs.
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>{
+  "Title": "About Our Company",
+  "Description": "We are a passionate team dedicated to creating awesome products.",
+  "Team": [
+    {
+      "Name": "John Smith",
+      "Title": "CEO",
+      "Bio": "John has been in the industry for over 15 years..."
+    },
+    {
+      "Name": "Jane Doe",
+      "Title": "CTO",
+      "Bio": "Jane is an expert in cloud technologies..."
+    }
+  ],
+  "FoundedYear": 2010,
+  "Location": "San Francisco, CA"
+}</code></pre>
+    </div>
+
+    <p>
+        The data from this file will be available in your template via the dot (<code>.</code>) notation:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>{{`{{- /* layout:base.tmpl */ -}}`}}
+&lt;h1&gt;{{`{{.Title}}`}}&lt;/h1&gt;
+&lt;p&gt;{{`{{.Description}}`}}&lt;/p&gt;
+
+&lt;h2&gt;Our Team&lt;/h2&gt;
+&lt;div class="team-members"&gt;
+  {{`{{range .Team}}`}}
+  &lt;div class="team-member"&gt;
+    &lt;h3&gt;{{`{{.Name}}`}} - {{`{{.Title}}`}}&lt;/h3&gt;
+    &lt;p&gt;{{`{{.Bio}}`}}&lt;/p&gt;
+  &lt;/div&gt;
+  {{`{{end}}`}}
+&lt;/div&gt;
+
+&lt;p&gt;Founded in {{`{{.FoundedYear}}`}} in {{`{{.Location}}`}}&lt;/p&gt;</code></pre>
+    </div>
+
+    <h2 id="accessing-data" class="text-2xl font-bold mt-8 mb-4">Accessing Data in Templates</h2>
+    <p>
+        JSON data is automatically parsed and made available to your templates. You can access the data using Go template syntax:
+    </p>
+
+    <table class="go-table w-full mt-4 mb-6">
+        <thead class="bg-gray-100">
+            <tr>
+                <th class="py-2 px-4 text-left font-semibold border-b">Syntax</th>
+                <th class="py-2 px-4 text-left font-semibold border-b">Description</th>
+                <th class="py-2 px-4 text-left font-semibold border-b">Example</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="border-b">
+                <td class="py-2 px-4"><code>{{`{{.PropertyName}}`}}</code></td>
+                <td class="py-2 px-4">Access a property at the top level</td>
+                <td class="py-2 px-4"><code>{{`{{.Title}}`}}</code></td>
+            </tr>
+            <tr class="border-b">
+                <td class="py-2 px-4"><code>{{`{{.Object.Property}}`}}</code></td>
+                <td class="py-2 px-4">Access a nested property</td>
+                <td class="py-2 px-4"><code>{{`{{.Metadata.Author}}`}}</code></td>
+            </tr>
+            <tr class="border-b">
+                <td class="py-2 px-4"><code>{{`{{range .Array}}`}}</code></td>
+                <td class="py-2 px-4">Iterate over an array</td>
+                <td class="py-2 px-4"><code>{{`{{range .Team}}...{{end}}`}}</code></td>
+            </tr>
+            <tr class="border-b">
+                <td class="py-2 px-4"><code>{{`{{index .Array 0}}`}}</code></td>
+                <td class="py-2 px-4">Access an array element by index</td>
+                <td class="py-2 px-4"><code>{{`{{index .Features 0}}`}}</code></td>
+            </tr>
+            <tr>
+                <td class="py-2 px-4"><code>{{`{{with .Object}}`}}</code></td>
+                <td class="py-2 px-4">Change the context to a nested object</td>
+                <td class="py-2 px-4"><code>{{`{{with .Metadata}}...{{end}}`}}</code></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2 id="conditional-rendering" class="text-2xl font-bold mt-8 mb-4">Conditional Rendering</h2>
+    <p>
+        You can use conditional statements to render content based on data values:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>{{`{{if .ShowFeatures}}`}}
+  &lt;section class="features"&gt;
+    &lt;h2&gt;Our Features&lt;/h2&gt;
+    &lt;ul&gt;
+      {{`{{range .Features}}`}}
+        &lt;li&gt;{{`{{.}}`}}&lt;/li&gt;
+      {{`{{end}}`}}
+    &lt;/ul&gt;
+  &lt;/section&gt;
+{{`{{end}}`}}
+
+{{`{{if .Pricing}}`}}
+  &lt;section class="pricing"&gt;
+    &lt;h2&gt;Pricing&lt;/h2&gt;
+    &lt;p&gt;Starting at ${{`{{.Pricing.StartingPrice}}`}}&lt;/p&gt;
+  &lt;/section&gt;
+{{`{{else}}`}}
+  &lt;section class="pricing"&gt;
+    &lt;h2&gt;Pricing&lt;/h2&gt;
+    &lt;p&gt;Contact us for pricing information.&lt;/p&gt;
+  &lt;/section&gt;
+{{`{{end}}`}}</code></pre>
+    </div>
+
+    <h2 id="complex-data" class="text-2xl font-bold mt-8 mb-4">Complex Data Structures</h2>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Nested Objects</h3>
+    <p>
+        You can nest objects to create more complex data structures:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>{
+  "PageInfo": {
+    "Title": "Product Details",
+    "Description": "Learn about our flagship product",
+    "Keywords": ["product", "details", "features"]
+  },
+  "Product": {
+    "Name": "SuperWidget",
+    "Version": "2.0",
+    "Features": [
+      "Cloud Integration",
+      "AI-powered analytics",
+      "Mobile-friendly interface"
+    ],
+    "Specifications": {
+      "Weight": "2.5 kg",
+      "Dimensions": "30 x 20 x 10 cm",
+      "PowerConsumption": "15W"
+    }
+  }
+}</code></pre>
+    </div>
+
+    <p>
+        Access nested data using dot notation:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>&lt;title&gt;{{`{{.PageInfo.Title}}`}}&lt;/title&gt;
+&lt;meta name="description" content="{{`{{.PageInfo.Description}}`}}"&gt;
+
+&lt;h1&gt;{{`{{.Product.Name}}`}} v{{`{{.Product.Version}}`}}&lt;/h1&gt;
+
+&lt;h2&gt;Features&lt;/h2&gt;
+&lt;ul&gt;
+  {{`{{range .Product.Features}}`}}
+    &lt;li&gt;{{`{{.}}`}}&lt;/li&gt;
+  {{`{{end}}`}}
+&lt;/ul&gt;
+
+&lt;h2&gt;Specifications&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;Weight: {{`{{.Product.Specifications.Weight}}`}}&lt;/li&gt;
+  &lt;li&gt;Dimensions: {{`{{.Product.Specifications.Dimensions}}`}}&lt;/li&gt;
+  &lt;li&gt;Power Consumption: {{`{{.Product.Specifications.PowerConsumption}}`}}&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+    </div>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Arrays of Objects</h3>
+    <p>
+        Arrays of objects are useful for collections of similar items:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>{
+  "Title": "Our Blog",
+  "Posts": [
+    {
+      "Title": "Getting Started with Go Templates",
+      "Author": "Jane Smith",
+      "Date": "2023-01-15T10:00:00Z",
+      "Summary": "Learn how to use Go templates effectively...",
+      "Tags": ["go", "templates", "tutorial"]
+    },
+    {
+      "Title": "Advanced Template Techniques",
+      "Author": "John Doe",
+      "Date": "2023-02-20T14:30:00Z",
+      "Summary": "Take your templates to the next level...",
+      "Tags": ["go", "templates", "advanced"]
+    }
+  ]
+}</code></pre>
+    </div>
+
+    <p>
+        Iterate over arrays using <code>range</code>:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>&lt;h1&gt;{{`{{.Title}}`}}&lt;/h1&gt;
+
+{{`{{range .Posts}}`}}
+  &lt;article class="post"&gt;
+    &lt;h2&gt;{{`{{.Title}}`}}&lt;/h2&gt;
+    &lt;div class="meta"&gt;
+      By {{`{{.Author}}`}} on {{`{{formatDate .Date "January 2, 2006"}}`}}
+    &lt;/div&gt;
+    &lt;p&gt;{{`{{.Summary}}`}}&lt;/p&gt;
+    &lt;div class="tags"&gt;
+      {{`{{range .Tags}}`}}
+        &lt;span class="tag"&gt;#{{`{{.}}`}}&lt;/span&gt;
+      {{`{{end}}`}}
+    &lt;/div&gt;
+  &lt;/article&gt;
+{{`{{end}}`}}</code></pre>
+    </div>
+
+    <h2 id="pagination" class="text-2xl font-bold mt-8 mb-4">Data for Pagination</h2>
+    <p>
+        For paginated content, use a special <code>Iterations</code> structure in your data file:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>{
+  "Title": "Product Catalog",
+  "Iterations": {
+    "PageSize": 10,
+    "PageRoot": "/products",
+    "Data": [
+      { "Name": "Product 1", "Price": 29.99, "Description": "..." },
+      { "Name": "Product 2", "Price": 39.99, "Description": "..." },
+      ...more products...
+    ]
+  }
+}</code></pre>
+    </div>
+
+    <p>
+        The generator will automatically create paginated output files, with each page containing <code>PageSize</code> items from the <code>Data</code> array. In your template, you can access the current page's data:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>&lt;h1&gt;{{`{{.Title}}`}}&lt;/h1&gt;
+
+&lt;div class="products"&gt;
+  {{`{{range .Iterations.Data}}`}}
+    &lt;div class="product"&gt;
+      &lt;h2&gt;{{`{{.Name}}`}}&lt;/h2&gt;
+      &lt;div class="price"&gt;${{`{{.Price}}`}}&lt;/div&gt;
+      &lt;p&gt;{{`{{.Description}}`}}&lt;/p&gt;
+    &lt;/div&gt;
+  {{`{{end}}`}}
+&lt;/div&gt;
+
+&lt;div class="pagination"&gt;
+  Page {{`{{.Iterations.PageNumber}}`}} of {{`{{.Iterations.TotalPages}}`}}
+  &lt;div class="page-links"&gt;
+    {{`{{range seq 1 .Iterations.TotalPages}}`}}
+      &lt;a href="{{`{{$.Iterations.PageRoot}}`}}/{{`{{.}}`}}/" 
+         class="{{`{{if eq . $.Iterations.PageNumber}}`}}active{{`{{end}}`}}"&gt;
+        {{`{{.}}`}}
+      &lt;/a&gt;
+    {{`{{end}}`}}
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <h2 id="combining-data" class="text-2xl font-bold mt-8 mb-4">Combining Data from Multiple Sources</h2>
+    <p>
+        While each page has its own data file, you can share data across pages in several ways:
+    </p>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Using Components with Dedicated Data</h3>
+    <p>
+        Create components that have their own data requirements, documented clearly:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>{{`{{/* 
+  navigation.tmpl
+  Expects a data structure with:
+  - Current: string (current page identifier)
+  - Items: []NavItem where NavItem has { URL, Title, ID }
+*/}}`}}
+
+&lt;nav&gt;
+  {{`{{range .Items}}`}}
+    &lt;a href="{{`{{.URL}}`}}"
+      class="{{`{{if eq $.Current .ID}}`}}active{{`{{end}}`}}"&gt;
+      {{`{{.Title}}`}}
+    &lt;/a&gt;
+  {{`{{end}}`}}
+&lt;/nav&gt;</code></pre>
+    </div>
+
+    <p>
+        Then include this component in your pages:
+    </p>
+
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>{{`{{template "navigation.tmpl" (dict "Current" "about" "Items" .Navigation)}}`}}</code></pre>
+    </div>
+
+    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 my-6">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="ml-3">
+                <h3 class="text-sm font-medium text-blue-800">Note</h3>
+                <div class="mt-2 text-sm text-blue-700">
+                    <p>
+                        The <code>dict</code> function shown here is an example and not built into Go Template SSG. You would need to add a custom function for this capability. Alternatively, structure your JSON data in a way that components can receive the data they need.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2 id="best-practices" class="text-2xl font-bold mt-8 mb-4">Best Practices for Data Files</h2>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Structure Your Data Logically</h3>
+    <p>
+        Organize your data in a way that makes sense for your content and is easy to access in templates:
+    </p>
+    <ul class="list-disc pl-5 mt-2 mb-4">
+        <li class="mb-1">Group related data into objects</li>
+        <li class="mb-1">Use consistent naming conventions</li>
+        <li class="mb-1">Keep the structure flat when possible, but don't be afraid to nest when it makes sense</li>
+    </ul>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Validate Your JSON</h3>
+    <p>
+        Always validate your JSON files to ensure they're properly formatted. Invalid JSON will cause template rendering to fail.
+    </p>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Consider the Template Context</h3>
+    <p>
+        Structure your data to minimize the need for complex template logic:
+    </p>
+    <ul class="list-disc pl-5 mt-2 mb-4">
+        <li class="mb-1">Pre-compute values when possible rather than doing calculations in templates</li>
+        <li class="mb-1">Format data in a way that's easy to display (e.g., pre-formatting dates or currency values)</li>
+        <li class="mb-1">Use boolean flags to control conditional rendering</li>
+    </ul>
+
+    <h3 class="text-xl font-semibold mt-6 mb-3">Document Your Data Structure</h3>
+    <p>
+        Add comments to your templates describing the expected data structure, especially for components that might be reused across multiple pages.
+    </p>
+
+    <h2 id="next-steps" class="text-2xl font-bold mt-8 mb-4">Next Steps</h2>
+    <p>
+        Now that you understand how to use data files, you might want to explore:
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+        <a href="/guide/pagination/" class="go-card block hover:no-underline">
+            <h3 class="text-lg font-semibold text-go-blue">Pagination</h3>
+            <p class="text-gray-600">Learn more about paginating content using the Iterations structure.</p>
+        </a>
+        <a href="/guide/templates/functions/" class="go-card block hover:no-underline">
+            <h3 class="text-lg font-semibold text-go-blue">Template Functions</h3>
+            <p class="text-gray-600">Discover functions that help you manipulate and display your data.</p>
+        </a>
+    </div>
+</div> 
