@@ -1,0 +1,204 @@
+{{- /* layout:base.tmpl */ -}}
+
+<div class="prose prose-blue max-w-none">
+    <h1 class="text-3xl font-bold mb-6">Landing Page Example</h1>
+    
+    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 my-6">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="ml-3">
+                <p class="text-sm text-blue-700">
+                    This example demonstrates how to build a product launch landing page with Go Template SSG. It showcases component-based architecture, data-driven content, and responsive design using Tailwind CSS.
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <h2 id="overview" class="text-2xl font-bold mt-8 mb-4">Overview</h2>
+    <p class="text-gray-700 mb-4">
+        The landing page example illustrates how to create a modern, component-based product launch website. This single-page application is designed to showcase a new SaaS product called "SaaSify" that's coming soon. The page demonstrates how to:
+    </p>
+    
+    <ul class="list-disc pl-6 mb-6 space-y-2">
+        <li class="text-gray-700">Structure templates in a modular, component-based way</li>
+        <li class="text-gray-700">Separate data from presentation using JSON data files</li>
+        <li class="text-gray-700">Create responsive designs with Tailwind CSS</li>
+        <li class="text-gray-700">Implement common landing page sections like hero, features, testimonials, and pricing</li>
+        <li class="text-gray-700">Create interactive elements like a waitlist sign-up form</li>
+    </ul>
+    
+    <h2 id="directory-structure" class="text-2xl font-bold mt-8 mb-4">Project Structure</h2>
+    <p class="text-gray-700 mb-4">
+        The landing page example follows a component-based architecture with the following structure:
+    </p>
+    
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>examples/landing/
+├── templates/          # All template files
+│   ├── layouts/        # Layout templates
+│   │   └── base.tmpl   # Base layout template
+│   ├── components/     # Reusable component templates
+│   │   ├── hero.tmpl   # Hero section component
+│   │   ├── features.tmpl # Features section component
+│   │   ├── testimonials.tmpl # Testimonials section component
+│   │   ├── pricing.tmpl # Pricing tables component
+│   │   ├── news.tmpl   # News/updates component
+│   │   └── waitlist.tmpl # Waitlist form component
+│   └── pages/          # Page templates
+│       ├── index.tmpl  # Main page template
+│       └── index.tmpl.json # Page data
+└── output/            # Generated static site
+    └── index.html     # Generated landing page</code></pre>
+    </div>
+    
+    <h2 id="architecture" class="text-2xl font-bold mt-8 mb-4">Architecture</h2>
+    
+    <h3 id="layout" class="text-xl font-semibold mt-6 mb-3">Layout</h3>
+    <p class="text-gray-700 mb-4">
+        The landing page uses a single base layout defined in <code>layouts/base.tmpl</code>. This layout provides the HTML structure, loads the Tailwind CSS framework from CDN, and includes basic meta tags for SEO.
+    </p>
+    
+    <h3 id="components" class="text-xl font-semibold mt-6 mb-3">Components</h3>
+    <p class="text-gray-700 mb-4">
+        The landing page is built using a component-based approach, where each section of the page is defined as a separate template file. This makes the templates more maintainable and allows for component reuse. The components include:
+    </p>
+    
+    <div class="overflow-x-auto">
+        <table class="go-table w-full mt-4 mb-6">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th class="py-2 px-4 text-left font-semibold border-b">Component</th>
+                    <th class="py-2 px-4 text-left font-semibold border-b">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="border-b">
+                    <td class="py-2 px-4"><code class="bg-gray-100 px-1 rounded">hero.tmpl</code></td>
+                    <td class="py-2 px-4">Hero section with headline, subheadline, and call-to-action buttons</td>
+                </tr>
+                <tr class="border-b">
+                    <td class="py-2 px-4"><code class="bg-gray-100 px-1 rounded">features.tmpl</code></td>
+                    <td class="py-2 px-4">Features grid showcasing key product features with icons</td>
+                </tr>
+                <tr class="border-b">
+                    <td class="py-2 px-4"><code class="bg-gray-100 px-1 rounded">testimonials.tmpl</code></td>
+                    <td class="py-2 px-4">Customer testimonials with profile pictures and ratings</td>
+                </tr>
+                <tr class="border-b">
+                    <td class="py-2 px-4"><code class="bg-gray-100 px-1 rounded">pricing.tmpl</code></td>
+                    <td class="py-2 px-4">Pricing plans comparison table with features and pricing tiers</td>
+                </tr>
+                <tr class="border-b">
+                    <td class="py-2 px-4"><code class="bg-gray-100 px-1 rounded">news.tmpl</code></td>
+                    <td class="py-2 px-4">Recent updates and announcements about the product</td>
+                </tr>
+                <tr class="border-b">
+                    <td class="py-2 px-4"><code class="bg-gray-100 px-1 rounded">waitlist.tmpl</code></td>
+                    <td class="py-2 px-4">Interactive sign-up form for the product waitlist</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <h3 id="pages" class="text-xl font-semibold mt-6 mb-3">Pages</h3>
+    <p class="text-gray-700 mb-4">
+        The landing page example has a single page template, <code class="bg-gray-100 px-1 rounded">pages/index.tmpl</code>, which composes all the components to create the complete landing page. The page uses a layout directive at the top to specify which layout to use:
+    </p>
+    
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code>{{ "{{" }}- /* layout:base.tmpl */ -{{ "}}" }}
+
+{{ "{{" }}template "hero" .{{ "}}" }}
+{{ "{{" }}template "features" .{{ "}}" }}
+{{ "{{" }}template "testimonials" .{{ "}}" }}
+{{ "{{" }}template "pricing" .{{ "}}" }}
+{{ "{{" }}template "news" .{{ "}}" }}
+{{ "{{" }}template "waitlist" .{{ "}}" }}</code></pre>
+    </div>
+    
+    <h3 id="data" class="text-xl font-semibold mt-6 mb-3">Data Structure</h3>
+    <p class="text-gray-700 mb-4">
+        The content for the landing page is stored in a JSON data file, <code class="bg-gray-100 px-1 rounded">pages/index.tmpl.json</code>. This separation of data from presentation allows for easier content updates without modifying the templates. The data file includes:
+    </p>
+    
+    <ul class="list-disc pl-6 mb-6 space-y-2">
+        <li class="text-gray-700">Page metadata (title, description)</li>
+        <li class="text-gray-700">Hero section content (headline, subheadline, button text)</li>
+        <li class="text-gray-700">Features list with icons and descriptions</li>
+        <li class="text-gray-700">Testimonials with author information and ratings</li>
+        <li class="text-gray-700">Pricing tiers with features and pricing details</li>
+        <li class="text-gray-700">News updates with dates and descriptions</li>
+        <li class="text-gray-700">Waitlist form configuration</li>
+        <li class="text-gray-700">FAQ items with questions and answers</li>
+    </ul>
+    
+    <h2 id="implementation-details" class="text-2xl font-bold mt-8 mb-4">Implementation Details</h2>
+    
+    <h3 id="responsive-design" class="text-xl font-semibold mt-6 mb-3">Responsive Design</h3>
+    <p class="text-gray-700 mb-4">
+        The landing page is built with responsive design in mind, using Tailwind CSS's responsive utility classes (e.g., <code class="bg-gray-100 px-1 rounded">md:</code>, <code class="bg-gray-100 px-1 rounded">lg:</code> prefixes) to adapt the layout for different screen sizes. The layout shifts from multi-column on larger screens to single-column on mobile devices.
+    </p>
+    
+    <h3 id="interactive-elements" class="text-xl font-semibold mt-6 mb-3">Interactive Elements</h3>
+    <p class="text-gray-700 mb-4">
+        The landing page includes several interactive elements:
+    </p>
+    
+    <ul class="list-disc pl-6 mb-6 space-y-2">
+        <li class="text-gray-700">A waitlist sign-up form with client-side validation</li>
+        <li class="text-gray-700">Pricing toggle to switch between monthly and annual pricing</li>
+        <li class="text-gray-700">Expandable FAQ accordions</li>
+        <li class="text-gray-700">Hover effects on buttons and cards</li>
+    </ul>
+    
+    <h3 id="template-functions" class="text-xl font-semibold mt-6 mb-3">Template Functions</h3>
+    <p class="text-gray-700 mb-4">
+        The example demonstrates the use of several template functions provided by Go Template SSG:
+    </p>
+    
+    <ul class="list-disc pl-6 mb-6 space-y-2">
+        <li class="text-gray-700"><code class="bg-gray-100 px-1 rounded">truncate</code>: To limit text length in testimonials</li>
+        <li class="text-gray-700"><code class="bg-gray-100 px-1 rounded">formatDate</code>: To format dates in the news section</li>
+        <li class="text-gray-700"><code class="bg-gray-100 px-1 rounded">html</code>: To render HTML content in descriptions</li>
+    </ul>
+    
+    <h2 id="lessons-learned" class="text-2xl font-bold mt-8 mb-4">Key Takeaways</h2>
+    <p class="text-gray-700 mb-4">
+        This example demonstrates several important concepts for building sites with Go Template SSG:
+    </p>
+    
+    <ol class="list-decimal pl-6 mb-6 space-y-2">
+        <li class="text-gray-700"><strong class="font-semibold">Component-Based Architecture</strong>: Breaking the UI into reusable components makes the code more maintainable and allows for better separation of concerns.</li>
+        <li class="text-gray-700"><strong class="font-semibold">Data-Driven Templates</strong>: Using JSON data files to drive the content of templates separates content from presentation.</li>
+        <li class="text-gray-700"><strong class="font-semibold">Responsive Design</strong>: Using Tailwind CSS's utility classes makes it easy to create responsive layouts without writing custom CSS.</li>
+        <li class="text-gray-700"><strong class="font-semibold">Template Composition</strong>: Combining smaller templates to create complex pages demonstrates the power of Go's template composition.</li>
+    </ol>
+    
+    <h2 id="view-example" class="text-2xl font-bold mt-8 mb-4">Viewing the Example</h2>
+    <p class="text-gray-700 mb-4">
+        You can find the complete landing page example in the <a href="https://github.com/csotherden/go-tmpl-ssg/tree/main/examples/landing" class="text-blue-600 hover:text-blue-800 underline">GitHub repository</a>.
+    </p>
+    
+    <p class="text-gray-700 mb-4">To generate and view the landing page locally:</p>
+    
+    <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
+        <pre><code># Generate the static site
+go run cmd/go-tmpl-generate/main.go --template examples/landing/templates --output examples/landing/output
+
+# Serve the generated site using the development server
+go run cmd/go-tmpl-dev-server/main.go --source examples/landing/templates --root examples/landing/output</code></pre>
+    </div>
+    
+    <div class="mt-10 flex justify-between">
+        <a href="/examples/" class="px-4 py-2 border border-blue-600 text-blue-600 rounded hover:bg-blue-50 transition duration-200">
+            ← Back to Examples
+        </a>
+        <a href="/examples/portfolio/" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition duration-200 flex items-center">
+            Portfolio Example →
+        </a>
+    </div>
+</div> 
