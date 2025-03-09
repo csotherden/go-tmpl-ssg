@@ -1,0 +1,62 @@
+{
+  "Title": "Contact Me",
+  "Subtitle": "Have a project in mind or just want to say hello? Let's get in touch!",
+  "ActivePage": "contact",
+  
+  "ContactInfo": {
+    "Description": "I'm always interested in hearing about new projects and opportunities. Whether you need a website, web application, or technical consultation, I'm here to help turn your ideas into reality.",
+    "Email": "alex@example.com",
+    "Phone": "+1 (555) 123-4567",
+    "Location": "San Francisco, CA",
+    "SocialLinks": [
+      {
+        "Icon": "fab fa-github",
+        "URL": "https://github.com/"
+      },
+      {
+        "Icon": "fab fa-linkedin",
+        "URL": "https://linkedin.com/"
+      },
+      {
+        "Icon": "fab fa-twitter",
+        "URL": "https://twitter.com/"
+      },
+      {
+        "Icon": "fab fa-dev",
+        "URL": "https://dev.to/"
+      },
+      {
+        "Icon": "fab fa-instagram",
+        "URL": "https://instagram.com/"
+      }
+    ],
+    "MapEmbed": "<iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d100940.14245968247!2d-122.43759999999999!3d37.75769999999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80859a6d00690021%3A0x4a501367f076adff!2sSan%20Francisco%2C%20CA!5e0!3m2!1sen!2sus!4v1636646546000!5m2!1sen!2sus\" width=\"100%\" height=\"100%\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\"></iframe>"
+  },
+  
+  "FAQs": [
+    {
+      "Question": "What types of projects do you work on?",
+      "Answer": "I specialize in web development projects, including e-commerce platforms, progressive web applications, content management systems, and custom web applications. I'm particularly focused on projects that require modern JavaScript frameworks like React, Vue.js, and Node.js."
+    },
+    {
+      "Question": "What is your typical project timeline?",
+      "Answer": "Project timelines vary depending on the scope and complexity. A simple website might take 2-4 weeks, while a complex web application could take 3-6 months. I'll provide a detailed timeline estimate after discussing your specific requirements."
+    },
+    {
+      "Question": "How do you charge for your services?",
+      "Answer": "I offer both project-based and hourly pricing models. For well-defined projects, I prefer fixed-price quotes based on detailed requirements. For ongoing work or projects with evolving scopes, an hourly rate often works best. I'm happy to discuss pricing options based on your specific needs."
+    },
+    {
+      "Question": "Do you provide design services?",
+      "Answer": "While my primary expertise is in development, I collaborate with talented UI/UX designers for projects requiring extensive design work. For clients with existing designs, I can implement them precisely. I can also provide basic design solutions for smaller projects."
+    },
+    {
+      "Question": "How do we get started on a project?",
+      "Answer": "The process typically begins with an initial consultation to discuss your requirements, goals, and timeline. Following that, I'll provide a proposal outlining the scope, timeline, and cost. Once approved, we'll define the project roadmap and begin development."
+    },
+    {
+      "Question": "Do you provide maintenance and support after project completion?",
+      "Answer": "Yes, I offer maintenance and support services to ensure your website or application continues to run smoothly. This includes regular updates, security patches, performance monitoring, and troubleshooting. We can discuss a maintenance plan tailored to your specific needs."
+    }
+  ]
+} 

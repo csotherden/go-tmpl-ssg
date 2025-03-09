@@ -1,0 +1,98 @@
+{
+  "Title": "My Projects",
+  "Subtitle": "A showcase of my work and the technologies I've used to bring ideas to life.",
+  "ActivePage": "projects",
+  
+  "Categories": [
+    "Web Development",
+    "E-commerce",
+    "Mobile",
+    "UI/UX",
+    "Backend",
+    "Frontend"
+  ],
+  
+  "Projects": [
+    {
+      "Title": "E-commerce Platform",
+      "Description": "A modern e-commerce platform built with React, Node.js, and MongoDB. Features include product search, filtering, shopping cart, payment gateway integration, and admin dashboard.",
+      "ImageURL": "https://dummyimage.com/600x400",
+      "Categories": ["Web Development", "E-commerce", "Frontend", "Backend"],
+      "Technologies": ["React", "Node.js", "MongoDB", "Express", "Stripe"],
+      "DemoURL": "https://demo.example.com",
+      "SourceURL": "https://github.com/alexdev/ecommerce"
+    },
+    {
+      "Title": "Task Management App",
+      "Description": "A productivity application for task management with features like task creation, assignment, due dates, priority levels, and progress tracking.",
+      "ImageURL": "https://dummyimage.com/600x400",
+      "Categories": ["Web Development", "Frontend", "UI/UX"],
+      "Technologies": ["React", "Firebase", "Tailwind CSS", "Redux"],
+      "DemoURL": "https://demo.example.com",
+      "SourceURL": "https://github.com/alexdev/taskmanager"
+    },
+    {
+      "Title": "Recipe Finder Portal",
+      "Description": "A web application that allows users to search for recipes based on ingredients, dietary restrictions, and meal types. Includes favorites, meal planning, and shopping list features.",
+      "ImageURL": "https://dummyimage.com/600x400",
+      "Categories": ["Web Development", "Frontend", "UI/UX"],
+      "Technologies": ["Vue.js", "Node.js", "PostgreSQL", "Auth0"],
+      "DemoURL": "https://demo.example.com",
+      "SourceURL": "https://github.com/alexdev/recipefinder"
+    },
+    {
+      "Title": "Real Estate Listings",
+      "Description": "A property listing website that allows real estate agents to post properties and users to search, filter, and contact agents about listings.",
+      "ImageURL": "https://dummyimage.com/600x400",
+      "Categories": ["Web Development", "Frontend", "Backend"],
+      "Technologies": ["Next.js", "MongoDB", "Express", "Cloudinary"],
+      "DemoURL": "https://demo.example.com",
+      "SourceURL": "https://github.com/alexdev/realestate"
+    },
+    {
+      "Title": "Fitness Tracking Mobile App",
+      "Description": "A mobile application for tracking workouts, nutrition, and progress towards fitness goals. Features include exercise library, custom workout plans, and progress visualization.",
+      "ImageURL": "https://dummyimage.com/600x400",
+      "Categories": ["Mobile", "UI/UX"],
+      "Technologies": ["React Native", "Firebase", "Redux", "Google Fit API"],
+      "DemoURL": "https://demo.example.com",
+      "SourceURL": "https://github.com/alexdev/fitnessapp"
+    },
+    {
+      "Title": "Content Management System",
+      "Description": "A custom CMS built for a digital magazine, allowing editors to create, edit, and schedule articles with a rich text editor and media management.",
+      "ImageURL": "https://dummyimage.com/600x400",
+      "Categories": ["Web Development", "Backend"],
+      "Technologies": ["Node.js", "Express", "MongoDB", "AWS S3"],
+      "DemoURL": "https://demo.example.com",
+      "SourceURL": "https://github.com/alexdev/cms"
+    },
+    {
+      "Title": "Budget Tracking Dashboard",
+      "Description": "A financial dashboard that helps users track income, expenses, and savings goals. Features include expense categorization, budget setting, and data visualization.",
+      "ImageURL": "https://dummyimage.com/600x400",
+      "Categories": ["Web Development", "Frontend", "UI/UX"],
+      "Technologies": ["React", "D3.js", "Firebase", "Plaid API"],
+      "DemoURL": "https://demo.example.com",
+      "SourceURL": "https://github.com/alexdev/budgetapp"
+    },
+    {
+      "Title": "Inventory Management System",
+      "Description": "A comprehensive inventory management solution for small businesses, with features like product tracking, stock alerts, supplier management, and sales reporting.",
+      "ImageURL": "https://dummyimage.com/600x400",
+      "Categories": ["Web Development", "Backend", "E-commerce"],
+      "Technologies": ["Angular", "Node.js", "MySQL", "Docker"],
+      "DemoURL": "https://demo.example.com",
+      "SourceURL": "https://github.com/alexdev/inventory"
+    },
+    {
+      "Title": "Social Media Dashboard",
+      "Description": "A unified dashboard for managing multiple social media accounts, including post scheduling, analytics, and engagement monitoring.",
+      "ImageURL": "https://dummyimage.com/600x400",
+      "Categories": ["Web Development", "Frontend"],
+      "Technologies": ["React", "GraphQL", "Apollo", "Various Social APIs"],
+      "DemoURL": "https://demo.example.com",
+      "SourceURL": "https://github.com/alexdev/socialdashboard"
+    }
+  ]
+} 

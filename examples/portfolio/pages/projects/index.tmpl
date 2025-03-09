@@ -1,0 +1,106 @@
+{{- /* layout:base.tmpl */ -}}
+
+{{define "content"}}
+<!-- Page Header -->
+<section class="py-20 bg-gradient-to-r from-blue-500 to-indigo-600 text-white">
+    <div class="container mx-auto px-4 text-center">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">{{.Title}}</h1>
+        <p class="text-xl text-blue-100 max-w-3xl mx-auto">{{.Subtitle}}</p>
+    </div>
+</section>
+
+<!-- Projects Filter -->
+<section class="pt-16 pb-8">
+    <div class="container mx-auto px-4">
+        <div class="flex flex-wrap justify-center gap-4 mb-8">
+            <button 
+                data-filter="all" 
+                class="px-4 py-2 bg-primary text-white rounded-md filter-btn active"
+            >
+                All Projects
+            </button>
+            
+            {{range .Categories}}
+            <button 
+                data-filter="{{slugify .}}" 
+                class="px-4 py-2 bg-gray-200 text-gray-800 hover:bg-primary hover:text-white transition duration-300 rounded-md filter-btn"
+            >
+                {{.}}
+            </button>
+            {{end}}
+        </div>
+    </div>
+</section>
+
+<!-- Projects Grid -->
+<section class="pb-20">
+    <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="projects-grid">
+            {{range .Projects}}
+            <div class="project-item" data-categories="{{range $index, $category := .Categories}}{{if $index}},{{end}}{{slugify $category}}{{end}}">
+                {{template "project-card" .}}
+            </div>
+            {{end}}
+        </div>
+        
+        <!-- Empty State -->
+        <div id="empty-state" class="hidden text-center py-20">
+            <div class="text-gray-400 text-6xl mb-4">
+                <i class="fas fa-search"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-700 mb-2">No projects found</h3>
+            <p class="text-gray-600">No projects match the selected category. Try selecting a different category.</p>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const projectItems = document.querySelectorAll('.project-item');
+        const projectsGrid = document.getElementById('projects-grid');
+        const emptyState = document.getElementById('empty-state');
+        
+        // Filter projects when a filter button is clicked
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const filter = this.getAttribute('data-filter');
+                
+                // Update active button
+                filterButtons.forEach(btn => btn.classList.remove('active', 'bg-primary', 'text-white'));
+                filterButtons.forEach(btn => btn.classList.add('bg-gray-200', 'text-gray-800', 'hover:bg-primary', 'hover:text-white'));
+                this.classList.add('active', 'bg-primary', 'text-white');
+                this.classList.remove('bg-gray-200', 'text-gray-800', 'hover:bg-primary', 'hover:text-white');
+                
+                // Show all projects if "All Projects" is selected
+                if (filter === 'all') {
+                    projectItems.forEach(item => item.classList.remove('hidden'));
+                    emptyState.classList.add('hidden');
+                    return;
+                }
+                
+                // Otherwise, filter projects based on category
+                let visibleCount = 0;
+                
+                projectItems.forEach(item => {
+                    const categories = item.getAttribute('data-categories').split(',');
+                    
+                    if (categories.includes(filter)) {
+                        item.classList.remove('hidden');
+                        visibleCount++;
+                    } else {
+                        item.classList.add('hidden');
+                    }
+                });
+                
+                // Show empty state if no projects match the filter
+                if (visibleCount === 0) {
+                    emptyState.classList.remove('hidden');
+                } else {
+                    emptyState.classList.add('hidden');
+                }
+            });
+        });
+    });
+</script>
+{{end}} 

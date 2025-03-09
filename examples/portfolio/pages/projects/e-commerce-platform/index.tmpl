@@ -1,0 +1,219 @@
+{{- /* layout:base.tmpl */ -}}
+
+{{define "content"}}
+<!-- Project Header -->
+<section class="py-20 bg-gradient-to-r from-blue-500 to-indigo-600 text-white">
+    <div class="container mx-auto px-4">
+        <div class="max-w-6xl mx-auto">
+            <!-- Back Button -->
+            <a href="/projects/" class="inline-flex items-center text-white hover:text-blue-200 mb-6 transition duration-300">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Back to Projects
+            </a>
+            
+            <!-- Project Title and Categories -->
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">{{.Title}}</h1>
+            
+            <!-- Categories -->
+            <div class="flex flex-wrap gap-2 mb-6">
+                {{range .Categories}}
+                <span class="bg-white bg-opacity-20 text-white text-sm px-3 py-1 rounded-full">{{.}}</span>
+                {{end}}
+            </div>
+            
+            <!-- Project Meta -->
+            <div class="flex flex-wrap gap-x-8 gap-y-4 text-blue-100">
+                <!-- Completion Date -->
+                <div class="flex items-center">
+                    <i class="fas fa-calendar-alt mr-2"></i>
+                    <span>Completed: {{.CompletionDate}}</span>
+                </div>
+                
+                <!-- Client -->
+                {{if .Client}}
+                <div class="flex items-center">
+                    <i class="fas fa-user mr-2"></i>
+                    <span>Client: {{.Client}}</span>
+                </div>
+                {{end}}
+                
+                <!-- External Links -->
+                <div class="flex items-center gap-4">
+                    {{if .DemoURL}}
+                    <a href="{{.DemoURL}}" target="_blank" rel="noopener" class="text-white hover:text-blue-200 transition duration-300" title="Live Demo">
+                        <i class="fas fa-external-link-alt mr-1"></i>
+                        Live Demo
+                    </a>
+                    {{end}}
+                    
+                    {{if .SourceURL}}
+                    <a href="{{.SourceURL}}" target="_blank" rel="noopener" class="text-white hover:text-blue-200 transition duration-300" title="Source Code">
+                        <i class="fab fa-github mr-1"></i>
+                        Source Code
+                    </a>
+                    {{end}}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Project Content -->
+<section class="py-16">
+    <div class="container mx-auto px-4">
+        <div class="max-w-6xl mx-auto">
+            <!-- Project Image -->
+            <div class="mb-12">
+                <img 
+                    src="{{.ImageURL}}" 
+                    alt="{{.Title}}" 
+                    class="w-full h-auto rounded-lg shadow-md"
+                >
+            </div>
+            
+            <!-- Project Overview -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                <!-- Main Content -->
+                <div class="lg:col-span-2">
+                    <h2 class="section-heading pb-2">Project Overview</h2>
+                    
+                    <!-- Project Description -->
+                    <div class="prose prose-lg max-w-none text-gray-700 mb-10">
+                        {{html .Description}}
+                    </div>
+                    
+                    <!-- Project Challenges -->
+                    {{if .Challenges}}
+                    <h3 class="text-2xl font-bold mb-4">Challenges</h3>
+                    <div class="prose prose-lg max-w-none text-gray-700 mb-10">
+                        {{html .Challenges}}
+                    </div>
+                    {{end}}
+                    
+                    <!-- Project Solutions -->
+                    {{if .Solutions}}
+                    <h3 class="text-2xl font-bold mb-4">Solutions</h3>
+                    <div class="prose prose-lg max-w-none text-gray-700 mb-10">
+                        {{html .Solutions}}
+                    </div>
+                    {{end}}
+                    
+                    <!-- Project Gallery -->
+                    {{if .Gallery}}
+                    <h3 class="text-2xl font-bold mb-4">Project Gallery</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
+                        {{range .Gallery}}
+                        <div class="relative overflow-hidden rounded-lg shadow-md h-64">
+                            <img 
+                                src="{{.ImageURL}}" 
+                                alt="{{.Caption}}" 
+                                class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                            >
+                            {{if .Caption}}
+                            <div class="absolute inset-0 bg-black bg-opacity-60 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                                <p class="text-white">{{.Caption}}</p>
+                            </div>
+                            {{end}}
+                        </div>
+                        {{end}}
+                    </div>
+                    {{end}}
+                    
+                    <!-- Project Testimonial -->
+                    {{if and .Testimonial.Quote .Testimonial.Author}}
+                    <div class="bg-gray-50 border-l-4 border-primary p-6 rounded-r-lg mb-10">
+                        <p class="text-xl italic text-gray-700 mb-4">{{.Testimonial.Quote}}</p>
+                        <p class="font-semibold">— {{.Testimonial.Author}}{{if .Testimonial.Title}}, {{.Testimonial.Title}}{{end}}</p>
+                    </div>
+                    {{end}}
+                </div>
+                
+                <!-- Sidebar -->
+                <div>
+                    <!-- Project Information -->
+                    <div class="bg-gray-50 rounded-lg p-6 mb-8">
+                        <h3 class="text-xl font-bold mb-4">Project Information</h3>
+                        
+                        <ul class="space-y-4">
+                            <!-- Project Type -->
+                            <li class="flex">
+                                <span class="font-medium w-24">Type:</span>
+                                <span>{{.ProjectType}}</span>
+                            </li>
+                            
+                            <!-- Timeline -->
+                            <li class="flex">
+                                <span class="font-medium w-24">Timeline:</span>
+                                <span>{{.Timeline}}</span>
+                            </li>
+                            
+                            <!-- Role -->
+                            <li class="flex">
+                                <span class="font-medium w-24">My Role:</span>
+                                <span>{{.Role}}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Technologies Used -->
+                    <div class="bg-gray-50 rounded-lg p-6 mb-8">
+                        <h3 class="text-xl font-bold mb-4">Technologies Used</h3>
+                        
+                        <div class="flex flex-wrap gap-2">
+                            {{range .Technologies}}
+                            <span class="bg-gray-200 text-gray-800 text-sm px-3 py-1 rounded-full">{{.}}</span>
+                            {{end}}
+                        </div>
+                    </div>
+                    
+                    <!-- Key Features -->
+                    {{if .KeyFeatures}}
+                    <div class="bg-gray-50 rounded-lg p-6">
+                        <h3 class="text-xl font-bold mb-4">Key Features</h3>
+                        
+                        <ul class="space-y-2">
+                            {{range .KeyFeatures}}
+                            <li class="flex items-start">
+                                <span class="text-primary mr-2 mt-1">
+                                    <i class="fas fa-check-circle"></i>
+                                </span>
+                                <span>{{.}}</span>
+                            </li>
+                            {{end}}
+                        </ul>
+                    </div>
+                    {{end}}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Related Projects -->
+{{if .RelatedProjects}}
+<section class="py-16 bg-gray-50">
+    <div class="container mx-auto px-4">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="section-heading pb-2 mb-10">Related Projects</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {{range .RelatedProjects}}
+                    {{template "project-card" .}}
+                {{end}}
+            </div>
+        </div>
+    </div>
+</section>
+{{end}}
+
+<!-- Call to Action -->
+<section class="py-20 bg-gradient-to-r from-blue-500 to-indigo-600 text-white">
+    <div class="container mx-auto px-4 text-center">
+        <h2 class="text-3xl font-bold mb-4">Have a similar project in mind?</h2>
+        <p class="text-xl mb-8 text-blue-100 max-w-3xl mx-auto">Let's discuss how we can bring your ideas to life. I'm always open to new projects and collaborations.</p>
+        <a href="/contact/" class="btn bg-white text-primary hover:bg-gray-100 font-medium">
+            Get In Touch
+        </a>
+    </div>
+</section>
+{{end}} 

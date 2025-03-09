@@ -1,0 +1,66 @@
+{
+  "ActivePage": "blog",
+  "Title": "Mastering React Hooks",
+  "Categories": ["React", "Frontend", "JavaScript"],
+  "Tags": ["React", "Hooks", "useState", "useEffect", "Custom Hooks", "Performance"],
+  "PublishedDate": "2023-04-10T12:00:00Z",
+  "ReadingTime": 10,
+  "ImageURL": "https://dummyimage.com/1200x600",
+  "ImageCaption": "React Hooks provide a more direct API to React concepts you already know",
+  "URL": "https://www.portfolio.example.com/blog/mastering-react-hooks/",
+  
+  "Author": {
+    "Name": "Alex Developer",
+    "Bio": "Full Stack Developer with 5+ years of experience, specializing in React and Node.js. Passionate about creating clean, maintainable code and sharing knowledge with the developer community.",
+    "AvatarURL": "https://dummyimage.com/200x200",
+    "SocialLinks": [
+      {
+        "Icon": "fab fa-github",
+        "URL": "https://github.com/"
+      },
+      {
+        "Icon": "fab fa-twitter",
+        "URL": "https://twitter.com/"
+      },
+      {
+        "Icon": "fab fa-linkedin",
+        "URL": "https://linkedin.com/"
+      },
+      {
+        "Icon": "fab fa-dev",
+        "URL": "https://dev.to/"
+      }
+    ]
+  },
+  
+  "Excerpt": "A deep dive into React Hooks, covering useState, useEffect, useContext, and custom hooks with practical examples and performance optimization tips.",
+  
+  "Content": "<p>React Hooks were introduced in React 16.8, and they've revolutionized how we write React components. By allowing us to use state and other React features without writing a class, hooks make our code more concise, easier to understand, and simpler to test.</p><h2>Why Hooks?</h2><p>Before hooks, React components were primarily written as classes when they needed to manage state or use lifecycle methods. This approach had several drawbacks:</p><ul><li>Complex components became hard to understand</li><li>Logic was scattered across different lifecycle methods</li><li>Classes can be confusing for both humans and machines (e.g., <code>this</code> binding, optimization issues)</li></ul><p>Hooks solve these problems by allowing us to organize code by logical concerns rather than lifecycle methods.</p><h2>The Essential Hooks</h2><h3>useState</h3><p>The <code>useState</code> hook lets you add state to functional components. It returns a pair: the current state value and a function to update it.</p><pre><code>import React, { useState } from 'react';\n\nfunction Counter() {\n  const [count, setCount] = useState(0);\n  \n  return (\n    &lt;div&gt;\n      &lt;p&gt;You clicked {count} times&lt;/p&gt;\n      &lt;button onClick={() => setCount(count + 1)}&gt;\n        Click me\n      &lt;/button&gt;\n    &lt;/div&gt;\n  );\n}</code></pre><p>Unlike <code>this.setState</code> in class components, <code>useState</code> doesn't merge the old and new state — it replaces it. This is why it's common to use multiple <code>useState</code> calls for different state values.</p><h3>useEffect</h3><p>The <code>useEffect</code> hook lets you perform side effects in function components. It serves the same purpose as <code>componentDidMount</code>, <code>componentDidUpdate</code>, and <code>componentWillUnmount</code> in class components, but unified into a single API.</p><pre><code>import React, { useState, useEffect } from 'react';\n\nfunction Example() {\n  const [count, setCount] = useState(0);\n\n  // Similar to componentDidMount and componentDidUpdate:\n  useEffect(() => {\n    // Update the document title using the browser API\n    document.title = `You clicked ${count} times`;\n    \n    // Similar to componentWillUnmount:\n    return () => {\n      document.title = 'React App';\n    };\n  }, [count]); // Only re-run if count changes\n\n  return (\n    &lt;div&gt;\n      &lt;p&gt;You clicked {count} times&lt;/p&gt;\n      &lt;button onClick={() => setCount(count + 1)}&gt;\n        Click me\n      &lt;/button&gt;\n    &lt;/div&gt;\n  );\n}</code></pre><p>The second argument to <code>useEffect</code> is an array of dependencies. React will only re-run the effect if one of these values changes. If you provide an empty array <code>[]</code>, the effect will only run once (on mount and unmount).</p><h3>useContext</h3><p>The <code>useContext</code> hook lets you subscribe to React context without introducing nesting.</p><pre><code>import React, { useContext } from 'react';\n\nconst ThemeContext = React.createContext('light');\n\nfunction ThemedButton() {\n  const theme = useContext(ThemeContext);\n  \n  return (\n    &lt;button className={`btn-${theme}`}&gt;\n      Themed Button\n    &lt;/button&gt;\n  );\n}</code></pre><h2>Custom Hooks</h2><p>One of the most powerful features of hooks is the ability to create your own custom hooks. Custom hooks let you extract and reuse stateful logic between different components.</p><p>Here's a simple custom hook for managing form inputs:</p><pre><code>import { useState } from 'react';\n\nfunction useInput(initialValue) {\n  const [value, setValue] = useState(initialValue);\n  \n  const handleChange = (e) => {\n    setValue(e.target.value);\n  };\n  \n  return {\n    value,\n    onChange: handleChange\n  };\n}\n\n// Usage in a component\nfunction Form() {\n  const nameInput = useInput('');\n  const emailInput = useInput('');\n  \n  const handleSubmit = (e) => {\n    e.preventDefault();\n    console.log('Submitted:', nameInput.value, emailInput.value);\n  };\n  \n  return (\n    &lt;form onSubmit={handleSubmit}&gt;\n      &lt;input\n        type=\"text\"\n        placeholder=\"Name\"\n        {...nameInput}\n      /&gt;\n      &lt;input\n        type=\"email\"\n        placeholder=\"Email\"\n        {...emailInput}\n      /&gt;\n      &lt;button type=\"submit\"&gt;Submit&lt;/button&gt;\n    &lt;/form&gt;\n  );\n}</code></pre><h2>Performance Optimization</h2><p>When working with hooks, there are several techniques to optimize performance:</p><h3>useMemo</h3><p>The <code>useMemo</code> hook memoizes expensive calculations, preventing them from being recomputed on every render unless dependencies change.</p><pre><code>import React, { useMemo } from 'react';\n\nfunction ExpensiveComponent({ data, filter }) {\n  const filteredData = useMemo(() => {\n    console.log('Computing filtered data...');\n    return data.filter(item => item.includes(filter));\n  }, [data, filter]); // Only recompute if data or filter changes\n  \n  return (\n    &lt;ul&gt;\n      {filteredData.map(item => (\n        &lt;li key={item}&gt;{item}&lt;/li&gt;\n      ))}\n    &lt;/ul&gt;\n  );\n}</code></pre><h3>useCallback</h3><p>The <code>useCallback</code> hook returns a memoized callback that only changes when its dependencies change. This is useful when passing callbacks to optimized child components that rely on reference equality to prevent unnecessary renders.</p><pre><code>import React, { useState, useCallback } from 'react';\n\nfunction Parent() {\n  const [count, setCount] = useState(0);\n  \n  // This function is recreated only when count changes\n  const handleClick = useCallback(() => {\n    console.log(`Button clicked, count: ${count}`);\n  }, [count]);\n  \n  return (\n    &lt;div&gt;\n      &lt;p&gt;Count: {count}&lt;/p&gt;\n      &lt;button onClick={() => setCount(count + 1)}&gt;\n        Increment\n      &lt;/button&gt;\n      &lt;ExpensiveChild onClick={handleClick} /&gt;\n    &lt;/div&gt;\n  );\n}</code></pre><h2>Rules of Hooks</h2><p>To ensure hooks work correctly, it's important to follow these rules:</p><ol><li><strong>Only call hooks at the top level</strong> - Don't call hooks inside loops, conditions, or nested functions.</li><li><strong>Only call hooks from React functions</strong> - Call hooks from React function components or custom hooks, not regular JavaScript functions.</li></ol><h2>Conclusion</h2><p>React Hooks represent a paradigm shift in how we write React components. By understanding the essential hooks (<code>useState</code>, <code>useEffect</code>, <code>useContext</code>) and performance optimization hooks (<code>useMemo</code>, <code>useCallback</code>), you can create more maintainable, efficient, and elegant React applications.</p><p>Custom hooks take this further, allowing you to abstract and reuse logic across your application. The more you use hooks, the more you'll appreciate their simplicity and power.</p><p>Happy coding!</p>",
+  
+  "RelatedPosts": [
+    {
+      "Title": "Effective State Management in React Applications",
+      "Excerpt": "Comparing different state management approaches in React, from Context API and Redux to Recoil and Zustand, with guidelines on choosing the right solution for your project.",
+      "ImageURL": "https://dummyimage.com/800x500",
+      "Categories": ["React", "Frontend"],
+      "PublishedDate": "2023-03-18T12:00:00Z",
+      "ReadingTime": 15
+    },
+    {
+      "Title": "The Future of Frontend Development",
+      "Excerpt": "An exploration of upcoming trends and technologies that will shape the future of frontend development, including WebAssembly, CSS features, and JavaScript frameworks.",
+      "ImageURL": "https://dummyimage.com/800x500",
+      "Categories": ["Frontend", "JavaScript"],
+      "PublishedDate": "2023-06-15T12:00:00Z",
+      "ReadingTime": 8
+    },
+    {
+      "Title": "TypeScript Best Practices for Large Projects",
+      "Excerpt": "Essential TypeScript patterns and best practices for maintaining large-scale applications, including type definitions, interfaces vs. types, and advanced utility types.",
+      "ImageURL": "https://dummyimage.com/800x500",
+      "Categories": ["JavaScript", "Frontend", "Backend"],
+      "PublishedDate": "2022-10-15T12:00:00Z",
+      "ReadingTime": 14
+    }
+  ]
+} 

@@ -1,0 +1,91 @@
+{
+  "Title": "Blog",
+  "Subtitle": "Thoughts, tutorials, and insights about web development and technology.",
+  "ActivePage": "blog",
+  
+  "Categories": [
+    "Frontend",
+    "Backend",
+    "React",
+    "Node.js",
+    "JavaScript",
+    "UI/UX",
+    "Career",
+    "Tools"
+  ],
+  
+  "Posts": [
+    {
+      "Title": "Mastering React Hooks",
+      "Excerpt": "A deep dive into React Hooks, covering useState, useEffect, useContext, and custom hooks with practical examples and performance optimization tips.",
+      "ImageURL": "https://dummyimage.com/800x500",
+      "Categories": ["React", "Frontend", "JavaScript"],
+      "PublishedDate": "2023-07-10T12:00:00Z",
+      "ReadingTime": 10
+    },
+    {
+      "Title": "The Future of Frontend Development",
+      "Excerpt": "An exploration of upcoming trends and technologies that will shape the future of frontend development, including WebAssembly, CSS features, and JavaScript frameworks.",
+      "ImageURL": "https://dummyimage.com/800x500",
+      "Categories": ["Frontend", "JavaScript"],
+      "PublishedDate": "2023-06-15T12:00:00Z",
+      "ReadingTime": 8
+    },
+    {
+      "Title": "Building Scalable APIs with Node.js",
+      "Excerpt": "A comprehensive guide to building robust, scalable, and maintainable APIs using Node.js, Express, and best practices for authentication, error handling, and performance.",
+      "ImageURL": "https://dummyimage.com/800x500",
+      "Categories": ["Backend", "Node.js"],
+      "PublishedDate": "2023-05-22T12:00:00Z",
+      "ReadingTime": 12
+    },
+    {
+      "Title": "Effective State Management in React Applications",
+      "Excerpt": "Comparing different state management approaches in React, from Context API and Redux to Recoil and Zustand, with guidelines on choosing the right solution for your project.",
+      "ImageURL": "https://dummyimage.com/800x500",
+      "Categories": ["React", "Frontend"],
+      "PublishedDate": "2023-03-18T12:00:00Z",
+      "ReadingTime": 15
+    },
+    {
+      "Title": "Serverless Architecture: Benefits and Limitations",
+      "Excerpt": "An in-depth look at serverless architecture, its benefits for scalability and cost optimization, as well as potential limitations and when to consider alternative approaches.",
+      "ImageURL": "https://dummyimage.com/800x500",
+      "Categories": ["Backend", "Tools"],
+      "PublishedDate": "2023-02-05T12:00:00Z",
+      "ReadingTime": 9
+    },
+    {
+      "Title": "Accessibility in Web Development",
+      "Excerpt": "Best practices for creating accessible websites that work for everyone, including keyboard navigation, screen reader support, and ARIA attributes.",
+      "ImageURL": "https://dummyimage.com/800x500",
+      "Categories": ["UI/UX", "Frontend"],
+      "PublishedDate": "2023-01-20T12:00:00Z",
+      "ReadingTime": 7
+    },
+    {
+      "Title": "Optimizing Website Performance",
+      "Excerpt": "Strategies and techniques for improving website performance, including image optimization, code splitting, lazy loading, and caching mechanisms.",
+      "ImageURL": "https://dummyimage.com/800x500",
+      "Categories": ["Frontend", "Tools"],
+      "PublishedDate": "2022-12-12T12:00:00Z",
+      "ReadingTime": 11
+    },
+    {
+      "Title": "From Junior to Senior Developer: A Career Roadmap",
+      "Excerpt": "A guide on advancing your career from junior to senior developer, covering technical skills, soft skills, mentorship, and continuous learning strategies.",
+      "ImageURL": "https://dummyimage.com/800x500",
+      "Categories": ["Career"],
+      "PublishedDate": "2022-11-08T12:00:00Z",
+      "ReadingTime": 13
+    },
+    {
+      "Title": "TypeScript Best Practices for Large Projects",
+      "Excerpt": "Essential TypeScript patterns and best practices for maintaining large-scale applications, including type definitions, interfaces vs. types, and advanced utility types.",
+      "ImageURL": "https://dummyimage.com/800x500",
+      "Categories": ["JavaScript", "Frontend", "Backend"],
+      "PublishedDate": "2022-10-15T12:00:00Z",
+      "ReadingTime": 14
+    }
+  ]
+} 

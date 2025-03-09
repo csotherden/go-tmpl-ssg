@@ -1,0 +1,172 @@
+{
+  "Title": "Alex Developer - Full Stack Web Developer",
+  "Description": "Professional web developer specializing in creating responsive, user-friendly websites and applications.",
+  "ActivePage": "home",
+  
+  "Hero": {
+    "Title": "Creating Modern Web Experiences",
+    "Subtitle": "Full Stack Developer specializing in crafting responsive, user-friendly, and performance-optimized websites and applications.",
+    "PrimaryButtonText": "View My Work",
+    "PrimaryButtonURL": "/projects/",
+    "SecondaryButtonText": "Contact Me",
+    "SecondaryButtonURL": "/contact/",
+    "ImageURL": "https://dummyimage.com/600x500",
+    "ImageAlt": "Alex coding at desktop"
+  },
+  
+  "About": {
+    "Title": "About Me",
+    "Description": "With over 5 years of experience in web development, I help businesses build modern, high-performance websites and applications that deliver exceptional user experiences.",
+    "ImageURL": "https://dummyimage.com/500x600",
+    "ImageAlt": "Alex profile photo",
+    "KeyPoints": [
+      "Specialized in React, Node.js, and TypeScript",
+      "Experience with modern web frameworks and libraries",
+      "Focus on clean, maintainable, and well-documented code",
+      "Committed to best practices and continuous learning"
+    ],
+    "ButtonText": "Learn More",
+    "ButtonURL": "/about/"
+  },
+  
+  "Services": {
+    "Title": "My Services",
+    "Subtitle": "I offer a comprehensive range of web development solutions tailored to meet your specific needs.",
+    "Items": [
+      {
+        "Icon": "fas fa-code",
+        "Title": "Frontend Development",
+        "Description": "Building responsive and interactive user interfaces with modern frameworks like React, Vue, and Angular."
+      },
+      {
+        "Icon": "fas fa-server",
+        "Title": "Backend Development",
+        "Description": "Creating robust and scalable server-side applications with Node.js, Express, and databases like MongoDB."
+      },
+      {
+        "Icon": "fas fa-mobile-alt",
+        "Title": "Responsive Web Design",
+        "Description": "Designing websites that work seamlessly across all devices, from desktops to smartphones."
+      },
+      {
+        "Icon": "fas fa-search",
+        "Title": "SEO Optimization",
+        "Description": "Implementing best practices to improve search engine rankings and drive organic traffic to your site."
+      },
+      {
+        "Icon": "fas fa-tachometer-alt",
+        "Title": "Performance Optimization",
+        "Description": "Enhancing website speed and performance to provide a better user experience and improve conversions."
+      },
+      {
+        "Icon": "fas fa-tools",
+        "Title": "Website Maintenance",
+        "Description": "Regular updates, security patches, and performance monitoring to keep your website running smoothly."
+      }
+    ]
+  },
+  
+  "FeaturedProjects": {
+    "Title": "Recent Projects",
+    "Subtitle": "Check out some of my latest work. Each project presents unique challenges and showcases different skills.",
+    "ButtonText": "View All Projects",
+    "ButtonURL": "/projects/",
+    "Projects": [
+      {
+        "Title": "E-commerce Platform",
+        "Description": "A modern e-commerce platform built with React, Node.js, and MongoDB. Features include product search, filtering, shopping cart, payment gateway integration, and admin dashboard.",
+        "ImageURL": "https://dummyimage.com/600x400",
+        "Categories": ["Web Development", "E-commerce"],
+        "Technologies": ["React", "Node.js", "MongoDB", "Express", "Stripe"],
+        "DemoURL": "https://demo.example.com",
+        "SourceURL": "https://github.com/alexdev/ecommerce"
+      },
+      {
+        "Title": "Task Management App",
+        "Description": "A productivity application for task management with features like task creation, assignment, due dates, priority levels, and progress tracking.",
+        "ImageURL": "https://dummyimage.com/600x400",
+        "Categories": ["Web Development", "Productivity"],
+        "Technologies": ["React", "Firebase", "Tailwind CSS", "Redux"],
+        "DemoURL": "https://demo.example.com",
+        "SourceURL": "https://github.com/alexdev/taskmanager"
+      },
+      {
+        "Title": "Recipe Finder Portal",
+        "Description": "A web application that allows users to search for recipes based on ingredients, dietary restrictions, and meal types. Includes favorites, meal planning, and shopping list features.",
+        "ImageURL": "https://dummyimage.com/600x400",
+        "Categories": ["Web Development", "Food & Drink"],
+        "Technologies": ["Vue.js", "Node.js", "PostgreSQL", "Auth0"],
+        "DemoURL": "https://demo.example.com",
+        "SourceURL": "https://github.com/alexdev/recipefinder"
+      }
+    ]
+  },
+  
+  "Testimonials": {
+    "Title": "Client Testimonials",
+    "Subtitle": "Here's what some of my clients have to say about working with me.",
+    "Items": [
+      {
+        "Quote": "Alex is an outstanding developer who consistently delivers high-quality work. The website he built for our business exceeded our expectations and has significantly improved our online presence.",
+        "Name": "Sarah Johnson",
+        "Title": "CEO",
+        "Company": "DigitalFirst Marketing",
+        "AvatarURL": "https://dummyimage.com/100x100"
+      },
+      {
+        "Quote": "Working with Alex was a pleasure from start to finish. He understood our requirements perfectly and turned our vision into reality. His technical skills and attention to detail are impressive.",
+        "Name": "Michael Chen",
+        "Title": "Founder",
+        "Company": "Innovate Solutions",
+        "AvatarURL": "https://dummyimage.com/100x100"
+      },
+      {
+        "Quote": "I've worked with several developers in the past, but Alex stands out for his professionalism, expertise, and communication skills. He's become our go-to developer for all our web projects.",
+        "Name": "Emily Rodriguez",
+        "Title": "Marketing Director",
+        "Company": "Future Tech",
+        "AvatarURL": "https://dummyimage.com/100x100"
+      }
+    ]
+  },
+  
+  "RecentBlogPosts": {
+    "Title": "Latest from the Blog",
+    "Subtitle": "I write about web development, design patterns, and best practices.",
+    "ButtonText": "View All Posts",
+    "ButtonURL": "/blog/",
+    "Posts": [
+      {
+        "Title": "The Future of Frontend Development",
+        "Excerpt": "An exploration of upcoming trends and technologies that will shape the future of frontend development, including WebAssembly, CSS features, and JavaScript frameworks.",
+        "ImageURL": "https://dummyimage.com/600x400",
+        "Categories": ["Frontend", "Web Development"],
+        "PublishedDate": "2023-06-15T12:00:00Z",
+        "ReadingTime": 8
+      },
+      {
+        "Title": "Building Scalable APIs with Node.js",
+        "Excerpt": "A comprehensive guide to building robust, scalable, and maintainable APIs using Node.js, Express, and best practices for authentication, error handling, and performance.",
+        "ImageURL": "https://dummyimage.com/600x400",
+        "Categories": ["Backend", "Node.js"],
+        "PublishedDate": "2023-05-22T12:00:00Z",
+        "ReadingTime": 12
+      },
+      {
+        "Title": "Mastering React Hooks",
+        "Excerpt": "A deep dive into React Hooks, covering useState, useEffect, useContext, and custom hooks with practical examples and performance optimization tips.",
+        "ImageURL": "https://dummyimage.com/600x400",
+        "Categories": ["React", "Frontend"],
+        "PublishedDate": "2023-04-10T12:00:00Z",
+        "ReadingTime": 10
+      }
+    ]
+  },
+  
+  "CTA": {
+    "Title": "Ready to Start Your Next Project?",
+    "Subtitle": "Let's collaborate to create something amazing. I'm currently available for freelance work and new opportunities.",
+    "ButtonText": "Get in Touch",
+    "ButtonURL": "/contact/"
+  }
+} 

@@ -1,0 +1,60 @@
+{{define "blog-card"}}
+<article class="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg">
+    <!-- Blog Post Image -->
+    {{if .ImageURL}}
+    <div class="h-48 overflow-hidden">
+        <img 
+            src="{{.ImageURL}}" 
+            alt="{{.Title}}" 
+            class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+        >
+    </div>
+    {{end}}
+    
+    <!-- Blog Post Content -->
+    <div class="p-6">
+        <!-- Categories -->
+        <div class="flex flex-wrap gap-2 mb-3">
+            {{range .Categories}}
+            <span class="bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full">{{.}}</span>
+            {{end}}
+        </div>
+        
+        <!-- Blog Post Title -->
+        <h3 class="text-xl font-bold text-gray-800 hover:text-primary transition duration-300 mb-2">
+            <a href="/blog/{{slugify .Title}}/">{{.Title}}</a>
+        </h3>
+        
+        <!-- Metadata -->
+        <div class="flex items-center text-gray-500 text-sm mb-3">
+            <!-- Date -->
+            <span class="flex items-center">
+                <i class="far fa-calendar mr-1"></i>
+                {{if eq (printf "%T" .PublishedDate) "string"}}
+                    {{.PublishedDate}}
+                {{else}}
+                    {{nowFormat "January 2, 2006"}}
+                {{end}}
+            </span>
+            
+            <!-- Reading Time -->
+            {{if .ReadingTime}}
+            <span class="mx-2">•</span>
+            <span class="flex items-center">
+                <i class="far fa-clock mr-1"></i>
+                {{.ReadingTime}} min read
+            </span>
+            {{end}}
+        </div>
+        
+        <!-- Blog Post Excerpt -->
+        <p class="text-gray-600 mb-4">{{truncate .Excerpt 120}}</p>
+        
+        <!-- Read More Link -->
+        <a href="/blog/{{slugify .Title}}/" class="inline-flex items-center text-primary font-medium hover:text-primary-dark transition duration-300">
+            Read More
+            <i class="fas fa-arrow-right ml-1 text-sm"></i>
+        </a>
+    </div>
+</article>
+{{end}} 

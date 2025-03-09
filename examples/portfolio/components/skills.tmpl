@@ -1,0 +1,18 @@
+{{define "skills"}}
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    {{range .Skills}}
+    <div>
+        <div class="flex justify-between items-center mb-2">
+            <h4 class="font-medium text-gray-800">{{.Name}}</h4>
+            <span class="text-sm text-gray-600">{{.Level}}%</span>
+        </div>
+        <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+            <div 
+                class="h-full bg-primary rounded-full" 
+                style="width: {{.Level}}%"
+            ></div>
+        </div>
+    </div>
+    {{end}}
+</div>
+{{end}} 

@@ -1,0 +1,210 @@
+{
+  "Title": "About Me",
+  "Subtitle": "Learn more about my background, skills, and what drives me as a developer.",
+  "ActivePage": "about",
+  
+  "Profile": {
+    "Name": "Alex Developer",
+    "Bio": "I'm a passionate Full Stack Developer with over 5 years of experience building modern web applications. I specialize in JavaScript technologies, with expertise in React, Node.js, and TypeScript. My mission is to create elegant, user-friendly, and high-performance digital experiences that help businesses achieve their goals. When I'm not coding, you can find me hiking, reading tech blogs, or experimenting with new technologies.",
+    "ImageURL": "https://dummyimage.com/600x800",
+    "Email": "alex@example.com",
+    "Location": "San Francisco, CA",
+    "Website": "https://alexdev.example.com",
+    "ResumeURL": "/files/alex-developer-resume.pdf",
+    "SocialLinks": [
+      {
+        "Icon": "fab fa-github",
+        "URL": "https://github.com/"
+      },
+      {
+        "Icon": "fab fa-linkedin",
+        "URL": "https://linkedin.com/"
+      },
+      {
+        "Icon": "fab fa-twitter",
+        "URL": "https://twitter.com/"
+      },
+      {
+        "Icon": "fab fa-dev",
+        "URL": "https://dev.to/"
+      }
+    ]
+  },
+  
+  "Skills": [
+    {
+      "Name": "JavaScript",
+      "Level": 95
+    },
+    {
+      "Name": "React.js",
+      "Level": 92
+    },
+    {
+      "Name": "Node.js",
+      "Level": 88
+    },
+    {
+      "Name": "TypeScript",
+      "Level": 85
+    },
+    {
+      "Name": "HTML/CSS",
+      "Level": 90
+    },
+    {
+      "Name": "Tailwind CSS",
+      "Level": 85
+    },
+    {
+      "Name": "MongoDB",
+      "Level": 80
+    },
+    {
+      "Name": "PostgreSQL",
+      "Level": 75
+    },
+    {
+      "Name": "GraphQL",
+      "Level": 78
+    },
+    {
+      "Name": "RESTful APIs",
+      "Level": 90
+    },
+    {
+      "Name": "Docker",
+      "Level": 70
+    },
+    {
+      "Name": "Git/GitHub",
+      "Level": 88
+    }
+  ],
+  
+  "Experience": [
+    {
+      "Title": "Senior Full Stack Developer",
+      "Company": "TechInnovate Solutions",
+      "Period": "2021 - Present",
+      "Description": "Lead developer for client projects, focusing on creating responsive web applications with React and Node.js.",
+      "Achievements": [
+        "Developed and launched 10+ websites and web applications for clients across various industries",
+        "Improved application performance by 40% through code optimization and implementing best practices",
+        "Mentored junior developers and conducted code reviews to ensure quality and maintainability",
+        "Implemented CI/CD pipelines to streamline deployment processes and reduce time-to-market"
+      ]
+    },
+    {
+      "Title": "Frontend Developer",
+      "Company": "Digital Creations Agency",
+      "Period": "2019 - 2021",
+      "Description": "Responsible for developing user interfaces for web applications using React and related technologies.",
+      "Achievements": [
+        "Built responsive, cross-browser compatible user interfaces for 15+ client projects",
+        "Collaborated with designers to implement pixel-perfect designs with a focus on usability",
+        "Reduced load times by 35% through performance optimization techniques",
+        "Implemented state management solutions using Redux and Context API"
+      ]
+    },
+    {
+      "Title": "Web Developer",
+      "Company": "StartUp Innovations",
+      "Period": "2018 - 2019",
+      "Description": "Developed and maintained company website and internal tools using JavaScript, HTML, and CSS.",
+      "Achievements": [
+        "Redesigned company website resulting in a 25% increase in user engagement",
+        "Created internal tools to automate repetitive tasks, saving 10+ hours per week",
+        "Collaborated with marketing team to implement SEO best practices",
+        "Integrated third-party APIs for enhanced functionality"
+      ]
+    }
+  ],
+  
+  "Education": [
+    {
+      "Degree": "Master of Science in Computer Science",
+      "Institution": "Stanford University",
+      "Period": "2016 - 2018",
+      "Description": "Specialized in Web Technologies and Software Engineering. Graduated with honors."
+    },
+    {
+      "Degree": "Bachelor of Science in Computer Science",
+      "Institution": "University of California, Berkeley",
+      "Period": "2012 - 2016",
+      "Description": "Foundation in programming, algorithms, data structures, and software development methodologies."
+    }
+  ],
+  
+  "Certifications": [
+    {
+      "Name": "AWS Certified Developer - Associate",
+      "Issuer": "Amazon Web Services",
+      "Date": "2022",
+      "URL": "https://www.aws.example.com/certification"
+    },
+    {
+      "Name": "Professional Frontend Developer",
+      "Issuer": "Meta",
+      "Date": "2021",
+      "URL": "https://www.meta.example.com/certification"
+    },
+    {
+      "Name": "MongoDB Certified Developer",
+      "Issuer": "MongoDB",
+      "Date": "2020",
+      "URL": "https://www.mongodb.example.com/certification"
+    },
+    {
+      "Name": "Certified Scrum Master",
+      "Issuer": "Scrum Alliance",
+      "Date": "2019",
+      "URL": "https://www.scrumalliance.example.com/certification"
+    },
+    {
+      "Name": "React Development Certification",
+      "Issuer": "JavaScript Mastery Academy",
+      "Date": "2019",
+      "URL": "https://www.jsmastery.example.com/certification"
+    },
+    {
+      "Name": "Advanced JavaScript Certification",
+      "Issuer": "Udemy",
+      "Date": "2018",
+      "URL": "https://www.udemy.example.com/certification"
+    }
+  ],
+  
+  "Hobbies": [
+    {
+      "Name": "Hiking",
+      "Icon": "fas fa-hiking",
+      "Description": "Exploring nature trails and mountains to disconnect from technology and find inspiration."
+    },
+    {
+      "Name": "Photography",
+      "Icon": "fas fa-camera",
+      "Description": "Capturing landscapes and urban scenes, with a particular interest in architectural photography."
+    },
+    {
+      "Name": "Reading",
+      "Icon": "fas fa-book",
+      "Description": "Consuming technical books, science fiction, and philosophy to expand knowledge and perspective."
+    },
+    {
+      "Name": "Cooking",
+      "Icon": "fas fa-utensils",
+      "Description": "Experimenting with recipes from around the world, especially fusion cuisine."
+    },
+    {
+      "Name": "Open Source",
+      "Icon": "fas fa-code-branch",
+      "Description": "Contributing to open source projects and creating tools to help the developer community."
+    },
+    {
+      "Name": "Travel",
+      "Icon": "fas fa-plane",
+      "Description": "Exploring new cultures, architectures, and technologies around the world."
+    }
+  ]
+} 

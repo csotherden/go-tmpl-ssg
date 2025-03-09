@@ -1,0 +1,189 @@
+{{- /* layout:base.tmpl */ -}}
+
+{{define "content"}}
+<!-- Hero Section -->
+<section class="py-20 bg-gradient-to-r from-blue-500 to-indigo-600 text-white">
+    <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row items-center">
+            <!-- Hero Content -->
+            <div class="md:w-1/2 mb-10 md:mb-0">
+                <h1 class="text-4xl md:text-5xl font-bold mb-4">{{.Hero.Title}}</h1>
+                <p class="text-xl mb-8 text-blue-100">{{.Hero.Subtitle}}</p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <a href="{{.Hero.PrimaryButtonURL}}" class="btn bg-white text-primary hover:bg-gray-100 font-medium text-center">
+                        {{.Hero.PrimaryButtonText}}
+                    </a>
+                    <a href="{{.Hero.SecondaryButtonURL}}" class="btn border border-white text-white hover:bg-white hover:text-primary font-medium text-center">
+                        {{.Hero.SecondaryButtonText}}
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Hero Image -->
+            <div class="md:w-1/2 flex justify-center">
+                <img 
+                    src="{{.Hero.ImageURL}}" 
+                    alt="{{.Hero.ImageAlt}}" 
+                    class="max-w-full rounded-lg shadow-xl"
+                >
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- About Section -->
+<section class="py-20">
+    <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row items-center">
+            <!-- About Image -->
+            <div class="md:w-1/2 mb-10 md:mb-0 md:pr-8">
+                <img 
+                    src="{{.About.ImageURL}}" 
+                    alt="{{.About.ImageAlt}}" 
+                    class="rounded-lg shadow-md w-full"
+                >
+            </div>
+            
+            <!-- About Content -->
+            <div class="md:w-1/2">
+                <h2 class="section-heading pb-2">{{.About.Title}}</h2>
+                <p class="text-gray-600 mb-6">{{.About.Description}}</p>
+                
+                <!-- Key Points -->
+                <div class="space-y-4 mb-8">
+                    {{range .About.KeyPoints}}
+                    <div class="flex items-start">
+                        <div class="text-primary mr-3 mt-1">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <p>{{.}}</p>
+                    </div>
+                    {{end}}
+                </div>
+                
+                <a href="{{.About.ButtonURL}}" class="btn btn-primary">
+                    {{.About.ButtonText}}
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services Section -->
+<section class="py-20 bg-gray-50">
+    <div class="container mx-auto px-4">
+        <!-- Section Header -->
+        <div class="text-center mb-16">
+            <h2 class="text-3xl font-bold mb-4">{{.Services.Title}}</h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">{{.Services.Subtitle}}</p>
+        </div>
+        
+        <!-- Services Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {{range .Services.Items}}
+            <div class="bg-white p-8 rounded-lg shadow-md text-center">
+                <div class="text-primary text-4xl mb-4">
+                    <i class="{{.Icon}}"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-3">{{.Title}}</h3>
+                <p class="text-gray-600">{{.Description}}</p>
+            </div>
+            {{end}}
+        </div>
+    </div>
+</section>
+
+<!-- Featured Projects Section -->
+<section class="py-20">
+    <div class="container mx-auto px-4">
+        <!-- Section Header -->
+        <div class="text-center mb-16">
+            <h2 class="text-3xl font-bold mb-4">{{.FeaturedProjects.Title}}</h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">{{.FeaturedProjects.Subtitle}}</p>
+        </div>
+        
+        <!-- Projects Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {{range .FeaturedProjects.Projects}}
+                {{template "project-card" .}}
+            {{end}}
+        </div>
+        
+        <!-- View All Projects Button -->
+        <div class="text-center mt-12">
+            <a href="{{.FeaturedProjects.ButtonURL}}" class="btn btn-primary">
+                {{.FeaturedProjects.ButtonText}}
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="py-20 bg-gray-50">
+    <div class="container mx-auto px-4">
+        <!-- Section Header -->
+        <div class="text-center mb-16">
+            <h2 class="text-3xl font-bold mb-4">{{.Testimonials.Title}}</h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">{{.Testimonials.Subtitle}}</p>
+        </div>
+        
+        <!-- Testimonials Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {{range .Testimonials.Items}}
+            <div class="bg-white rounded-lg p-8 shadow-md">
+                <!-- Quote Mark -->
+                <div class="text-primary opacity-20 text-6xl font-serif leading-none mb-4">"</div>
+                
+                <!-- Testimonial Text -->
+                <p class="text-gray-600 mb-6 italic">{{.Quote}}</p>
+                
+                <!-- Author Info -->
+                <div class="flex items-center">
+                    <img src="{{.AvatarURL}}" alt="{{.Name}}" class="w-12 h-12 rounded-full mr-4 object-cover">
+                    <div>
+                        <h4 class="font-semibold">{{.Name}}</h4>
+                        <p class="text-gray-500 text-sm">{{.Title}}, {{.Company}}</p>
+                    </div>
+                </div>
+            </div>
+            {{end}}
+        </div>
+    </div>
+</section>
+
+<!-- Recent Blog Posts Section -->
+<section class="py-20">
+    <div class="container mx-auto px-4">
+        <!-- Section Header -->
+        <div class="text-center mb-16">
+            <h2 class="text-3xl font-bold mb-4">{{.RecentBlogPosts.Title}}</h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">{{.RecentBlogPosts.Subtitle}}</p>
+        </div>
+        
+        <!-- Blog Posts Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {{range .RecentBlogPosts.Posts}}
+                {{template "blog-card" .}}
+            {{end}}
+        </div>
+        
+        <!-- View All Blog Posts Button -->
+        <div class="text-center mt-12">
+            <a href="{{.RecentBlogPosts.ButtonURL}}" class="btn btn-primary">
+                {{.RecentBlogPosts.ButtonText}}
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action Section -->
+<section class="py-20 bg-gradient-to-r from-blue-500 to-indigo-600 text-white">
+    <div class="container mx-auto px-4 text-center">
+        <h2 class="text-3xl font-bold mb-4">{{.CTA.Title}}</h2>
+        <p class="text-xl mb-8 text-blue-100 max-w-3xl mx-auto">{{.CTA.Subtitle}}</p>
+        <a href="{{.CTA.ButtonURL}}" class="btn bg-white text-primary hover:bg-gray-100 font-medium">
+            {{.CTA.ButtonText}}
+        </a>
+    </div>
+</section>
+{{end}} 

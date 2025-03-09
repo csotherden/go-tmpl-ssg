@@ -1,0 +1,58 @@
+{{define "nav"}}
+<nav class="flex justify-between items-center">
+    <!-- Logo -->
+    <a href="/" class="text-2xl font-bold text-primary flex items-center">
+        <span class="mr-2"><i class="fas fa-code"></i></span>
+        <span>Alex Dev</span>
+    </a>
+    
+    <!-- Mobile Menu Button -->
+    <div class="md:hidden">
+        <button id="menuButton" class="text-gray-500 hover:text-primary focus:outline-none">
+            <i class="fas fa-bars text-xl"></i>
+        </button>
+    </div>
+    
+    <!-- Desktop Navigation -->
+    <ul class="hidden md:flex space-x-8">
+        <li><a href="/" class="{{if eq .ActivePage "home"}}text-primary font-medium{{else}}text-gray-600 hover:text-primary{{end}} transition duration-300">Home</a></li>
+        <li><a href="/about/" class="{{if eq .ActivePage "about"}}text-primary font-medium{{else}}text-gray-600 hover:text-primary{{end}} transition duration-300">About</a></li>
+        <li><a href="/projects/" class="{{if eq .ActivePage "projects"}}text-primary font-medium{{else}}text-gray-600 hover:text-primary{{end}} transition duration-300">Projects</a></li>
+        <li><a href="/blog/" class="{{if eq .ActivePage "blog"}}text-primary font-medium{{else}}text-gray-600 hover:text-primary{{end}} transition duration-300">Blog</a></li>
+        <li><a href="/contact/" class="{{if eq .ActivePage "contact"}}text-primary font-medium{{else}}text-gray-600 hover:text-primary{{end}} transition duration-300">Contact</a></li>
+    </ul>
+    
+    <!-- Mobile Navigation -->
+    <div id="mobileMenu" class="hidden fixed inset-0 bg-gray-800 bg-opacity-75 z-50">
+        <div class="bg-white h-full w-64 p-6 shadow-lg transform transition-transform duration-300">
+            <div class="flex justify-between items-center mb-8">
+                <a href="/" class="text-2xl font-bold text-primary">Alex Dev</a>
+                <button id="closeMenuButton" class="text-gray-500 hover:text-primary focus:outline-none">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <ul class="space-y-4">
+                <li><a href="/" class="{{if eq .ActivePage "home"}}text-primary font-medium{{else}}text-gray-600 hover:text-primary{{end}} transition duration-300 block py-2">Home</a></li>
+                <li><a href="/about/" class="{{if eq .ActivePage "about"}}text-primary font-medium{{else}}text-gray-600 hover:text-primary{{end}} transition duration-300 block py-2">About</a></li>
+                <li><a href="/projects/" class="{{if eq .ActivePage "projects"}}text-primary font-medium{{else}}text-gray-600 hover:text-primary{{end}} transition duration-300 block py-2">Projects</a></li>
+                <li><a href="/blog/" class="{{if eq .ActivePage "blog"}}text-primary font-medium{{else}}text-gray-600 hover:text-primary{{end}} transition duration-300 block py-2">Blog</a></li>
+                <li><a href="/contact/" class="{{if eq .ActivePage "contact"}}text-primary font-medium{{else}}text-gray-600 hover:text-primary{{end}} transition duration-300 block py-2">Contact</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<script>
+    const menuButton = document.getElementById('menuButton');
+    const closeMenuButton = document.getElementById('closeMenuButton');
+    const mobileMenu = document.getElementById('mobileMenu');
+    
+    menuButton.addEventListener('click', () => {
+        mobileMenu.classList.remove('hidden');
+    });
+    
+    closeMenuButton.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+    });
+</script>
+{{end}} 

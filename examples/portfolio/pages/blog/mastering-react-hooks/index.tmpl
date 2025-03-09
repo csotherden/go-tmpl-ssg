@@ -1,0 +1,194 @@
+{{- /* layout:base.tmpl */ -}}
+
+{{define "content"}}
+<!-- Blog Post Header -->
+<section class="py-20 bg-gradient-to-r from-blue-500 to-indigo-600 text-white">
+    <div class="container mx-auto px-4">
+        <div class="max-w-4xl mx-auto">
+            <!-- Back Button -->
+            <a href="/blog/" class="inline-flex items-center text-white hover:text-blue-200 mb-6 transition duration-300">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Back to Blog
+            </a>
+            
+            <!-- Post Title -->
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">{{.Title}}</h1>
+            
+            <!-- Post Meta -->
+            <div class="flex flex-wrap items-center gap-x-6 gap-y-3 mb-6">
+                <!-- Author -->
+                <div class="flex items-center">
+                    <img 
+                        src="{{.Author.AvatarURL}}" 
+                        alt="{{.Author.Name}}" 
+                        class="w-10 h-10 rounded-full mr-3 object-cover"
+                    >
+                    <span>{{.Author.Name}}</span>
+                </div>
+                
+                <!-- Date -->
+                <div class="flex items-center text-blue-100">
+                    <i class="far fa-calendar-alt mr-2"></i>
+                    <span>
+                        {{if eq (printf "%T" .PublishedDate) "string"}}
+                            {{.PublishedDate}}
+                        {{else}}
+                            {{nowFormat "January 2, 2006"}}
+                        {{end}}
+                    </span>
+                </div>
+                
+                <!-- Reading Time -->
+                <div class="flex items-center text-blue-100">
+                    <i class="far fa-clock mr-2"></i>
+                    <span>{{.ReadingTime}} min read</span>
+                </div>
+            </div>
+            
+            <!-- Categories -->
+            <div class="flex flex-wrap gap-2">
+                {{range .Categories}}
+                <span class="bg-white bg-opacity-20 text-white text-sm px-3 py-1 rounded-full">{{.}}</span>
+                {{end}}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Blog Post Content -->
+<section class="py-16">
+    <div class="container mx-auto px-4">
+        <div class="max-w-4xl mx-auto">
+            <!-- Featured Image -->
+            {{if .ImageURL}}
+            <div class="mb-10">
+                <img 
+                    src="{{.ImageURL}}" 
+                    alt="{{.Title}}" 
+                    class="w-full h-auto rounded-lg shadow-md"
+                >
+                {{if .ImageCaption}}
+                <p class="text-center text-gray-500 mt-2 text-sm italic">{{.ImageCaption}}</p>
+                {{end}}
+            </div>
+            {{end}}
+            
+            <!-- Post Content -->
+            <div class="prose prose-lg max-w-none mb-12">
+                {{html .Content}}
+            </div>
+            
+            <!-- Tags -->
+            {{if .Tags}}
+            <div class="border-t border-b border-gray-200 py-6 mb-8">
+                <div class="flex flex-wrap items-center">
+                    <span class="font-medium mr-4">Tags:</span>
+                    <div class="flex flex-wrap gap-2">
+                        {{range .Tags}}
+                        <span class="bg-gray-100 text-gray-800 text-sm px-3 py-1 rounded-full">{{.}}</span>
+                        {{end}}
+                    </div>
+                </div>
+            </div>
+            {{end}}
+            
+            <!-- Author Bio -->
+            <div class="bg-gray-50 rounded-lg p-6 mb-12 flex flex-col md:flex-row items-center md:items-start gap-6">
+                <img 
+                    src="{{.Author.AvatarURL}}" 
+                    alt="{{.Author.Name}}" 
+                    class="w-20 h-20 rounded-full object-cover"
+                >
+                <div>
+                    <h3 class="text-xl font-bold mb-2">About {{.Author.Name}}</h3>
+                    <p class="text-gray-600 mb-4">{{.Author.Bio}}</p>
+                    
+                    <!-- Social Links -->
+                    <div class="flex space-x-4">
+                        {{range .Author.SocialLinks}}
+                        <a href="{{.URL}}" target="_blank" rel="noopener" class="text-gray-500 hover:text-primary transition duration-300">
+                            <i class="{{.Icon}} text-lg"></i>
+                        </a>
+                        {{end}}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Share Post -->
+            <div class="text-center mb-12">
+                <h3 class="text-xl font-bold mb-4">Share This Post</h3>
+                <div class="flex justify-center space-x-6">
+                    <a href="https://twitter.com/intent/tweet?url=https://example.com&text=Share" target="_blank" rel="noopener" class="text-gray-500 hover:text-primary transition duration-300">
+                        <i class="fab fa-twitter text-xl"></i>
+                    </a>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https://example.com" target="_blank" rel="noopener" class="text-gray-500 hover:text-primary transition duration-300">
+                        <i class="fab fa-facebook text-xl"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://example.com&title=Share" target="_blank" rel="noopener" class="text-gray-500 hover:text-primary transition duration-300">
+                        <i class="fab fa-linkedin text-xl"></i>
+                    </a>
+                    <a href="mailto:?subject=Check this out&body=https://example.com" class="text-gray-500 hover:text-primary transition duration-300">
+                        <i class="fas fa-envelope text-xl"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Related Posts -->
+{{if .RelatedPosts}}
+<section class="py-16 bg-gray-50">
+    <div class="container mx-auto px-4">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="section-heading pb-2 mb-10">Related Posts</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {{range .RelatedPosts}}
+                    {{template "blog-card" .}}
+                {{end}}
+            </div>
+        </div>
+    </div>
+</section>
+{{end}}
+
+<!-- Newsletter Section -->
+<section class="py-20">
+    <div class="container mx-auto px-4">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-3xl font-bold mb-4">Subscribe to My Newsletter</h2>
+            <p class="text-xl text-gray-600 mb-8">Get the latest posts and updates delivered directly to your inbox.</p>
+            
+            <form id="newsletterForm" class="max-w-xl mx-auto">
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        placeholder="Your email address" 
+                        class="flex-grow px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                        required
+                    >
+                    <button 
+                        type="submit" 
+                        class="btn btn-primary whitespace-nowrap"
+                    >
+                        Subscribe
+                    </button>
+                </div>
+                <p class="text-sm text-gray-500 mt-3">I respect your privacy. Unsubscribe at any time.</p>
+            </form>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.getElementById('newsletterForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        // In a real application, this would handle form submission via AJAX
+        alert('Thanks for subscribing! In a real application, this would add you to a newsletter list.');
+        this.reset();
+    });
+</script>
+{{end}} 

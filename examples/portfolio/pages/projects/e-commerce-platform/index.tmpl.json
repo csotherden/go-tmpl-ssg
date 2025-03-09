@@ -1,0 +1,102 @@
+{
+  "ActivePage": "projects",
+  "Title": "E-commerce Platform",
+  "Categories": ["Web Development", "E-commerce", "Frontend", "Backend"],
+  "CompletionDate": "July 2023",
+  "Client": "StyleHub Boutique",
+  "DemoURL": "https://demo.example.com",
+  "SourceURL": "https://github.com/alexdev/ecommerce",
+  "URL": "https://www.portfolio.example.com/projects/e-commerce-platform/",
+  "ImageURL": "https://dummyimage.com/1200x800",
+  "ProjectType": "Full Stack Web Application",
+  "Timeline": "3 months",
+  "Role": "Lead Developer",
+  
+  "Description": "<p>This modern e-commerce platform was designed and developed for StyleHub Boutique, a fashion retailer looking to expand their online presence. The goal was to create a user-friendly, responsive, and feature-rich online store that would provide customers with an exceptional shopping experience while giving the client powerful tools to manage their inventory and orders.</p><p>Built with React on the frontend and Node.js with Express on the backend, this platform leverages MongoDB for flexible data storage and Stripe for secure payment processing. The application features a clean, intuitive interface with lightning-fast product browsing, advanced filtering, and seamless checkout.</p>",
+  
+  "Challenges": "<p>During the development of this project, several challenges had to be addressed:</p><ul><li>Implementing a real-time inventory management system to prevent overselling of products</li><li>Creating a responsive design that works seamlessly across devices of all sizes</li><li>Building a secure payment gateway integration with proper error handling</li><li>Optimizing performance with a growing product catalog</li><li>Implementing an efficient search and filtering system</li></ul>",
+  
+  "Solutions": "<p>To overcome these challenges, I implemented the following solutions:</p><ul><li>Built a WebSocket-based inventory tracking system that updates stock levels in real-time</li><li>Developed a mobile-first responsive design using Tailwind CSS and custom breakpoints</li><li>Integrated Stripe's secure elements with comprehensive client and server-side validation</li><li>Implemented pagination, lazy loading, and image optimization techniques</li><li>Created a powerful search engine with Elasticsearch for faceted filtering and instant results</li></ul>",
+  
+  "Technologies": [
+    "React",
+    "Node.js",
+    "Express",
+    "MongoDB",
+    "Stripe API",
+    "Redux",
+    "Tailwind CSS",
+    "Elasticsearch",
+    "AWS S3",
+    "JWT Authentication",
+    "Socket.io",
+    "Jest"
+  ],
+  
+  "KeyFeatures": [
+    "Responsive product catalog with advanced filtering",
+    "User accounts with order history and saved preferences",
+    "Secure payment processing with multiple options",
+    "Real-time inventory management",
+    "Admin dashboard for product, order, and customer management",
+    "Detailed analytics and sales reporting",
+    "Automated email notifications for orders and shipping updates",
+    "Wishlist and shopping cart functionality",
+    "Product reviews and ratings system"
+  ],
+  
+  "Gallery": [
+    {
+      "ImageURL": "https://dummyimage.com/800x600",
+      "Caption": "Product listing page with filtering options"
+    },
+    {
+      "ImageURL": "https://dummyimage.com/800x600",
+      "Caption": "Product detail page with related items"
+    },
+    {
+      "ImageURL": "https://dummyimage.com/800x600",
+      "Caption": "Shopping cart and checkout flow"
+    },
+    {
+      "ImageURL": "https://dummyimage.com/800x600",
+      "Caption": "Admin dashboard for inventory management"
+    }
+  ],
+  
+  "Testimonial": {
+    "Quote": "Working with Alex on our e-commerce platform was a game-changer for our business. The website not only looks beautiful but has significantly improved our online sales and customer satisfaction. Alex was responsive, professional, and delivered exactly what we needed—on time and within budget.",
+    "Author": "Emma Richards",
+    "Title": "Owner, StyleHub Boutique"
+  },
+  
+  "RelatedProjects": [
+    {
+      "Title": "Inventory Management System",
+      "Description": "A comprehensive inventory management solution for small businesses, with features like product tracking, stock alerts, supplier management, and sales reporting.",
+      "ImageURL": "https://dummyimage.com/600x400",
+      "Categories": ["Web Development", "Backend", "E-commerce"],
+      "Technologies": ["Angular", "Node.js", "MySQL", "Docker"],
+      "DemoURL": "https://demo.example.com",
+      "SourceURL": "https://github.com/alexdev/inventory"
+    },
+    {
+      "Title": "Real Estate Listings",
+      "Description": "A property listing website that allows real estate agents to post properties and users to search, filter, and contact agents about listings.",
+      "ImageURL": "https://dummyimage.com/600x400",
+      "Categories": ["Web Development", "Frontend", "Backend"],
+      "Technologies": ["Next.js", "MongoDB", "Express", "Cloudinary"],
+      "DemoURL": "https://demo.example.com",
+      "SourceURL": "https://github.com/alexdev/realestate"
+    },
+    {
+      "Title": "Budget Tracking Dashboard",
+      "Description": "A financial dashboard that helps users track income, expenses, and savings goals. Features include expense categorization, budget setting, and data visualization.",
+      "ImageURL": "https://dummyimage.com/600x400",
+      "Categories": ["Web Development", "Frontend", "UI/UX"],
+      "Technologies": ["React", "D3.js", "Firebase", "Plaid API"],
+      "DemoURL": "https://demo.example.com",
+      "SourceURL": "https://github.com/alexdev/budgetapp"
+    }
+  ]
+} 

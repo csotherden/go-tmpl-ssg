@@ -1,0 +1,121 @@
+{{- /* layout:base.tmpl */ -}}
+
+{{define "content"}}
+<!-- Page Header -->
+<section class="py-20 bg-gradient-to-r from-blue-500 to-indigo-600 text-white">
+    <div class="container mx-auto px-4 text-center">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">{{.Title}}</h1>
+        <p class="text-xl text-blue-100 max-w-3xl mx-auto">{{.Subtitle}}</p>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section class="py-20">
+    <div class="container mx-auto px-4">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- Contact Information -->
+                <div>
+                    <h2 class="section-heading pb-2">Get in Touch</h2>
+                    <p class="text-gray-600 mb-8">
+                        {{.ContactInfo.Description}}
+                    </p>
+                    
+                    <!-- Contact Details -->
+                    <div class="space-y-6 mb-10">
+                        <!-- Email -->
+                        <div class="flex items-start">
+                            <div class="bg-primary text-white p-3 rounded-full mr-4">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-lg mb-1">Email</h3>
+                                <a href="mailto:{{.ContactInfo.Email}}" class="text-primary hover:underline">{{.ContactInfo.Email}}</a>
+                            </div>
+                        </div>
+                        
+                        <!-- Phone -->
+                        <div class="flex items-start">
+                            <div class="bg-primary text-white p-3 rounded-full mr-4">
+                                <i class="fas fa-phone-alt"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-lg mb-1">Phone</h3>
+                                <a href="tel:{{.ContactInfo.Phone}}" class="text-gray-600">{{.ContactInfo.Phone}}</a>
+                            </div>
+                        </div>
+                        
+                        <!-- Location -->
+                        <div class="flex items-start">
+                            <div class="bg-primary text-white p-3 rounded-full mr-4">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-lg mb-1">Location</h3>
+                                <p class="text-gray-600">{{.ContactInfo.Location}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Social Media -->
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4">Connect With Me</h3>
+                        <div class="flex space-x-4">
+                            {{range .ContactInfo.SocialLinks}}
+                            <a href="{{.URL}}" target="_blank" rel="noopener" class="bg-gray-100 hover:bg-primary hover:text-white text-gray-600 p-3 rounded-full transition duration-300">
+                                <i class="{{.Icon}} text-lg"></i>
+                            </a>
+                            {{end}}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Contact Form -->
+                <div>
+                    <h2 class="section-heading pb-2">Send Me a Message</h2>
+                    <p class="text-gray-600 mb-8">
+                        Have a question, project inquiry, or just want to say hello? Fill out the form below, and I'll get back to you as soon as possible.
+                    </p>
+                    
+                    {{template "contact-form" .}}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+{{if .FAQs}}
+<section class="py-20 bg-gray-50">
+    <div class="container mx-auto px-4">
+        <div class="max-w-5xl mx-auto">
+            <h2 class="text-3xl font-bold mb-4 text-center">Frequently Asked Questions</h2>
+            <p class="text-xl text-gray-600 mb-12 text-center">Find answers to common questions about my services and working process.</p>
+            
+            <div class="space-y-6">
+                {{range .FAQs}}
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-bold mb-3">{{.Question}}</h3>
+                    <p class="text-gray-600">{{.Answer}}</p>
+                </div>
+                {{end}}
+            </div>
+        </div>
+    </div>
+</section>
+{{end}}
+
+<!-- Map Section -->
+{{if .ContactInfo.MapEmbed}}
+<section class="py-20">
+    <div class="container mx-auto px-4">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-3xl font-bold mb-8 text-center">Find Me Here</h2>
+            <div class="rounded-lg overflow-hidden shadow-md h-96">
+                {{html .ContactInfo.MapEmbed}}
+            </div>
+        </div>
+    </div>
+</section>
+{{end}}
+{{end}} 

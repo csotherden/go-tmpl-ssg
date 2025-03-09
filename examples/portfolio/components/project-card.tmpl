@@ -1,0 +1,48 @@
+{{define "project-card"}}
+<div class="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg">
+    <!-- Project Image -->
+    <div class="h-48 overflow-hidden">
+        <img 
+            src="{{.ImageURL}}" 
+            alt="{{.Title}}" 
+            class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+        >
+    </div>
+    
+    <!-- Project Content -->
+    <div class="p-6">
+        <!-- Project Title -->
+        <h3 class="text-xl font-bold text-gray-800 mb-2">{{.Title}}</h3>
+        
+        <!-- Project Description (truncated) -->
+        <p class="text-gray-600 mb-4">{{truncate .Description 120}}</p>
+        
+        <!-- Project Technologies -->
+        <div class="flex flex-wrap gap-2 mb-4">
+            {{range .Technologies}}
+            <span class="bg-gray-100 text-gray-800 text-xs px-3 py-1 rounded-full">{{.}}</span>
+            {{end}}
+        </div>
+        
+        <!-- Project Links -->
+        <div class="flex justify-between mt-4">
+            <a href="/projects/{{slugify .Title}}/" class="text-primary hover:text-primary-dark font-medium transition duration-300">
+                View Details
+                <i class="fas fa-arrow-right ml-1 text-sm"></i>
+            </a>
+            <div class="flex space-x-3">
+                {{if .DemoURL}}
+                <a href="{{.DemoURL}}" target="_blank" rel="noopener" class="text-gray-500 hover:text-primary transition duration-300" title="Live Demo">
+                    <i class="fas fa-external-link-alt"></i>
+                </a>
+                {{end}}
+                {{if .SourceURL}}
+                <a href="{{.SourceURL}}" target="_blank" rel="noopener" class="text-gray-500 hover:text-primary transition duration-300" title="Source Code">
+                    <i class="fab fa-github"></i>
+                </a>
+                {{end}}
+            </div>
+        </div>
+    </div>
+</div>
+{{end}} 

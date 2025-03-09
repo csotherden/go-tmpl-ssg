@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .Title }} | Alex Developer Portfolio</title>
+    <meta name="description" content="{{ default "Portfolio website of Alex Developer, showcasing web development projects and skills" .Description }}">
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            light: '#63b3ed',
+                            DEFAULT: '#3182ce',
+                            dark: '#2c5282',
+                        },
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer components {
+            .btn {
+                @apply px-4 py-2 rounded-md transition duration-300 inline-block;
+            }
+            .btn-primary {
+                @apply bg-primary text-white hover:bg-primary-dark;
+            }
+            .btn-outline {
+                @apply border border-primary text-primary hover:bg-primary hover:text-white;
+            }
+            .section-heading {
+                @apply text-3xl font-bold mb-6 text-gray-800 relative;
+            }
+            .section-heading::after {
+                content: '';
+                @apply absolute left-0 bottom-0 h-1 w-20 bg-primary;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm">
+        <div class="container mx-auto px-4 py-4">
+            {{template "nav" .}}
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <main class="flex-grow">
+        {{template "content" .}}
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            {{template "footer" .}}
+        </div>
+    </footer>
+</body>
+</html> 
