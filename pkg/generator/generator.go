@@ -17,6 +17,7 @@ import (
 
 var parentTemplateRegex = regexp.MustCompile(`(?m)^{{-? /\* layout:(.*?) \*/ -?}}`)
 
+// SiteConfig holds configuration for the site generation
 type SiteConfig struct {
 	TemplateDir     string
 	OutputDir       string
@@ -24,6 +25,7 @@ type SiteConfig struct {
 	BaseURL         string
 	DevServer       bool
 	DevServerAddr   string
+	LiveReload      bool
 }
 
 type SiteGenerator struct {
@@ -302,8 +304,8 @@ func (s *SiteGenerator) executeTemplate(outputPath string, tmpl *template.Templa
 	// Convert buffer to string for manipulation
 	htmlContent := buf.String()
 
-	// Inject WebSocket script if DevServer is enabled
-	if s.Config.DevServer {
+	// Inject WebSocket script if DevServer and LiveReload are enabled
+	if s.Config.DevServer && s.Config.LiveReload {
 		websocketScript := fmt.Sprintf(`<script>
 			function connectWebSocket() {
 				const socket = new WebSocket("ws://%s/ws");

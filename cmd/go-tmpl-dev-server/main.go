@@ -14,6 +14,7 @@ func main() {
 	port := flag.String("port", "8080", "Port to run the server on")
 	rootDir := flag.String("root", "./output", "Root directory to serve files from")
 	sourceDir := flag.String("source", "./templates", "Source directory to watch for changes")
+	liveReload := flag.Bool("live-reload", true, "Enable live reload functionality")
 	flag.Parse()
 
 	// Create site configuration
@@ -24,6 +25,7 @@ func main() {
 		BaseURL:         fmt.Sprintf("http://localhost:%s", *port),
 		DevServer:       true,
 		DevServerAddr:   fmt.Sprintf("localhost:%s", *port),
+		LiveReload:      *liveReload,
 	}
 
 	// Create server configuration
@@ -31,6 +33,7 @@ func main() {
 		Port:       *port,
 		RootDir:    *rootDir,
 		SourceDir:  *sourceDir,
+		LiveReload: *liveReload,
 		SiteConfig: siteConfig,
 	}
 

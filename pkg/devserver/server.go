@@ -23,6 +23,7 @@ type ServerConfig struct {
 	Port       string
 	RootDir    string
 	SourceDir  string
+	LiveReload bool
 	SiteConfig generator.SiteConfig
 }
 
@@ -56,7 +57,13 @@ func (s *Server) Start() error {
 		http.ServeFile(w, r, filePath)
 	})
 
-	http.HandleFunc("/ws", s.handleWebSocket)
+	// Setup websocket handler for live reload only if enabled
+	if s.Config.LiveReload {
+		http.HandleFunc("/ws", s.handleWebSocket)
+		log.Println("Live reload enabled. Connect to the /ws endpoint for real-time updates.")
+	} else {
+		log.Println("Live reload disabled. Manual refresh required after file changes.")
+	}
 
 	// Start HTTP server
 	log.Printf("Serving %s on http://localhost:%s", absRoot, s.Config.Port)
@@ -65,6 +72,11 @@ func (s *Server) Start() error {
 
 // NotifyClients notifies all connected WebSocket clients to reload the page
 func (s *Server) NotifyClients() {
+	// Skip notification if live reload is disabled
+	if !s.Config.LiveReload {
+		return
+	}
+
 	s.clientsMutex.Lock()
 	defer s.clientsMutex.Unlock()
 
