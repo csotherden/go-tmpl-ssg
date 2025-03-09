@@ -1,0 +1,33 @@
+{{define "hero"}}
+<section class="py-20 bg-gradient-to-r from-blue-500 to-indigo-600 text-white">
+    <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row items-center justify-between">
+            <!-- Hero Content -->
+            <div class="md:w-1/2 mb-12 md:mb-0 fade-in">
+                <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">{{ .HeroTitle }}</h1>
+                <p class="text-xl mb-8 text-blue-100">{{ .HeroSubtitle }}</p>
+                
+                <!-- Countdown Timer -->
+                <div class="bg-white/20 rounded-lg p-6 backdrop-blur-sm mb-8">
+                    <p class="text-center mb-4 text-lg font-medium">Launching in:</p>
+                    <div id="countdown" class="flex justify-between text-center"></div>
+                </div>
+                
+                <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                    <a href="#waitlist" class="btn bg-white text-primary hover:bg-gray-100 font-semibold py-3 px-6 rounded-lg shadow-md transition duration-300 text-center">
+                        Join the Waitlist
+                    </a>
+                    <a href="#features" class="btn border-2 border-white text-white hover:bg-white/10 font-semibold py-3 px-6 rounded-lg transition duration-300 text-center">
+                        Learn More
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Hero Image -->
+            <div class="md:w-1/2 fade-in" style="animation-delay: 0.3s;">
+                <img src="https://placehold.co/600x400/3b82f6/FFFFFF?text=Product+Preview" alt="Product Preview" class="rounded-lg shadow-2xl mx-auto">
+            </div>
+        </div>
+    </div>
+</section>
+{{end}} 

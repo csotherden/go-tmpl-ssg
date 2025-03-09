@@ -1,0 +1,73 @@
+{{define "pricing"}}
+<section id="pricing" class="py-20 bg-white">
+    <div class="container mx-auto px-4">
+        <!-- Section Header -->
+        <div class="text-center mb-16">
+            <h2 class="text-3xl font-bold mb-4">{{ .PricingTitle }}</h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">{{ .PricingDescription }}</p>
+        </div>
+        
+        <!-- Pricing Toggle -->
+        <div class="flex items-center justify-center mb-12">
+            <span class="text-gray-700 mr-4">Monthly</span>
+            <div class="relative inline-block w-12 mr-4 align-middle select-none">
+                <input type="checkbox" name="toggle" id="pricing-toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 border-gray-300 appearance-none cursor-pointer"/>
+                <label for="pricing-toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+            </div>
+            <span class="text-gray-700">Annually <span class="text-green-500 font-medium">(Save 20%)</span></span>
+        </div>
+        
+        <!-- Pricing Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {{range .PricingPlans}}
+            <div class="bg-gray-50 rounded-lg overflow-hidden shadow-md transition-transform hover:scale-105 hover:shadow-lg duration-300 {{if .Featured}}relative border-2 border-primary{{end}}">
+                {{if .Featured}}
+                <div class="absolute top-0 right-0 bg-primary text-white px-4 py-1 rounded-bl-lg font-semibold shadow-md">Most Popular</div>
+                {{end}}
+                
+                <!-- Plan Header -->
+                <div class="p-8 {{if .Featured}}bg-primary/5{{end}}">
+                    <h3 class="text-2xl font-bold mb-2 {{if .Featured}}text-primary{{end}}">{{.Name}}</h3>
+                    <p class="text-gray-600 mb-6">{{.Description}}</p>
+                    
+                    <!-- Price -->
+                    <div class="flex items-baseline mb-8">
+                        <span class="text-4xl font-bold">{{.MonthlyPrice}}</span>
+                        <span class="text-gray-500 ml-2">/month</span>
+                    </div>
+                    
+                    <!-- CTA -->
+                    <a href="#waitlist" class="block w-full py-3 px-6 text-center rounded-md shadow-md font-medium transition duration-300 {{if .Featured}}bg-primary hover:bg-primary-dark text-white{{else}}bg-white hover:bg-gray-100 text-primary border border-gray-200{{end}}">
+                        Join the Waitlist
+                    </a>
+                </div>
+                
+                <!-- Features List -->
+                <div class="p-8 bg-white">
+                    <ul class="space-y-4">
+                        {{range .Features}}
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-green-500 mt-1 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span>{{.}}</span>
+                        </li>
+                        {{end}}
+                    </ul>
+                </div>
+            </div>
+            {{end}}
+        </div>
+        
+        <!-- Money Back Guarantee -->
+        <div class="text-center mt-12">
+            <p class="text-gray-600 flex items-center justify-center">
+                <svg class="w-5 h-5 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                </svg>
+                30-day money-back guarantee. No questions asked.
+            </p>
+        </div>
+    </div>
+</section>
+{{end}} 

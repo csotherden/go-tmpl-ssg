@@ -1,0 +1,47 @@
+{{define "features"}}
+<section id="features" class="py-20 bg-white">
+    <div class="container mx-auto px-4">
+        <!-- Section Header -->
+        <div class="text-center mb-16">
+            <h2 class="text-3xl font-bold mb-4">{{ .FeaturesTitle }}</h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">{{ .FeaturesDescription }}</p>
+        </div>
+        
+        <!-- Features Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {{range .Features}}
+            <div class="bg-gray-50 rounded-lg p-8 shadow-sm hover:shadow-md transition duration-300">
+                <div class="text-primary text-4xl mb-4">
+                    <i class="{{.Icon}}"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-3">{{.Title}}</h3>
+                <p class="text-gray-600">{{.Description}}</p>
+            </div>
+            {{end}}
+        </div>
+        
+        <!-- Feature Highlight -->
+        <div class="mt-20 bg-gray-50 rounded-lg p-8 shadow-md">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-8 md:mb-0 md:pr-8">
+                    <h3 class="text-2xl font-bold mb-4">{{ .HighlightTitle }}</h3>
+                    <p class="text-gray-600 mb-6">{{ .HighlightDescription }}</p>
+                    <ul class="space-y-3">
+                        {{range .HighlightPoints}}
+                        <li class="flex items-start">
+                            <svg class="h-5 w-5 text-primary mt-1 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span>{{.}}</span>
+                        </li>
+                        {{end}}
+                    </ul>
+                </div>
+                <div class="md:w-1/2">
+                    <img src="https://placehold.co/600x400/e5e7eb/818cf8?text=Feature+Highlight" alt="Feature Highlight" class="rounded-lg shadow-md">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{{end}} 

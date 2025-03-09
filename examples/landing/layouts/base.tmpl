@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .Title }}</title>
+    <meta name="description" content="{{ .Description }}">
+    
+    <!-- Tailwind CSS CDN for quick styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            light: '#4da8ff',
+                            DEFAULT: '#2563eb',
+                            dark: '#1e40af',
+                        },
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .fade-in {
+            animation: fadeIn 1s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col bg-gray-50">
+    <!-- Navbar Component -->
+    {{template "navbar" .}}
+    
+    <!-- Main Content -->
+    <main class="flex-grow">
+        {{template "PageContent" .}}
+    </main>
+    
+    <!-- Footer Component -->
+    {{template "footer" .}}
+    
+    <!-- Custom JavaScript -->
+    <script>
+        // Simple countdown timer for the launch
+        document.addEventListener('DOMContentLoaded', function() {
+            const countdownEl = document.getElementById('countdown');
+            if (countdownEl) {
+                // Set launch date to 30 days from now
+                const launchDate = new Date();
+                launchDate.setDate(launchDate.getDate() + 30);
+                
+                function updateCountdown() {
+                    const now = new Date();
+                    const diff = launchDate - now;
+                    
+                    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                    
+                    countdownEl.innerHTML = `
+                        <div class="text-center">
+                            <span class="text-3xl font-bold">${days}</span>
+                            <span class="text-sm block">days</span>
+                        </div>
+                        <div class="text-center">
+                            <span class="text-3xl font-bold">${hours}</span>
+                            <span class="text-sm block">hours</span>
+                        </div>
+                        <div class="text-center">
+                            <span class="text-3xl font-bold">${minutes}</span>
+                            <span class="text-sm block">minutes</span>
+                        </div>
+                        <div class="text-center">
+                            <span class="text-3xl font-bold">${seconds}</span>
+                            <span class="text-sm block">seconds</span>
+                        </div>
+                    `;
+                }
+                
+                updateCountdown();
+                setInterval(updateCountdown, 1000);
+            }
+        });
+        
+        // Form submission
+        const waitlistForm = document.getElementById('waitlist-form');
+        if (waitlistForm) {
+            waitlistForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = document.getElementById('email').value;
+                // Normally you'd send this to your server/API
+                console.log('Email submitted:', email);
+                
+                // Show success message
+                const successMessage = document.getElementById('success-message');
+                if (successMessage) {
+                    successMessage.classList.remove('hidden');
+                    waitlistForm.reset();
+                    
+                    // Hide success message after 5 seconds
+                    setTimeout(() => {
+                        successMessage.classList.add('hidden');
+                    }, 5000);
+                }
+            });
+        }
+    </script>
+</body>
+</html> 

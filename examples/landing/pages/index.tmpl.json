@@ -1,0 +1,241 @@
+{
+  "Title": "SaaSify - The Ultimate SaaS Platform Coming Soon",
+  "Description": "SaaSify is an all-in-one SaaS platform that helps businesses streamline operations, increase productivity, and drive growth.",
+  "ProductName": "SaaSify",
+  "TagLine": "Simplify your business operations",
+  "CompanyName": "SaaSify Inc.",
+  "CurrentYear": "2023",
+  
+  "HeroTitle": "Revolutionize Your Business Operations",
+  "HeroSubtitle": "An all-in-one SaaS platform designed to streamline your workflows, boost productivity, and scale your business.",
+  
+  "FeaturesTitle": "Powerful Features to Transform Your Business",
+  "FeaturesDescription": "SaaSify provides all the tools you need to take your business to the next level.",
+  "Features": [
+    {
+      "Icon": "fas fa-bolt",
+      "Title": "Lightning Fast",
+      "Description": "Experience blazing fast performance with our optimized cloud infrastructure, ensuring your team never waits for the system."
+    },
+    {
+      "Icon": "fas fa-shield-alt",
+      "Title": "Enterprise Security",
+      "Description": "Bank-level encryption and security measures to protect your sensitive business data at all times."
+    },
+    {
+      "Icon": "fas fa-chart-line",
+      "Title": "Advanced Analytics",
+      "Description": "Gain valuable insights with comprehensive analytics and reporting features to make data-driven decisions."
+    },
+    {
+      "Icon": "fas fa-users",
+      "Title": "Team Collaboration",
+      "Description": "Seamless collaboration tools for your team to work together effectively, regardless of location."
+    },
+    {
+      "Icon": "fas fa-code",
+      "Title": "Developer API",
+      "Description": "Robust API for developers to integrate with existing systems and extend functionality."
+    },
+    {
+      "Icon": "fas fa-mobile-alt",
+      "Title": "Mobile Friendly",
+      "Description": "Access your dashboard and tools from any device with our responsive mobile application."
+    }
+  ],
+  
+  "HighlightTitle": "Automate Your Workflow",
+  "HighlightDescription": "Our automation engine helps you save time by handling repetitive tasks and processes automatically.",
+  "HighlightPoints": [
+    "Create custom automation workflows without coding",
+    "Integrate with 100+ popular business tools",
+    "Set up triggers and actions with a visual builder",
+    "Monitor performance with detailed automation logs",
+    "Save up to 20 hours per week on manual tasks"
+  ],
+  
+  "TestimonialsTitle": "What Our Beta Users Say",
+  "TestimonialsDescription": "We've been working with select companies to perfect our platform. Here's what they have to say.",
+  "Testimonials": [
+    {
+      "Quote": "SaaSify has completely transformed how we manage our operations. The automation features alone have saved us countless hours every week.",
+      "Name": "Sarah Johnson",
+      "Title": "Operations Director",
+      "Company": "Acme Inc",
+      "AvatarURL": "https://i.pravatar.cc/150?img=1",
+      "Rating": 5
+    },
+    {
+      "Quote": "As a growing startup, we needed a solution that could scale with us. SaaSify has proven to be exactly what we needed with its flexible pricing and robust feature set.",
+      "Name": "Michael Chen",
+      "Title": "CEO",
+      "Company": "TechStart",
+      "AvatarURL": "https://i.pravatar.cc/150?img=8",
+      "Rating": 5
+    },
+    {
+      "Quote": "The analytics capabilities are impressive. We can now make data-driven decisions quickly with real-time insights into our business performance.",
+      "Name": "Jessica Williams",
+      "Title": "Analytics Manager",
+      "Company": "DataDrive",
+      "AvatarURL": "https://i.pravatar.cc/150?img=5",
+      "Rating": 4
+    }
+  ],
+  
+  "FeaturedBrands": [
+    {
+      "Name": "TechCorp",
+      "LogoURL": "https://placehold.co/200x80/e5e7eb/6B7280?text=TechCorp"
+    },
+    {
+      "Name": "Innovate Inc",
+      "LogoURL": "https://placehold.co/200x80/e5e7eb/6B7280?text=Innovate"
+    },
+    {
+      "Name": "FutureTech",
+      "LogoURL": "https://placehold.co/200x80/e5e7eb/6B7280?text=FutureTech"
+    },
+    {
+      "Name": "GlobalSoft",
+      "LogoURL": "https://placehold.co/200x80/e5e7eb/6B7280?text=GlobalSoft"
+    }
+  ],
+  
+  "PricingTitle": "Flexible Pricing for Teams of All Sizes",
+  "PricingDescription": "Choose the plan that fits your needs. All plans include a 30-day money-back guarantee.",
+  "PricingPlans": [
+    {
+      "Name": "Starter",
+      "Description": "Perfect for small teams just getting started",
+      "MonthlyPrice": "$49",
+      "Features": [
+        "Up to 5 team members",
+        "Basic automation features",
+        "Standard analytics",
+        "Email support",
+        "5GB storage",
+        "API access"
+      ],
+      "Featured": false
+    },
+    {
+      "Name": "Professional",
+      "Description": "Ideal for growing businesses with advanced needs",
+      "MonthlyPrice": "$99",
+      "Features": [
+        "Up to 20 team members",
+        "Advanced automation features",
+        "Enhanced analytics with custom reports",
+        "Priority email and chat support",
+        "25GB storage",
+        "API access with higher rate limits",
+        "Custom integrations"
+      ],
+      "Featured": true
+    },
+    {
+      "Name": "Enterprise",
+      "Description": "For large organizations requiring maximum capabilities",
+      "MonthlyPrice": "$249",
+      "Features": [
+        "Unlimited team members",
+        "Full automation suite",
+        "Advanced analytics with AI insights",
+        "24/7 dedicated support",
+        "100GB storage",
+        "Unlimited API access",
+        "Custom development support",
+        "SLA guarantees",
+        "Custom security controls"
+      ],
+      "Featured": false
+    }
+  ],
+  
+  "NewsTitle": "Latest Updates and News",
+  "NewsDescription": "Stay up to date with our progress and coverage in the media.",
+  "LatestUpdates": [
+    {
+      "Title": "New Feature Sneak Peek: AI Assistant",
+      "Excerpt": "We're excited to announce that our AI assistant feature is nearing completion and will be available at launch. This smart assistant will help automate many of your daily tasks.",
+      "Date": "June 15, 2023",
+      "ImageURL": "https://placehold.co/800x600/4DA8FF/FFFFFF?text=AI+Assistant",
+      "Link": "#"
+    },
+    {
+      "Title": "Beta Program Expands to 100 Companies",
+      "Excerpt": "Due to overwhelming demand, we've expanded our beta program to include 100 companies. The feedback has been invaluable for refining our platform.",
+      "Date": "May 28, 2023",
+      "ImageURL": "https://placehold.co/800x600/4DA8FF/FFFFFF?text=Beta+Program",
+      "Link": "#"
+    },
+    {
+      "Title": "SaaSify Secures $5M in Seed Funding",
+      "Excerpt": "We're thrilled to announce that we've secured $5M in seed funding to accelerate development and expand our team. This investment will help us bring SaaSify to market faster.",
+      "Date": "April 12, 2023",
+      "ImageURL": "https://placehold.co/800x600/4DA8FF/FFFFFF?text=Funding+News",
+      "Link": "#"
+    }
+  ],
+  
+  "PressCoverage": [
+    {
+      "Title": "SaaSify Named One of Top 10 Startups to Watch in 2023",
+      "Publication": "Tech Insider",
+      "Date": "May 10, 2023",
+      "PublicationLogo": "https://placehold.co/200x80/e5e7eb/6B7280?text=Tech+Insider",
+      "Link": "#"
+    },
+    {
+      "Title": "How SaaSify is Revolutionizing Business Operations",
+      "Publication": "Business Weekly",
+      "Date": "April 22, 2023",
+      "PublicationLogo": "https://placehold.co/200x80/e5e7eb/6B7280?text=Business+Weekly",
+      "Link": "#"
+    },
+    {
+      "Title": "The Future of Work: SaaSify's Innovative Approach",
+      "Publication": "Future Tech Journal",
+      "Date": "March 15, 2023",
+      "PublicationLogo": "https://placehold.co/200x80/e5e7eb/6B7280?text=Future+Tech",
+      "Link": "#"
+    },
+    {
+      "Title": "SaaSify Closes Impressive Seed Round Led by Top VCs",
+      "Publication": "Venture Beat",
+      "Date": "April 14, 2023",
+      "PublicationLogo": "https://placehold.co/200x80/e5e7eb/6B7280?text=Venture+Beat",
+      "Link": "#"
+    }
+  ],
+  
+  "WaitlistTitle": "Join Our Waitlist",
+  "WaitlistDescription": "Be among the first to experience SaaSify when we launch.",
+  "WaitlistBenefits": [
+    "Get early access to our platform",
+    "Receive a 30% discount on your first year",
+    "Get personalized onboarding and support",
+    "Provide feedback to shape the product",
+    "Join our exclusive founder's community"
+  ],
+  
+  "FAQs": [
+    {
+      "Question": "When will SaaSify launch?",
+      "Answer": "We're planning to launch in Q3 2023. Join our waitlist to get notified as soon as we go live."
+    },
+    {
+      "Question": "Can I try before I buy?",
+      "Answer": "Yes! We'll offer a 14-day free trial for all plans when we launch."
+    },
+    {
+      "Question": "Is there a long-term contract?",
+      "Answer": "No, all our plans are month-to-month with no long-term commitment. Annual plans with discounts will also be available."
+    },
+    {
+      "Question": "How does the waitlist work?",
+      "Answer": "When you join our waitlist, you'll be notified as soon as we launch. Waitlist members will also receive exclusive benefits and early access."
+    }
+  ]
+} 

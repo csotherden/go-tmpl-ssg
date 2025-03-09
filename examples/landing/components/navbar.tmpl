@@ -1,0 +1,39 @@
+{{define "navbar"}}
+<nav class="bg-white shadow-sm py-4">
+    <div class="container mx-auto px-4 flex justify-between items-center">
+        <!-- Logo -->
+        <div class="flex items-center">
+            <span class="text-2xl font-bold text-primary">{{ .ProductName }}</span>
+        </div>
+        
+        <!-- Navigation -->
+        <div class="hidden md:flex items-center space-x-8">
+            <a href="#features" class="text-gray-600 hover:text-primary transition duration-300">Features</a>
+            <a href="#testimonials" class="text-gray-600 hover:text-primary transition duration-300">Testimonials</a>
+            <a href="#pricing" class="text-gray-600 hover:text-primary transition duration-300">Pricing</a>
+            <a href="#news" class="text-gray-600 hover:text-primary transition duration-300">News</a>
+            <a href="#waitlist" class="bg-primary hover:bg-primary-dark text-white font-medium py-2 px-4 rounded-md transition duration-300">Join Waitlist</a>
+        </div>
+        
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button type="button" class="text-gray-500 hover:text-primary focus:outline-none">
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Mobile menu (hidden by default) -->
+    <div class="md:hidden hidden">
+        <div class="container mx-auto px-4 py-3 space-y-3">
+            <a href="#features" class="block text-gray-600 hover:text-primary transition duration-300">Features</a>
+            <a href="#testimonials" class="block text-gray-600 hover:text-primary transition duration-300">Testimonials</a>
+            <a href="#pricing" class="block text-gray-600 hover:text-primary transition duration-300">Pricing</a>
+            <a href="#news" class="block text-gray-600 hover:text-primary transition duration-300">News</a>
+            <a href="#waitlist" class="block bg-primary hover:bg-primary-dark text-white font-medium py-2 px-4 rounded-md transition duration-300 w-full text-center">Join Waitlist</a>
+        </div>
+    </div>
+</nav>
+{{end}} 
