@@ -38,28 +38,25 @@
     
     <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
         <pre><code>examples/landing/
-├── templates/          # All template files
-│   ├── layouts/        # Layout templates
-│   │   └── base.tmpl   # Base layout template
-│   ├── components/     # Reusable component templates
-│   │   ├── hero.tmpl   # Hero section component
-│   │   ├── features.tmpl # Features section component
-│   │   ├── testimonials.tmpl # Testimonials section component
-│   │   ├── pricing.tmpl # Pricing tables component
-│   │   ├── news.tmpl   # News/updates component
-│   │   └── waitlist.tmpl # Waitlist form component
-│   └── pages/          # Page templates
-│       ├── index.tmpl  # Main page template
-│       └── index.tmpl.json # Page data
-└── output/            # Generated static site
-    └── index.html     # Generated landing page</code></pre>
+├── layouts/        # Layout templates
+│   └── base.tmpl   # Base layout template
+├── components/     # Reusable component templates
+│   ├── hero.tmpl   # Hero section component
+│   ├── features.tmpl # Features section component
+│   ├── testimonials.tmpl # Testimonials section component
+│   ├── pricing.tmpl # Pricing tables component
+│   ├── news.tmpl   # News/updates component
+│   └── waitlist.tmpl # Waitlist form component
+└── pages/          # Page templates
+    ├── index.tmpl  # Main page template
+    └── index.tmpl.json # Page data</code></pre>
     </div>
     
     <h2 id="architecture" class="text-2xl font-bold mt-8 mb-4">Architecture</h2>
     
     <h3 id="layout" class="text-xl font-semibold mt-6 mb-3">Layout</h3>
     <p class="text-gray-700 mb-4">
-        The landing page uses a single base layout defined in <code>layouts/base.tmpl</code>. This layout provides the HTML structure, loads the Tailwind CSS framework from CDN, and includes basic meta tags for SEO.
+        The landing page uses a single base layout defined in <code class="bg-gray-100 px-1 rounded">layouts/base.tmpl</code>. This layout provides the HTML structure, loads the Tailwind CSS framework from CDN, and includes basic meta tags for SEO.
     </p>
     
     <h3 id="components" class="text-xl font-semibold mt-6 mb-3">Components</h3>
@@ -187,10 +184,10 @@
     
     <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
         <pre><code># Generate the static site
-go run cmd/go-tmpl-generate/main.go --template examples/landing/templates --output examples/landing/output
+go run cmd/go-tmpl-generate/main.go --template examples/landing --output examples/landing/output
 
 # Serve the generated site using the development server
-go run cmd/go-tmpl-dev-server/main.go --source examples/landing/templates --root examples/landing/output</code></pre>
+go run cmd/go-tmpl-dev-server/main.go --source examples/landing --root examples/landing/output</code></pre>
     </div>
     
     <div class="mt-10 flex justify-between">
