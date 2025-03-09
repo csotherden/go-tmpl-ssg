@@ -1,6 +1,8 @@
 {{- /* layout:base.tmpl */ -}}
 
 <div class="prose prose-blue max-w-none">
+    <h1 class="text-3xl font-bold mb-6">Portfolio Example</h1>
+    
     <div class="bg-blue-50 border-l-4 border-blue-500 p-4 my-6">
         <div class="flex">
             <div class="flex-shrink-0">
@@ -35,7 +37,7 @@
     </p>
     
     <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
-        <pre><code>examples/portfolio/
+        <pre class="whitespace-pre-wrap break-words"><code>examples/portfolio/
 ├── layouts/        # Layout templates
 │   └── base.tmpl   # Base layout template
 ├── components/     # Reusable component templates
@@ -70,7 +72,7 @@
     </p>
     
     <div class="overflow-x-auto">
-        <table class="w-full mt-4 mb-6 border-collapse">
+        <table class="w-full border-collapse mt-4 mb-6">
             <thead class="bg-gray-100">
                 <tr>
                     <th class="py-2 px-4 text-left font-semibold border-b">Component</th>
@@ -112,7 +114,7 @@
     </p>
     
     <div class="overflow-x-auto">
-        <table class="w-full mt-4 mb-6 border-collapse">
+        <table class="w-full border-collapse mt-4 mb-6">
             <thead class="bg-gray-100">
                 <tr>
                     <th class="py-2 px-4 text-left font-semibold border-b">Page</th>
@@ -234,7 +236,7 @@
     <p class="text-gray-700 mb-4">To generate and view the portfolio site locally:</p>
     
     <div class="bg-gray-50 rounded-md p-4 mb-6 overflow-x-auto">
-        <pre><code># Generate the static site
+        <pre class="whitespace-pre-wrap break-words"><code># Generate the static site
 go run cmd/go-tmpl-generate/main.go --template examples/portfolio --output examples/portfolio/output
 
 # Serve the generated site using the development server

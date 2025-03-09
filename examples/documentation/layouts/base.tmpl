@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{if .Title}}{{.Title}} - {{end}}Go Template SSG</title>
+    <title>{{if .Title}}{{.Title}}{{else}}Go Template SSG{{end}}</title>
     <meta name="description" content="{{if .Description}}{{.Description}}{{else}}A simple, flexible static site generator using Go templates{{end}}">
     <!-- Tailwind CSS from CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -51,11 +51,13 @@
             </div>
         </div>
 
-        <!-- Main content -->
-        <main class="flex-1">
-            {{if .Title}}<h1 class="text-3xl font-bold mb-6">{{.Title}}</h1>{{end}}
-            {{template "PageContent" .}}
-        </main>
+            <!-- Main content area -->
+            <main class="flex-1 overflow-hidden bg-white rounded-lg shadow">
+                <div class="px-4 py-6 sm:px-6 lg:px-8">
+                    {{template "PageContent" .}}
+                </div>
+            </main>
+        </div>
     </div>
 
     <!-- Footer -->
