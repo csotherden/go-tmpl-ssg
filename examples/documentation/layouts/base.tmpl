@@ -22,7 +22,7 @@
             const currentSection = pathSegments.length > 0 ? pathSegments[0] : '';
             
             // Handle navbar highlighting
-            const navItems = document.querySelectorAll('.nav-item');
+            const navItems = document.querySelectorAll('.go-navbar-item');
             navItems.forEach(item => {
                 const href = item.getAttribute('href');
                 const section = href.split('/').filter(Boolean)[0] || '';

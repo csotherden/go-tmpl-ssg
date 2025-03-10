@@ -71,6 +71,11 @@ code {
   border-bottom: 1px solid var(--go-gray);
 }
 
+.go-navbar-item.active {
+  font-weight: 650 !important;
+  border-bottom: 2px solid var(--go-blue) !important;
+}
+
 /* Sidebar navigation */
 .go-sidebar-item {
   border-left: 2px solid transparent;
